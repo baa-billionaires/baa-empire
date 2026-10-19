@@ -1,0 +1,6 @@
+{
+  "name": "Billionaires AI Academy & Africa Blockchain University",
+  "description": "Full autonomous ecosystem featuring Learn-to-Mine BaaCoin, AI Recruiter Scout, NFT Certificates with engraved chips, Prompt Marketplace 60/40, and Autonomous AI Data Center.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

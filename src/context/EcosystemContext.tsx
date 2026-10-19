@@ -1,0 +1,625 @@
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  Profile,
+  Course,
+  Enrollment,
+  Interaction,
+  PromptMarketplaceItem,
+  CertificateNFT,
+  Ebook,
+  AITool,
+  AITutor,
+  ScoutLead,
+  Referral,
+  Wallet
+} from '../types';
+import {
+  INITIAL_COURSES,
+  INITIAL_EBOOKS,
+  INITIAL_AI_TOOLS,
+  INITIAL_AI_TUTORS,
+  INITIAL_SCOUT_LEADS,
+  INITIAL_PROMPT_MARKETPLACE
+} from '../lib/seed';
+
+interface MiningBlock {
+  hash: string;
+  nonce: number;
+  reward: number;
+  timestamp: string;
+  courseTitle: string;
+}
+
+interface EcosystemContextType {
+  // Profile & Auth
+  profile: Profile;
+  isAdmin: boolean;
+  adminLogin: (email: string, pass: string) => boolean;
+  adminLogout: () => void;
+  updateProfile: (updates: Partial<Profile>) => void;
+
+  // Data
+  courses: Course[];
+  enrollments: Enrollment[];
+  interactions: Interaction[];
+  marketplacePrompts: PromptMarketplaceItem[];
+  certificates: CertificateNFT[];
+  ebooks: Ebook[];
+  aiTools: AITool[];
+  aiTutors: AITutor[];
+  scoutLeads: ScoutLead[];
+  referrals: Referral[];
+  wallet: Wallet;
+
+  // Branding
+  customLogoUrl: string | null;
+  setCustomLogoUrl: (url: string | null) => void;
+
+  // Actions
+  enrollInCourse: (courseId: string) => { success: boolean; networthEarned: number; error?: string };
+  recordInteraction: (params: {
+    courseId: string;
+    type: 'video_watch' | 'ai_tutor_query' | 'assignment_complete' | 'research_submit';
+    promptData?: string;
+    customReward?: { xp: number; baacoin: number };
+  }) => { xp: number; baacoin: number; block: MiningBlock };
+  completeCourse: (courseId: string) => CertificateNFT;
+  buyPrompt: (promptId: string) => { success: boolean; error?: string };
+  createCustomPrompt: (prompt: Omit<PromptMarketplaceItem, 'id' | 'sales' | 'revenue' | 'student_share' | 'platform_share' | 'created_at'>) => void;
+  
+  // AI Recruiter Scout
+  isScoutRunning: boolean;
+  scoutStats: { discovered: number; contacted: number; converted: number };
+  runScoutCycle: () => void;
+  convertLead: (leadId: string) => void;
+  addFreeLead: (email: string, name?: string, magnetTitle?: string) => void;
+
+  // Recent mining block
+  latestMiningBlock: MiningBlock | null;
+  resetAllSeedData: () => void;
+}
+
+const DEFAULT_PROFILE: Profile = {
+  id: 'usr-student-001',
+  email: 'student@billionairesai.academy',
+  full_name: 'Tariq Sterling',
+  role: 'student',
+  avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+  baacoin_balance: 198, // spendable unlocked
+  baacoin_networth: 990, // locked
+  baacoin_locked: true,
+  referral_code: 'BILLIONAIRE-AFRICA-2026',
+  level: 2,
+  xp: 340,
+  is_verified: true,
+  created_at: new Date(Date.now() - 86400000 * 5).toISOString()
+};
+
+const DEFAULT_WALLET: Wallet = {
+  user_id: 'usr-student-001',
+  balance: 198,
+  total_earned: 420,
+  total_mined: 84.5
+};
+
+const EcosystemContext = createContext<EcosystemContextType | undefined>(undefined);
+
+const LOCAL_STORAGE_PREFIX = 'richconnect_eco_';
+
+function loadFromStorage<T>(key: string, fallback: T): T {
+  try {
+    const item = localStorage.getItem(LOCAL_STORAGE_PREFIX + key);
+    return item ? JSON.parse(item) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveToStorage<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(LOCAL_STORAGE_PREFIX + key, JSON.stringify(value));
+  } catch (err) {
+    console.warn('Storage save failed:', err);
+  }
+}
+
+export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // Profiles & State
+  const [profile, setProfile] = useState<Profile>(() => loadFromStorage('profile', DEFAULT_PROFILE));
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
+    return !!localStorage.getItem('richconnect_admin');
+  });
+  const [customLogoUrl, setCustomLogoUrlState] = useState<string | null>(() => {
+    return localStorage.getItem('richconnect_custom_logo') || null;
+  });
+
+  // Entities
+  const [courses, setCourses] = useState<Course[]>(() => loadFromStorage('courses', INITIAL_COURSES));
+  const [ebooks, setEbooks] = useState<Ebook[]>(() => loadFromStorage('ebooks', INITIAL_EBOOKS));
+  const [aiTools, setAiTools] = useState<AITool[]>(() => loadFromStorage('tools', INITIAL_AI_TOOLS));
+  const [aiTutors, setAiTutors] = useState<AITutor[]>(() => loadFromStorage('tutors', INITIAL_AI_TUTORS));
+  const [scoutLeads, setScoutLeads] = useState<ScoutLead[]>(() => loadFromStorage('scout_leads', INITIAL_SCOUT_LEADS));
+  const [marketplacePrompts, setMarketplacePrompts] = useState<PromptMarketplaceItem[]>(() =>
+    loadFromStorage('marketplace_prompts', INITIAL_PROMPT_MARKETPLACE)
+  );
+
+  // Enrollments & Interactions
+  const [enrollments, setEnrollments] = useState<Enrollment[]>(() => {
+    const saved = loadFromStorage<Enrollment[]>('enrollments', []);
+    if (saved.length > 0) return saved;
+    // Default initial enrollment for demo instant access
+    return [
+      {
+        id: 'enr-demo-1',
+        user_id: DEFAULT_PROFILE.id,
+        course_id: INITIAL_COURSES[0].id,
+        progress: 35,
+        completed: false,
+        total_mined: 32.5,
+        created_at: new Date(Date.now() - 86400000 * 3).toISOString()
+      }
+    ];
+  });
+
+  const [interactions, setInteractions] = useState<Interaction[]>(() => loadFromStorage('interactions', []));
+  const [certificates, setCertificates] = useState<CertificateNFT[]>(() => loadFromStorage('certificates', []));
+  const [referrals, setReferrals] = useState<Referral[]>(() => loadFromStorage('referrals', [
+    {
+      id: 'ref-1',
+      referrer_id: DEFAULT_PROFILE.id,
+      referred_id: 'usr-new-092',
+      referred_name: 'Babajide Vance',
+      commission: 9.9,
+      baacoin_bonus: 99, // 10% of new student's 990 BaaCoin networth
+      paid: true,
+      created_at: new Date(Date.now() - 86400000 * 2).toISOString()
+    }
+  ]));
+  const [wallet, setWallet] = useState<Wallet>(() => loadFromStorage('wallet', DEFAULT_WALLET));
+
+  // Mining Animation Indicator
+  const [latestMiningBlock, setLatestMiningBlock] = useState<MiningBlock | null>(null);
+  const [isScoutRunning, setIsScoutRunning] = useState<boolean>(true);
+
+  // Save states automatically
+  useEffect(() => { saveToStorage('profile', profile); }, [profile]);
+  useEffect(() => { saveToStorage('courses', courses); }, [courses]);
+  useEffect(() => { saveToStorage('enrollments', enrollments); }, [enrollments]);
+  useEffect(() => { saveToStorage('interactions', interactions); }, [interactions]);
+  useEffect(() => { saveToStorage('marketplace_prompts', marketplacePrompts); }, [marketplacePrompts]);
+  useEffect(() => { saveToStorage('certificates', certificates); }, [certificates]);
+  useEffect(() => { saveToStorage('wallet', wallet); }, [wallet]);
+  useEffect(() => { saveToStorage('scout_leads', scoutLeads); }, [scoutLeads]);
+  useEffect(() => { saveToStorage('referrals', referrals); }, [referrals]);
+
+  // Set custom logo helper
+  const setCustomLogoUrl = (url: string | null) => {
+    setCustomLogoUrlState(url);
+    if (url) {
+      localStorage.setItem('richconnect_custom_logo', url);
+    } else {
+      localStorage.removeItem('richconnect_custom_logo');
+    }
+  };
+
+  // Admin login check
+  const adminLogin = (email: string, pass: string): boolean => {
+    if (email === 'naijaukmusicalfusion@gmail.com' && pass === 'RichConnectVault2026!Secure') {
+      localStorage.setItem('richconnect_admin', 'token_vault_2026_super_admin');
+      setIsAdmin(true);
+      return true;
+    }
+    return false;
+  };
+
+  const adminLogout = () => {
+    localStorage.removeItem('richconnect_admin');
+    setIsAdmin(false);
+  };
+
+  const updateProfile = (updates: Partial<Profile>) => {
+    setProfile(prev => ({ ...prev, ...updates }));
+  };
+
+  // 1. BAACOIN 10X NETWORTH SYSTEM ON ENROLLMENT
+  const enrollInCourse = (courseId: string) => {
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return { success: false, networthEarned: 0, error: 'Course not found' };
+
+    const existing = enrollments.find(e => e.course_id === courseId);
+    if (existing) {
+      return { success: true, networthEarned: course.baacoin_value };
+    }
+
+    const networthGain = course.baacoin_value; // e.g. $99 course -> 990 BaaCoin (10x price)
+    const newEnrollment: Enrollment = {
+      id: `enr-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      user_id: profile.id,
+      course_id: courseId,
+      progress: 0,
+      completed: false,
+      total_mined: 0,
+      created_at: new Date().toISOString()
+    };
+
+    setEnrollments(prev => [...prev, newEnrollment]);
+
+    // Update student networth: locked until graduation
+    setProfile(prev => ({
+      ...prev,
+      baacoin_networth: prev.baacoin_networth + networthGain,
+      baacoin_locked: true
+    }));
+
+    return { success: true, networthEarned: networthGain };
+  };
+
+  // 2. LEARN-TO-MINE SYSTEM (Interactions = Mining)
+  const recordInteraction = ({
+    courseId,
+    type,
+    promptData = '',
+    customReward
+  }: {
+    courseId: string;
+    type: 'video_watch' | 'ai_tutor_query' | 'assignment_complete' | 'research_submit';
+    promptData?: string;
+    customReward?: { xp: number; baacoin: number };
+  }) => {
+    let xpGain = 5;
+    let baacoinGain = 0.5;
+
+    if (customReward) {
+      xpGain = customReward.xp;
+      baacoinGain = customReward.baacoin;
+    } else {
+      switch (type) {
+        case 'video_watch':
+          xpGain = 5;
+          baacoinGain = 0.5;
+          break;
+        case 'ai_tutor_query':
+          xpGain = 10;
+          baacoinGain = 1.0;
+          break;
+        case 'assignment_complete':
+          xpGain = 50;
+          baacoinGain = 10.0;
+          break;
+        case 'research_submit':
+          xpGain = 100;
+          baacoinGain = 20.0;
+          break;
+      }
+    }
+
+    const newInteraction: Interaction = {
+      id: `int-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      user_id: profile.id,
+      course_id: courseId,
+      type,
+      xp_earned: xpGain,
+      baacoin_mined: baacoinGain,
+      prompt_data: promptData,
+      created_at: new Date().toISOString()
+    };
+
+    setInteractions(prev => [newInteraction, ...prev]);
+
+    // Update Enrollment progress & mined
+    setEnrollments(prev =>
+      prev.map(enr => {
+        if (enr.course_id === courseId) {
+          const progressIncrement = type === 'research_submit' ? 35 : type === 'assignment_complete' ? 25 : 10;
+          const newProgress = Math.min(100, enr.progress + progressIncrement);
+          const isDone = newProgress >= 100;
+          return {
+            ...enr,
+            progress: newProgress,
+            completed: isDone,
+            total_mined: Number((enr.total_mined + baacoinGain).toFixed(2))
+          };
+        }
+        return enr;
+      })
+    );
+
+    // Update Profile XP & level
+    setProfile(prev => {
+      const newXp = prev.xp + xpGain;
+      const newLevel = Math.floor(newXp / 250) + 1;
+      return {
+        ...prev,
+        xp: newXp,
+        level: newLevel
+      };
+    });
+
+    // Update Wallet
+    setWallet(prev => ({
+      ...prev,
+      total_mined: Number((prev.total_mined + baacoinGain).toFixed(2))
+    }));
+
+    // Mining cryptographic block representation
+    const courseObj = courses.find(c => c.id === courseId);
+    const mockHash = '0x' + Array.from({ length: 16 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    const block: MiningBlock = {
+      hash: mockHash,
+      nonce: Math.floor(Math.random() * 900000) + 100000,
+      reward: baacoinGain,
+      timestamp: new Date().toLocaleTimeString(),
+      courseTitle: courseObj ? courseObj.title : 'AI Autonomous Mastery'
+    };
+    setLatestMiningBlock(block);
+
+    return { xp: xpGain, baacoin: baacoinGain, block };
+  };
+
+  // 3. GRADUATION & BAACOIN UNLOCKING + PROMPT 60/40 COMPILATION + NFT CERTIFICATE
+  const completeCourse = (courseId: string): CertificateNFT => {
+    const course = courses.find(c => c.id === courseId);
+    const courseTitle = course ? course.title : 'AI Autonomous Mastery';
+    const courseValue = course ? course.baacoin_value : 990;
+
+    // 1. Mark enrollment as 100% completed
+    setEnrollments(prev =>
+      prev.map(enr => (enr.course_id === courseId ? { ...enr, progress: 100, completed: true } : enr))
+    );
+
+    // 2. UNLOCK BAACOIN NETWORTH:
+    // When enrollment.progress = 100% -> baacoin_locked = false,
+    // move 20% to balance instantly, rest vest daily!
+    const instantUnlockedPortion = Number((courseValue * 0.2).toFixed(2));
+    setProfile(prev => ({
+      ...prev,
+      baacoin_locked: false,
+      baacoin_balance: Number((prev.baacoin_balance + instantUnlockedPortion).toFixed(2))
+    }));
+
+    setWallet(prev => ({
+      ...prev,
+      balance: Number((prev.balance + instantUnlockedPortion).toFixed(2))
+    }));
+
+    // 3. PROMPT MARKETPLACE 60/40 COMPILATION
+    // Gather all prompt interactions for this course
+    const courseInteractions = interactions.filter(i => i.course_id === courseId && i.prompt_data);
+    const synthesizedPromptData = courseInteractions.map(i => i.prompt_data).filter(Boolean).join('\n---\n') ||
+      `SYSTEM DIRECTIVE: Autonomous High-Yield Production Model trained on ${courseTitle}. Execute zero-shot synthesis with multi-agent consensus.`;
+
+    const compiledPrompt: PromptMarketplaceItem = {
+      id: `prompt-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      user_id: profile.id,
+      student_name: profile.full_name,
+      course_id: courseId,
+      course_title: courseTitle,
+      title: `${profile.full_name}'s ${courseTitle} Mastery Prompt`,
+      description: `Official compiled mastery framework generated during 100% capstone completion of ${courseTitle}. High-throughput prompt package.`,
+      final_prompt: `[EXPERT PROMPT PACKAGE - BILLIONAIRES AI ACADEMY]\nRole: Senior Autonomous Architect\nDomain: ${courseTitle}\n\n${synthesizedPromptData}\n\nConstraints: Enforce 100% fidelity, zero token waste, strict JSON output and scalable API hook execution.`,
+      price: 49,
+      sales: 0,
+      revenue: 0,
+      student_share: 0, // 60% upon sales
+      platform_share: 0, // 40%
+      is_listed: true,
+      category: course ? course.category : 'AI Wealth',
+      tags: ['Graduation Prompt', 'Mastery', 'Autonomous', '60/40 Royalty'],
+      created_at: new Date().toISOString()
+    };
+
+    setMarketplacePrompts(prev => [compiledPrompt, ...prev]);
+
+    // 4. NFT CERTIFICATE WITH BAACOIN CHIP & QR CODE REFERRAL
+    const nftId = '0x' + Array.from({ length: 24 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    const newCert: CertificateNFT = {
+      id: `cert-${Date.now()}`,
+      user_id: profile.id,
+      student_name: profile.full_name,
+      course_id: courseId,
+      course_title: courseTitle,
+      nft_id: nftId,
+      baacoin_engraved: courseValue, // e.g. 990 BaaCoin chip
+      ipfs_url: `ipfs://bafybeic${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}/certificate.json`,
+      qr_data: `https://billionairesai.academy/verify/${nftId}?ref=${profile.referral_code}`,
+      is_tradable: true,
+      issue_date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      transaction_hash: '0xbaacoin' + Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+      referral_code: profile.referral_code
+    };
+
+    setCertificates(prev => [newCert, ...prev]);
+
+    return newCert;
+  };
+
+  // BUY PROMPT (60% to Student, 40% to Platform)
+  const buyPrompt = (promptId: string) => {
+    const item = marketplacePrompts.find(p => p.id === promptId);
+    if (!item) return { success: false, error: 'Prompt not found' };
+
+    const price = item.price;
+    const studentShare = Number((price * 0.6).toFixed(2));
+    const platformShare = Number((price * 0.4).toFixed(2));
+
+    setMarketplacePrompts(prev =>
+      prev.map(p => {
+        if (p.id === promptId) {
+          return {
+            ...p,
+            sales: p.sales + 1,
+            revenue: p.revenue + price,
+            student_share: p.student_share + studentShare,
+            platform_share: p.platform_share + platformShare
+          };
+        }
+        return p;
+      })
+    );
+
+    // If current user is the author, update their wallet earnings
+    if (item.user_id === profile.id) {
+      setWallet(prev => ({
+        ...prev,
+        balance: prev.balance + studentShare,
+        total_earned: prev.total_earned + studentShare
+      }));
+    }
+
+    return { success: true };
+  };
+
+  const createCustomPrompt = (prompt: Omit<PromptMarketplaceItem, 'id' | 'sales' | 'revenue' | 'student_share' | 'platform_share' | 'created_at'>) => {
+    const newPrompt: PromptMarketplaceItem = {
+      ...prompt,
+      id: `prompt-${Date.now()}`,
+      sales: 0,
+      revenue: 0,
+      student_share: 0,
+      platform_share: 0,
+      created_at: new Date().toISOString()
+    };
+    setMarketplacePrompts(prev => [newPrompt, ...prev]);
+  };
+
+  // 5. AUTONOMOUS AI RECRUITER SCOUT ENGINE
+  const scoutStats = {
+    discovered: 1245 + scoutLeads.length * 12,
+    contacted: 340 + scoutLeads.filter(l => l.status === 'contacted' || l.status === 'converted').length * 4,
+    converted: 45 + scoutLeads.filter(l => l.converted).length
+  };
+
+  const runScoutCycle = () => {
+    // Generates high-value realistic prospect leads across 3 pillars
+    const names = [
+      { name: "Folake Adebisi", loc: "Lagos, Nigeria", type: "student" as const, query: "need AI course to earn dollars" },
+      { name: "David Mensah", loc: "Accra, Ghana", type: "student" as const, query: "best prompt engineering academy Africa" },
+      { name: "Sir Alistair Sterling", loc: "London, UK", type: "investor" as const, query: "Africa clean energy AI data center seed" },
+      { name: "Maseru Technical University", loc: "Maseru, Lesotho", type: "institution" as const, query: "AI tutors for engineering students" },
+      { name: "Nairobi Angel Syndicate", loc: "Nairobi, Kenya", type: "investor" as const, query: "blockchain education tokenization" }
+    ];
+
+    const pick = names[Math.floor(Math.random() * names.length)];
+    const platforms: ScoutLead['source_platform'][] = ['LinkedIn', 'Twitter / X', 'Facebook Groups', 'TechCabal'];
+    const chosenPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+
+    let pitch = "";
+    if (pick.type === "student") {
+      pitch = `Hi ${pick.name}! Our AI Scout discovered your interest in: "${pick.query}". At Billionaires AI Academy, enrollment unlocks 10x your course price in BaaCoin Networth ($990 value) + Learn-to-Mine rewards. Claim your scholarship spot today: https://billionairesai.academy/academy`;
+    } else if (pick.type === "investor") {
+      pitch = `Greetings ${pick.name}, our autonomous scout identified your capital criteria on "${pick.query}". Universal Autonomous AI Data Center in Africa achieves 1.08 PUE with 100% hydro-solar power. View our executive term sheet: https://billionairesai.academy/datacenter`;
+    } else {
+      pitch = `Esteemed Leadership at ${pick.name}, embed autonomous AI Tutors in your portal for $99/mo. 24/7 student mentorship without increasing university overhead. Schedule integration: https://billionairesai.academy/marketplace`;
+    }
+
+    const newLead: ScoutLead = {
+      id: `lead-${Date.now()}`,
+      type: pick.type,
+      name: pick.name,
+      email: `${pick.name.toLowerCase().replace(/[^a-z0-9]/g, '.')}@scouted.io`,
+      phone_or_wa: `+23480${Math.floor(10000000 + Math.random() * 90000000)}`,
+      source_platform: chosenPlatform,
+      status: 'contacted',
+      ai_message: pitch,
+      converted: Math.random() > 0.65,
+      created_at: new Date().toISOString()
+    };
+
+    setScoutLeads(prev => [newLead, ...prev]);
+  };
+
+  const convertLead = (leadId: string) => {
+    setScoutLeads(prev =>
+      prev.map(l => (l.id === leadId ? { ...l, converted: true, status: 'converted' } : l))
+    );
+  };
+
+  const addFreeLead = (email: string, name?: string, magnetTitle?: string) => {
+    const leadName = name || email.split('@')[0];
+    const newLead: ScoutLead = {
+      id: `lead-free-${Date.now()}`,
+      type: 'student',
+      name: leadName,
+      email: email,
+      source_platform: 'Direct Scraping',
+      status: 'contacted',
+      ai_message: `Welcome ${leadName}! Your free resource "${magnetTitle || 'VIP Wealth Pack'}" is delivered. Unlock 10x BaaCoin Networth by joining our premier academy.`,
+      converted: false,
+      created_at: new Date().toISOString()
+    };
+    setScoutLeads(prev => [newLead, ...prev]);
+  };
+
+  // Background Autonomous Scout Loop (Runs periodically)
+  useEffect(() => {
+    if (!isScoutRunning) return;
+    const interval = setInterval(() => {
+      runScoutCycle();
+    }, 45000); // autonomous discovery tick
+    return () => clearInterval(interval);
+  }, [isScoutRunning]);
+
+  // Reset to pristine seed data
+  const resetAllSeedData = () => {
+    localStorage.clear();
+    setProfile(DEFAULT_PROFILE);
+    setCourses(INITIAL_COURSES);
+    setEbooks(INITIAL_EBOOKS);
+    setAiTools(INITIAL_AI_TOOLS);
+    setAiTutors(INITIAL_AI_TUTORS);
+    setScoutLeads(INITIAL_SCOUT_LEADS);
+    setMarketplacePrompts(INITIAL_PROMPT_MARKETPLACE);
+    setEnrollments([]);
+    setInteractions([]);
+    setCertificates([]);
+    setWallet(DEFAULT_WALLET);
+    setCustomLogoUrlState(null);
+  };
+
+  return (
+    <EcosystemContext.Provider
+      value={{
+        profile,
+        isAdmin,
+        adminLogin,
+        adminLogout,
+        updateProfile,
+        courses,
+        enrollments,
+        interactions,
+        marketplacePrompts,
+        certificates,
+        ebooks,
+        aiTools,
+        aiTutors,
+        scoutLeads,
+        referrals,
+        wallet,
+        customLogoUrl,
+        setCustomLogoUrl,
+        enrollInCourse,
+        recordInteraction,
+        completeCourse,
+        buyPrompt,
+        createCustomPrompt,
+        isScoutRunning,
+        scoutStats,
+        runScoutCycle,
+        convertLead,
+        addFreeLead,
+        latestMiningBlock,
+        resetAllSeedData
+      }}
+    >
+      {children}
+    </EcosystemContext.Provider>
+  );
+};
+
+export const useEcosystem = () => {
+  const context = useContext(EcosystemContext);
+  if (!context) {
+    throw new Error('useEcosystem must be used within an EcosystemProvider');
+  }
+  return context;
+};

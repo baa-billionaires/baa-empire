@@ -160,8 +160,11 @@ export async function initialize(
           email: tx.email,
           amount: Math.round(amount * 100), // kobo or cents
           reference,
+          description: 'Payment to Mode Digital Creations Limited - BAA-BILLIONAIRES Academy Project',
           metadata: {
             ...metadata,
+            description: 'Payment to Mode Digital Creations Limited - BAA-BILLIONAIRES Academy Project',
+            legal_entity: 'Mode Digital Creations Limited & Rossyst Enterprises Limited (BN: UY/009049)',
             ecosystem: 'Billionaires AI Academy',
             baacoin_allocation: anticipatedBaaCoin
           }

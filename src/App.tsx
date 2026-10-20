@@ -4,6 +4,8 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { Certificate } from './components/Certificate';
+import { BaaLiveNewsHeader } from './components/BaaLiveNewsHeader';
+import { AdminGate } from './components/AdminGate';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -33,6 +35,11 @@ import { WhatsAppContactsPage } from './pages/WhatsAppContactsPage';
 import { AdminTranslationsPage } from './pages/AdminTranslationsPage';
 import { CourseStudioPage } from './pages/CourseStudioPage';
 import { BulkGenerateVideosPage } from './pages/BulkGenerateVideosPage';
+import { UADCLab } from './pages/UADCLab';
+import { AboutPage } from './pages/AboutPage';
+import { PartnersPage } from './pages/PartnersPage';
+import { InvestorOnePagerPage } from './pages/InvestorOnePagerPage';
+import { WalletPage } from './pages/WalletPage';
 
 import { CertificateNFT } from './types';
 import { ArrowLeft } from 'lucide-react';
@@ -50,6 +57,16 @@ function AppContent() {
   // Sync with browser hash / path if desired
   useEffect(() => {
     const handleHashChange = () => {
+      // Check pathname first
+      if (window.location.pathname === '/investor-one-pager' || window.location.pathname === '/investor-one-pager/') {
+        setCurrentPage('investor-one-pager');
+        return;
+      }
+      if (window.location.pathname === '/wallet' || window.location.pathname === '/wallet/') {
+        setCurrentPage('wallet');
+        return;
+      }
+
       const hash = window.location.hash.replace('#', '');
       if (hash) {
         if (hash.startsWith('learn/')) {
@@ -67,7 +84,7 @@ function AppContent() {
         } else if (hash === 'admin') {
           setCurrentPage('admin');
         } else if ([
-          'home', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 
+          'home', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
@@ -130,6 +147,9 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-black text-slate-100 flex flex-col font-sans">
+      {/* Top Autonomous Live Breaking Video News & Headlines Header */}
+      <BaaLiveNewsHeader onNavigate={handleNav} />
+
       <Navbar
         currentPage={currentPage}
         setCurrentPage={handleNav}
@@ -172,6 +192,26 @@ function AppContent() {
           />
         )}
 
+        {currentPage === 'wallet' && (
+          <WalletPage onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'uadc-lab' && (
+          <UADCLab />
+        )}
+
+        {currentPage === 'investor-one-pager' && (
+          <InvestorOnePagerPage onBack={() => handleNav('home')} />
+        )}
+
+        {currentPage === 'about' && (
+          <AboutPage onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'partners' && (
+          <PartnersPage onNavigate={handleNav} />
+        )}
+
         {currentPage === 'datacenter' && (
           <DataCenterPage />
         )}
@@ -195,6 +235,7 @@ function AppContent() {
           <TutorDetailPage
             tutorId={selectedTutorId}
             onBack={() => handleNav('marketplace')}
+            onViewCertificate={handleSelectCertificate}
           />
         )}
 
@@ -232,60 +273,110 @@ function AppContent() {
           <BountiesPage />
         )}
 
-        {/* Autonomous Admin Command Routes */}
+        {/* Autonomous Admin Command Routes (Guarded for Admins Only) */}
         {currentPage === 'marketing' && (
-          <MarketingCommandPage
-            onBack={() => handleNav('admin')}
-          />
+          isAdmin ? (
+            <MarketingCommandPage onBack={() => handleNav('admin')} />
+          ) : (
+            <AdminGate
+              targetFeatureName="Marketing Command Center (Multi-Channel Ads)"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('marketing')}
+            />
+          )
         )}
 
         {currentPage === 'social' && (
-          <SocialCommandPage
-            onBack={() => handleNav('admin')}
-          />
+          isAdmin ? (
+            <SocialCommandPage onBack={() => handleNav('admin')} />
+          ) : (
+            <AdminGate
+              targetFeatureName="Social Media Autopilot (AI Viral Poster)"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('social')}
+            />
+          )
         )}
 
         {currentPage === 'whatsapp-broadcast' && (
-          <WhatsAppBroadcastPage
-            onBack={() => handleNav('admin')}
-          />
+          isAdmin ? (
+            <WhatsAppBroadcastPage onBack={() => handleNav('admin')} />
+          ) : (
+            <AdminGate
+              targetFeatureName="WhatsApp Mass Broadcast Console"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('whatsapp-broadcast')}
+            />
+          )
         )}
 
         {currentPage === 'whatsapp-closer' && (
-          <WhatsAppCloserPage
-            onBack={() => handleNav('admin')}
-          />
+          isAdmin ? (
+            <WhatsAppCloserPage onBack={() => handleNav('admin')} />
+          ) : (
+            <AdminGate
+              targetFeatureName="WhatsApp 24/7 AI Closer Bot"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('whatsapp-closer')}
+            />
+          )
         )}
 
         {currentPage === 'whatsapp-contacts' && (
-          <WhatsAppContactsPage
-            onBack={() => handleNav('admin')}
-          />
+          isAdmin ? (
+            <WhatsAppContactsPage onBack={() => handleNav('admin')} />
+          ) : (
+            <AdminGate
+              targetFeatureName="WhatsApp Scraper &amp; Verified CRM"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('whatsapp-contacts')}
+            />
+          )
         )}
 
         {currentPage === 'translations' && (
-          <AdminTranslationsPage
-            onBack={() => handleNav('admin')}
-          />
+          isAdmin ? (
+            <AdminTranslationsPage onBack={() => handleNav('admin')} />
+          ) : (
+            <AdminGate
+              targetFeatureName="Pan-African AI Course Translator"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('translations')}
+            />
+          )
         )}
 
         {currentPage === 'course-studio' && (
-          <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
-            <button
-              onClick={() => handleNav('admin')}
-              className="flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-white transition"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to Admin Vault</span>
-            </button>
-            <CourseStudioPage />
-          </div>
+          isAdmin ? (
+            <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6">
+              <button
+                onClick={() => handleNav('admin')}
+                className="flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-white transition"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Admin Vault</span>
+              </button>
+              <CourseStudioPage />
+            </div>
+          ) : (
+            <AdminGate
+              targetFeatureName="AI Video Course Studio"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('course-studio')}
+            />
+          )
         )}
 
         {currentPage === 'bulk-videos' && (
-          <BulkGenerateVideosPage
-            onBack={() => handleNav('admin')}
-          />
+          isAdmin ? (
+            <BulkGenerateVideosPage onBack={() => handleNav('admin')} />
+          ) : (
+            <AdminGate
+              targetFeatureName="Bulk 100 Course Video Generator"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('bulk-videos')}
+            />
+          )
         )}
 
         {currentPage === 'certificate-view' && selectedCertificate && (
@@ -320,9 +411,15 @@ function AppContent() {
         )}
 
         {currentPage === 'admin' && (
-          <AdminPage
-            onNavigate={handleNav}
-          />
+          isAdmin ? (
+            <AdminPage onNavigate={handleNav} />
+          ) : (
+            <AdminGate
+              targetFeatureName="Admin Command Vault &amp; Sovereign Operations"
+              onBackToPublic={() => handleNav('academy')}
+              onSuccess={() => handleNav('admin')}
+            />
+          )
         )}
 
         {currentPage === 'free' && (

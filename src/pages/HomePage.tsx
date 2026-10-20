@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useEcosystem } from '../context/EcosystemContext';
 import { HeroSphere } from '../components/HeroSphere';
+import { Baa4DEcosystemHero } from '../components/Baa4DEcosystemHero';
 import {
   Coins,
   Radar,
@@ -18,7 +19,8 @@ import {
   Users,
   ChevronRight,
   Flame,
-  Star
+  Star,
+  Orbit
 } from 'lucide-react';
 
 import { InternalAdRenderer } from '../components/InternalAdRenderer';
@@ -51,113 +53,140 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage, onSelectCour
         />
       </div>
 
-      {/* 1. HERO SECTION WITH 3D CANVAS SPHERE & LIVE SCOUT COUNTER */}
-      <section className="relative pt-12 pb-24 px-4 sm:px-6 lg:px-8 border-b border-zinc-900 cyber-grid">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Hero Left Content */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            {/* Autonomous Status Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-[#FFD700]/40 backdrop-blur-md">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-xs font-mono text-[#FFD700] font-bold">
-                AI Scout Active: {scoutStats.discovered.toLocaleString()} Leads Discovered Today
-              </span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl font-heading font-black tracking-tight text-white leading-[1.08]">
-              The Trillion-Dollar{' '}
-              <span className="bg-gradient-to-r from-[#FFF275] via-[#FFD700] to-[#E5A800] bg-clip-text text-transparent">
-                Autonomous
-              </span>{' '}
-              AI &amp; Blockchain University
-            </h1>
-
-            {/* Sub-headline */}
-            <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-2xl font-sans">
-              Learn-to-Mine with our <span className="text-[#FFD700] font-bold">10x BaaCoin Networth System</span>. Enroll for $99, instantly receive 990 BaaCoin ($990 networth), mine cryptocurrency as you learn, and sell your prompts in our 60/40 Marketplace.
-            </p>
-
-            {/* BaaCoin 10x Networth Quick Calculation Banner */}
-            <div className="p-4 rounded-2xl bg-zinc-950/80 border border-[#FFD700]/30 shadow-lg shadow-[#FFD700]/5 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FFD700]/10 flex items-center justify-center text-[#FFD700]">
-                  <Coins className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
-                    Autonomous Guarantee
-                  </span>
-                  <span className="text-sm font-bold text-white">
-                    $99 Tuition = <span className="text-[#FFD700]">990 BaaCoin Networth</span> (10x Value)
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-[#00D4FF] bg-[#00D4FF]/10 px-2.5 py-1 rounded-full border border-[#00D4FF]/30">
-                  Unlocked on Graduation
+      {/* 1. HERO SECTION WITH 4D WEBGL SHADER SOLAR SYSTEM & LIVE TELEMETRY */}
+      <section className="relative pt-10 pb-20 px-4 sm:px-6 lg:px-8 border-b border-zinc-900 cyber-grid">
+        <div className="max-w-7xl mx-auto space-y-10">
+          {/* Top Hero Headline & Quick Value Props */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Hero Left Content */}
+            <div className="lg:col-span-8 space-y-5 text-left">
+              {/* Autonomous Status Pill */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-[#FFD700]/40 backdrop-blur-md">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                <span className="text-xs font-mono text-[#FFD700] font-bold">
+                  AI Scout Active: {scoutStats.discovered.toLocaleString()} Leads Discovered Today
                 </span>
               </div>
+
+              {/* Main Headline */}
+              <h1 className="text-4xl sm:text-6xl font-heading font-black tracking-tight text-white leading-[1.08]">
+                The Trillion-Dollar{' '}
+                <span className="bg-gradient-to-r from-[#FFF275] via-[#FFD700] to-[#E5A800] bg-clip-text text-transparent">
+                  Autonomous
+                </span>{' '}
+                AI &amp; Blockchain University
+              </h1>
+
+              {/* Sub-headline */}
+              <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-3xl font-sans">
+                Learn-to-Mine with our <span className="text-[#FFD700] font-bold">10x BaaCoin Networth System</span>. Enroll for $99, instantly receive 990 BaaCoin ($990 networth), mine cryptocurrency as you learn, and command Africa's sovereign 4D autonomous data center.
+              </p>
+
+              {/* BaaCoin 10x Networth Quick Calculation Banner */}
+              <div className="p-4 rounded-2xl bg-zinc-950/80 border border-[#FFD700]/30 shadow-lg shadow-[#FFD700]/5 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FFD700]/10 flex items-center justify-center text-[#FFD700]">
+                    <Coins className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
+                      Autonomous Guarantee
+                    </span>
+                    <span className="text-sm font-bold text-white">
+                      $99 Tuition = <span className="text-[#FFD700]">990 BaaCoin Networth</span> (10x Value)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-[#00D4FF] bg-[#00D4FF]/10 px-2.5 py-1 rounded-full border border-[#00D4FF]/30">
+                    Unlocked on Graduation
+                  </span>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <button
+                  onClick={() => setCurrentPage('academy')}
+                  className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#F3C200] to-[#E5A800] text-black font-heading font-black text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition shadow-xl shadow-[#FFD700]/20 flex items-center gap-2"
+                >
+                  <span>Explore 100 Courses</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={() => setCurrentPage('uadc-lab')}
+                  className="px-6 py-3.5 rounded-xl bg-[#00FF88]/15 border border-[#00FF88]/50 hover:bg-[#00FF88]/25 text-[#00FF88] font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2 shadow-lg shadow-[#00FF88]/10"
+                >
+                  <Cpu className="w-4 h-4 text-[#00FF88]" />
+                  <span>Enter UADC Lab 🧠</span>
+                </button>
+
+                <button
+                  onClick={() => setCurrentPage('investor-one-pager')}
+                  className="px-5 py-3.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-[#00C853] text-white font-mono text-xs uppercase tracking-wider hover:bg-zinc-800 transition flex items-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4 text-[#00C853]" />
+                  <span>Investor Deck ($500k)</span>
+                </button>
+              </div>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <button
-                onClick={() => setCurrentPage('academy')}
-                className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#F3C200] to-[#E5A800] text-black font-heading font-black text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition shadow-xl shadow-[#FFD700]/20 flex items-center gap-2"
-              >
-                <span>Explore 100 Courses</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              <button
-                onClick={() => setCurrentPage('free')}
-                className="px-6 py-3.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-[#00D4FF] text-white font-mono text-xs uppercase tracking-wider hover:bg-zinc-800 transition flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4 text-[#00D4FF]" />
-                <span>Claim 7 Free Wealth Magnets</span>
-              </button>
-            </div>
-
-            {/* Micro Stats Row */}
-            <div className="pt-4 grid grid-cols-3 gap-4 border-t border-zinc-800/80 text-left font-mono">
-              <div>
-                <span className="text-xl sm:text-2xl font-bold text-white block">100+</span>
-                <span className="text-[11px] text-zinc-400">Master Courses</span>
+            {/* Quick Micro Telemetry */}
+            <div className="lg:col-span-4 bg-zinc-950/90 border border-zinc-800/90 rounded-3xl p-6 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+                <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  Ecosystem Telemetry
+                </span>
+                <span className="text-[10px] font-mono text-zinc-500">4D LIVE</span>
               </div>
-              <div>
-                <span className="text-xl sm:text-2xl font-bold text-[#FFD700] block">$990</span>
-                <span className="text-[11px] text-zinc-400">Networth / Student</span>
-              </div>
-              <div>
-                <span className="text-xl sm:text-2xl font-bold text-[#00D4FF] block">60 / 40</span>
-                <span className="text-[11px] text-zinc-400">Market Royalty</span>
+
+              <div className="space-y-3 font-mono text-xs">
+                <div className="flex justify-between items-center p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                  <span className="text-zinc-400">Total Courses:</span>
+                  <span className="text-white font-bold text-sm">100 Master Classes</span>
+                </div>
+
+                <div className="flex justify-between items-center p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                  <span className="text-zinc-400">Networth / Student:</span>
+                  <span className="text-[#FFD700] font-bold text-sm">$990 (990 BaaCoin)</span>
+                </div>
+
+                <div className="flex justify-between items-center p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                  <span className="text-zinc-400">Mesh Idle CPUs:</span>
+                  <span className="text-[#00FF88] font-bold text-sm">4,892 Phones Staked</span>
+                </div>
+
+                <div className="flex justify-between items-center p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+                  <span className="text-zinc-400">Legal Entity:</span>
+                  <span className="text-zinc-300 font-bold text-[11px]">BN: UY/009049</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Hero Right: 3D Golden Neural Sphere */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            <div className="w-full aspect-square max-w-[460px] relative">
-              <HeroSphere className="w-full h-full" />
-              {/* Floating Hologram Badges */}
-              <div className="absolute -top-2 -left-2 bg-black/85 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#FFD700]/40 text-xs font-mono shadow-xl flex items-center gap-2">
-                <Coins className="w-4 h-4 text-[#FFD700]" />
-                <div>
-                  <span className="text-[9px] text-zinc-400 block">LEARN-TO-MINE</span>
-                  <span className="text-[#FFD700] font-bold">+0.5 BaaCoin / min</span>
-                </div>
+          {/* 4D-STYLE ANIMATED HERO BANNER COMPONENT */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between px-2">
+              <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+                <Orbit className="w-4 h-4 text-[#00FF88]" />
+                <span className="text-white font-bold uppercase tracking-wider">
+                  Interactive 4D Planetary Engine
+                </span>
+                <span className="text-zinc-600">•</span>
+                <span className="text-emerald-400">Rotate &amp; Inspect Any of the 11 Solar Bodies</span>
               </div>
-
-              <div className="absolute -bottom-2 -right-2 bg-black/85 backdrop-blur-md px-3.5 py-2 rounded-xl border border-[#00D4FF]/40 text-xs font-mono shadow-xl flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-[#00D4FF]" />
-                <div>
-                  <span className="text-[9px] text-zinc-400 block">AUTONOMOUS DATA CENTER</span>
-                  <span className="text-emerald-400 font-bold">1.08 PUE Green Hydro</span>
-                </div>
-              </div>
+              <span className="text-[11px] font-mono text-[#FFD700] hidden sm:inline">
+                Three.js + GLSL WebGL Shaders + Framer Motion
+              </span>
             </div>
+
+            <Baa4DEcosystemHero
+              onNavigate={setCurrentPage}
+              onSelectCourse={onSelectCourse}
+            />
           </div>
         </div>
       </section>

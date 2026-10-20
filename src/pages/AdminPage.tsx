@@ -314,6 +314,63 @@ create table if not exists social_accounts (
   created_at timestamp default now()
 );
 
+-- UADC LAB TABLES
+create table if not exists uadc_earnings (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  module text,
+  engine_name text,
+  amount numeric default 0,
+  currency text default 'USD',
+  details jsonb,
+  created_at timestamp default now()
+);
+
+create table if not exists uadc_data_vault (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  vault_size_gb numeric default 2.3,
+  earning_rate_hourly numeric default 0.42,
+  total_dividends_earned numeric default 0,
+  unclaimed_dividends numeric default 47.30,
+  status text default 'active',
+  created_at timestamp default now()
+);
+
+create table if not exists uadc_stakes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  stake_amount numeric default 0,
+  apy_percent numeric default 24,
+  daily_yield numeric default 0,
+  status text default 'active',
+  created_at timestamp default now()
+);
+
+create table if not exists uadc_workers (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  worker_name text,
+  role text,
+  is_active bool default true,
+  today_earnings numeric default 0,
+  tasks_completed int default 0,
+  rental_price_monthly numeric default 29,
+  created_at timestamp default now()
+);
+
+create table if not exists uadc_twins (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  twin_name text,
+  role text,
+  avatar_url text,
+  is_active bool default true,
+  daily_revenue numeric default 0,
+  monthly_fee numeric default 19,
+  created_at timestamp default now()
+);
+
 -- Enable RLS
 alter table profiles enable row level security;
 alter table courses enable row level security;
@@ -332,6 +389,11 @@ alter table ai_tv_shows enable row level security;
 alter table translations enable row level security;
 alter table white_labels enable row level security;
 alter table social_accounts enable row level security;
+alter table uadc_earnings enable row level security;
+alter table uadc_data_vault enable row level security;
+alter table uadc_stakes enable row level security;
+alter table uadc_workers enable row level security;
+alter table uadc_twins enable row level security;
 
 create policy "Allow all profiles" on profiles for all using (true) with check (true);
 create policy "Allow all courses" on courses for all using (true) with check (true);
@@ -342,7 +404,12 @@ create policy "Allow all certificates_nft" on certificates_nft for all using (tr
 create policy "Allow all scout_leads" on scout_leads for all using (true) with check (true);
 create policy "Allow all wallets" on wallets for all using (true) with check (true);
 create policy "Allow all bounties" on bounties for all using (true) with check (true);
-create policy "Allow all tv" on ai_tv_shows for all using (true) with check (true);`;
+create policy "Allow all tv" on ai_tv_shows for all using (true) with check (true);
+create policy "Allow all uadc_earnings" on uadc_earnings for all using (true) with check (true);
+create policy "Allow all uadc_data_vault" on uadc_data_vault for all using (true) with check (true);
+create policy "Allow all uadc_stakes" on uadc_stakes for all using (true) with check (true);
+create policy "Allow all uadc_workers" on uadc_workers for all using (true) with check (true);
+create policy "Allow all uadc_twins" on uadc_twins for all using (true) with check (true);`;
 
   const handleCopySql = () => {
     navigator.clipboard.writeText(supabaseSqlContent);

@@ -17,7 +17,8 @@ import {
   Compass,
   Gift,
   Radio,
-  Briefcase
+  Briefcase,
+  Brain
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -36,6 +37,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navLinks = [
     { id: 'home', label: 'Home', icon: Compass },
+    { id: 'wallet', label: 'Wallet 🪙', icon: Coins, badge: 'BASE' },
+    { id: 'uadc-lab', label: 'UADC Lab 🧠', icon: Brain, badge: 'NEW' },
+    { id: 'investor-one-pager', label: 'Investor Deck', icon: Sparkles, badge: 'SEED' },
     { id: 'academy', label: 'Academy (100 Courses)', icon: BookOpen },
     { id: 'tv', label: 'AI TV', icon: Radio, badge: '24/7' },
     { id: 'bounties', label: 'Bounties', icon: Briefcase, badge: '₦150k' },
@@ -59,10 +63,13 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="bg-gradient-to-r from-black via-zinc-950 to-black px-4 py-1.5 border-b border-zinc-800/60 text-[11px] font-mono flex items-center justify-between overflow-x-auto no-scrollbar gap-4">
         {/* BaaCoin Ticker */}
         <div className="flex items-center gap-2 shrink-0">
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/30 font-bold">
+          <button
+            onClick={() => handleNav('wallet')}
+            className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/30 font-bold hover:bg-[#FFD700]/20 transition cursor-pointer"
+          >
             <Coins className="w-3.5 h-3.5 text-[#FFD700] animate-spin-slow" />
             BAACOIN: $1.00 USD
-          </span>
+          </button>
           <span className="text-zinc-500 hidden sm:inline">•</span>
           <span className="text-zinc-400 hidden sm:inline">10x Tuition Networth Enforced</span>
         </div>
@@ -82,8 +89,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Student Quick Networth Summary */}
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => handleNav('dashboard')}
-            className="flex items-center gap-1.5 hover:text-white transition text-zinc-300"
+            onClick={() => handleNav('wallet')}
+            className="flex items-center gap-1.5 hover:text-white transition text-zinc-300 cursor-pointer"
           >
             {profile.baacoin_locked ? (
               <span className="flex items-center gap-1 text-amber-400 font-bold">
@@ -149,25 +156,94 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="sm:hidden">Dashboard</span>
           </button>
 
-          {/* Admin Vault Button */}
-          <button
-            onClick={() => {
-              if (isAdmin) {
-                handleNav('admin');
-              } else {
-                openAdminModal();
-              }
-            }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono transition border ${
-              isAdmin
-                ? 'bg-emerald-950/60 border-emerald-500/50 text-emerald-400'
-                : 'bg-zinc-900/90 border-zinc-700 hover:border-[#00D4FF]/50 text-zinc-300 hover:text-white'
-            }`}
-            title="Admin Vault & Scout Control"
-          >
-            <Shield className="w-3.5 h-3.5 text-[#00D4FF]" />
-            <span className="hidden md:inline">{isAdmin ? 'Admin Vault' : 'Admin Login'}</span>
-          </button>
+          {/* Admin Vault / SuperAdmin Badge & Quick Launcher */}
+          {isAdmin ? (
+            <div className="relative group">
+              <button
+                onClick={() => handleNav('admin')}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-mono font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 hover:bg-emerald-900/80 transition shadow-lg shadow-emerald-950/40"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <Shield className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Admin Hub</span>
+              </button>
+
+              {/* Hover Dropdown for Admin Tools */}
+              <div className="absolute right-0 mt-2 w-64 bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-2 hidden group-hover:block z-50 animate-fade-in font-mono text-xs">
+                <div className="p-2 border-b border-zinc-800 text-[10px] text-zinc-400 uppercase tracking-wider font-bold flex items-center justify-between">
+                  <span>Autonomous Engines</span>
+                  <span className="text-emerald-400">ADMIN ONLY</span>
+                </div>
+                <div className="py-1 space-y-0.5">
+                  <button
+                    onClick={() => handleNav('admin')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>🏛️</span>
+                    <span>Admin Vault &amp; SQL Schema</span>
+                  </button>
+                  <button
+                    onClick={() => handleNav('marketing')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>🎯</span>
+                    <span>Marketing Command (Ads)</span>
+                  </button>
+                  <button
+                    onClick={() => handleNav('social')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>📡</span>
+                    <span>Social Media Autopilot</span>
+                  </button>
+                  <button
+                    onClick={() => handleNav('whatsapp-closer')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>🤖</span>
+                    <span>WhatsApp AI Closer</span>
+                  </button>
+                  <button
+                    onClick={() => handleNav('whatsapp-broadcast')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>💬</span>
+                    <span>WhatsApp Broadcast</span>
+                  </button>
+                  <button
+                    onClick={() => handleNav('course-studio')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>🎬</span>
+                    <span>AI Course Video Studio</span>
+                  </button>
+                  <button
+                    onClick={() => handleNav('bulk-videos')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>⚡</span>
+                    <span>Bulk 100 Course Generator</span>
+                  </button>
+                  <button
+                    onClick={() => handleNav('translations')}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 text-white transition flex items-center gap-2"
+                  >
+                    <span>🌍</span>
+                    <span>Pan-African Translations</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={openAdminModal}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono transition border bg-zinc-900/90 border-zinc-700 hover:border-[#00D4FF]/50 text-zinc-300 hover:text-white"
+              title="Admin Portal Login"
+            >
+              <Lock className="w-3.5 h-3.5 text-[#00D4FF]" />
+              <span className="hidden md:inline">Admin Login</span>
+            </button>
+          )}
 
           {/* Mobile Menu Toggle */}
           <button

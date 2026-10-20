@@ -77,6 +77,21 @@ interface EcosystemContextType {
   // Recent mining block
   latestMiningBlock: MiningBlock | null;
   resetAllSeedData: () => void;
+
+  // AI Tutor Lecture Mining & Minting
+  mintLectureNFTAndMine: (params: {
+    tutorId: string;
+    tutorName: string;
+    topic: string;
+    summary: string;
+    baacoinReward?: number;
+  }) => {
+    nftId: string;
+    baacoinAwarded: number;
+    blockHash: string;
+    timestamp: string;
+    certificate: CertificateNFT;
+  };
 }
 
 const DEFAULT_PROFILE: Profile = {
@@ -356,6 +371,71 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
     return { xp: xpGain, baacoin: baacoinGain, block };
   };
 
+  // 2.5 AI TUTOR LECTURE MINING & NFT MINTING
+  const mintLectureNFTAndMine = (params: {
+    tutorId: string;
+    tutorName: string;
+    topic: string;
+    summary: string;
+    baacoinReward?: number;
+  }) => {
+    const baacoinGain = params.baacoinReward || 150;
+    const xpGain = 250;
+
+    // 1. Credit student's wallet and unlocked spendable balance
+    setProfile(prev => ({
+      ...prev,
+      baacoin_balance: Number((prev.baacoin_balance + baacoinGain).toFixed(2)),
+      xp: prev.xp + xpGain
+    }));
+
+    setWallet(prev => ({
+      ...prev,
+      balance: Number((prev.balance + baacoinGain).toFixed(2)),
+      total_earned: Number((prev.total_earned + baacoinGain).toFixed(2)),
+      total_mined: Number((prev.total_mined + baacoinGain).toFixed(2))
+    }));
+
+    // 2. Mine cryptographic ledger block
+    const blockHash = '0x' + Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    const newBlock: MiningBlock = {
+      hash: blockHash,
+      nonce: Math.floor(Math.random() * 900000) + 100000,
+      reward: baacoinGain,
+      timestamp: new Date().toLocaleTimeString(),
+      courseTitle: `Lecture: ${params.topic} (${params.tutorName})`
+    };
+    setLatestMiningBlock(newBlock);
+
+    // 3. Mint on-chain verified lecture NFT certificate
+    const nftId = '0xlec' + Array.from({ length: 20 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    const lectureCert: CertificateNFT = {
+      id: `cert-lec-${Date.now()}`,
+      user_id: profile.id,
+      student_name: profile.full_name,
+      course_id: params.tutorId,
+      course_title: `Live Lecture: ${params.topic} by ${params.tutorName}`,
+      nft_id: nftId,
+      baacoin_engraved: baacoinGain,
+      ipfs_url: `ipfs://bafybeilec${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}/lecture-nft.json`,
+      qr_data: `https://billionairesai.academy/verify/${nftId}?tutor=${encodeURIComponent(params.tutorName)}&ref=${profile.referral_code}`,
+      is_tradable: true,
+      issue_date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      transaction_hash: '0xbaalecture' + Array.from({ length: 28 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+      referral_code: profile.referral_code
+    };
+
+    setCertificates(prev => [lectureCert, ...prev]);
+
+    return {
+      nftId,
+      baacoinAwarded: baacoinGain,
+      blockHash,
+      timestamp: newBlock.timestamp,
+      certificate: lectureCert
+    };
+  };
+
   // 3. GRADUATION & BAACOIN UNLOCKING + PROMPT 60/40 COMPILATION + NFT CERTIFICATE
   const completeCourse = (courseId: string): CertificateNFT => {
     const course = courses.find(c => c.id === courseId);
@@ -608,7 +688,8 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
         convertLead,
         addFreeLead,
         latestMiningBlock,
-        resetAllSeedData
+        resetAllSeedData,
+        mintLectureNFTAndMine
       }}
     >
       {children}

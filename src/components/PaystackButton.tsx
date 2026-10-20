@@ -261,6 +261,14 @@ export const PaystackButton: React.FC<PaystackButtonProps> = ({
               </div>
             </div>
 
+            {/* Legal Entity Checkout Description */}
+            <div className="mb-4 p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-[11px] font-mono flex items-center justify-between gap-2">
+              <span className="text-zinc-400 shrink-0">Recipient:</span>
+              <span className="text-emerald-400 font-bold truncate text-right">
+                Payment to Mode Digital Creations Limited - BAA-BILLIONAIRES Academy Project
+              </span>
+            </div>
+
             {/* BaaCoin Allocation Incentive Banner */}
             <div className="mb-5 p-3 rounded-2xl bg-gradient-to-r from-[#FFD700]/10 via-[#00D4FF]/10 to-transparent border border-[#FFD700]/30 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-[#FFD700]/20 flex items-center justify-center text-[#FFD700] shrink-0">

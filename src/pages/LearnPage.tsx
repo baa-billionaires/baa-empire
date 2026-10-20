@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useEcosystem } from '../context/EcosystemContext';
 import { Certificate } from '../components/Certificate';
 import confetti from 'canvas-confetti';
@@ -35,6 +35,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
   const {
     courses,
     enrollments,
+    enrollInCourse,
     recordInteraction,
     completeCourse,
     certificates,
@@ -43,6 +44,13 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
   const course = courses.find(c => c.id === courseId) || courses[0];
   const enrollment = enrollments.find(e => e.course_id === course.id);
+
+  // Ensure enrollment exists safely in background
+  useEffect(() => {
+    if (!enrollment && course) {
+      enrollInCourse(course.id);
+    }
+  }, [course?.id, enrollment, enrollInCourse]);
 
   // Active module & lesson tracking
   const [activeModuleIdx, setActiveModuleIdx] = useState(0);
@@ -76,6 +84,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
   const [miningLog, setMiningLog] = useState<string[]>([]);
   const [videoTimer, setVideoTimer] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoTimerRef = useRef(0);
 
   // Graduation Modal state
   const [graduatedCertificate, setGraduatedCertificate] = useState<any>(null);
@@ -84,35 +93,25 @@ export const LearnPage: React.FC<LearnPageProps> = ({
   const isCompleted = enrollment?.completed || (enrollment?.progress || 0) >= 100;
   const existingCert = certificates.find(c => c.course_id === course.id);
 
-  // Simulated Video Watch Miner (Every 12s simulated represents 1 min lecture tick -> +5 XP, +0.5 BaaCoin)
-  useEffect(() => {
-    let interval: any;
-    if (isVideoPlaying) {
-      interval = setInterval(() => {
-        setVideoTimer(prev => {
-          const next = prev + 1;
-          if (next % 6 === 0) {
-            triggerMineAction('video_watch', `Watched lecture segment on "${course.title}"`);
-          }
-          return next;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isVideoPlaying, course]);
-
-  const triggerMineAction = (
+  const triggerMineAction = useCallback((
     type: 'video_watch' | 'ai_tutor_query' | 'assignment_complete' | 'research_submit',
     promptData: string
   ) => {
     setIsMiningActive(true);
-    const { xp, baacoin, block } = recordInteraction({
+    const result = recordInteraction({
       courseId: course.id,
       type,
       promptData
     });
 
-    const logEntry = `[${new Date().toLocaleTimeString()}] MINED +${baacoin} BaaCoin (+${xp} XP) | Block ${block.hash.substring(0, 10)}... | Nonce: ${block.nonce}`;
+    const xp = result?.xp ?? 5;
+    const baacoin = result?.baacoin ?? 0.5;
+    const block = result?.block;
+
+    const logEntry = block
+      ? `[${new Date().toLocaleTimeString()}] MINED +${baacoin} BaaCoin (+${xp} XP) | Block ${block.hash.substring(0, 10)}... | Nonce: ${block.nonce}`
+      : `[${new Date().toLocaleTimeString()}] MINED +${baacoin} BaaCoin (+${xp} XP)`;
+
     setMiningLog(prev => [logEntry, ...prev.slice(0, 7)]);
 
     setTimeout(() => {
@@ -120,7 +119,31 @@ export const LearnPage: React.FC<LearnPageProps> = ({
     }, 1200);
 
     return { xp, baacoin };
-  };
+  }, [course.id, recordInteraction]);
+
+  // Reset video state when switching course
+  useEffect(() => {
+    setVideoTimer(0);
+    videoTimerRef.current = 0;
+    setIsVideoPlaying(false);
+  }, [courseId]);
+
+  // Simulated Video Watch Miner - cleanly decoupled from state updater
+  useEffect(() => {
+    if (!isVideoPlaying) return;
+
+    const interval = setInterval(() => {
+      videoTimerRef.current += 1;
+      const currentSeconds = videoTimerRef.current;
+      setVideoTimer(currentSeconds);
+
+      if (currentSeconds > 0 && currentSeconds % 6 === 0) {
+        triggerMineAction('video_watch', `Watched lecture segment on "${course.title}"`);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isVideoPlaying, course.title, triggerMineAction]);
 
   // Handle Asking AI Tutor
   const handleAskTutor = (e: React.FormEvent) => {

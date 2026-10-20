@@ -136,11 +136,39 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentPage, openAdminModal }
 
           {/* Student & Admin Portal */}
           <div>
-            <h5 className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-3">Portals &amp; Vault</h5>
+            <h5 className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-3">Portals &amp; Legal</h5>
             <ul className="space-y-2 text-xs">
               <li>
-                <button onClick={() => setCurrentPage('dashboard')} className="hover:text-white text-[#FFD700] font-medium transition">
+                <button onClick={() => setCurrentPage('uadc-lab')} className="hover:text-white text-[#00FF88] font-bold flex items-center gap-1.5 transition">
+                  <span>UADC Lab 🧠</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-[#00FF88]/20 text-[#00FF88] font-mono border border-[#00FF88]/40">15 ENGINES</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentPage('wallet')} className="hover:text-white text-[#FFD700] font-bold flex items-center gap-1.5 transition">
+                  <span>BAACOIN Wallet 🪙</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-[#FFD700]/20 text-[#FFD700] font-mono border border-[#FFD700]/40">BASE L2</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentPage('dashboard')} className="hover:text-white text-zinc-300 font-medium transition">
                   Student Portal &amp; Mining
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentPage('about')} className="hover:text-white text-zinc-300 transition">
+                  About BAA Academy
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentPage('partners')} className="hover:text-white text-emerald-400 transition">
+                  Partners &amp; Legal Trust
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentPage('investor-one-pager')} className="hover:text-white text-[#00C853] font-bold flex items-center gap-1.5 transition">
+                  <span>Investor One-Pager</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-[#00C853]/20 text-[#00C853] font-mono border border-[#00C853]/40">SEED DECK</span>
                 </button>
               </li>
               <li>
@@ -167,11 +195,19 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentPage, openAdminModal }
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-          <p>© {new Date().getFullYear()} Billionaires AI Academy &amp; Africa Blockchain University. Sovereign Intellectual Property.</p>
-          <div className="flex items-center gap-4 font-mono text-[11px]">
-            <span>Solidity • React • Supabase • Gemini AI</span>
+        {/* Bottom Bar with Exact Legal Text */}
+        <div className="mt-12 pt-6 border-t border-zinc-900 flex flex-col items-center justify-between gap-4 text-center text-xs text-zinc-400 font-sans leading-relaxed">
+          <p className="max-w-4xl">
+            © 2026 BAA-BILLIONAIRES Academy | A Production of Mode Digital Creations Limited &amp; Rossyst Enterprises Limited (BN: UY/009049) | No. 5 Ordu Street, Rumuola/Stadium Link Road, Port Harcourt, Rivers State, Nigeria | CAC Registered | Secured by Paystack
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4 font-mono text-[11px] text-zinc-500">
+            <span>CAC Registered: BN: UY/009049</span>
+            <span>•</span>
+            <span>Head Office: Port Harcourt, Rivers State</span>
+            <span>•</span>
+            <span>Lagos Hub: 12 Allen Ave, Ikeja</span>
+            <span>•</span>
+            <span className="text-[#00FF88]">Universal Autonomous Data Center (UADC)</span>
           </div>
         </div>
       </div>

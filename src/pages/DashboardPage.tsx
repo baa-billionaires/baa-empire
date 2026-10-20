@@ -197,10 +197,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   Collateral Valuation: <span className="text-white font-bold">${profile.baacoin_networth.toLocaleString()} USD</span>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-zinc-900 text-xs text-zinc-400 leading-relaxed font-sans">
-                  {profile.baacoin_locked
-                    ? 'Locked until capstone graduation (100% progress). Once completed, 20% moves to spendable balance instantly, rest vests daily.'
-                    : 'Congratulations! Your networth has unlocked. 20% liquid balance credited.'}
+                <div className="mt-4 pt-3 border-t border-zinc-900 text-xs text-zinc-400 leading-relaxed font-sans flex flex-col gap-2">
+                  <p>
+                    {profile.baacoin_locked
+                      ? 'Locked until capstone graduation (100% progress). Once completed, 20% moves to spendable balance instantly, rest vests daily.'
+                      : 'Congratulations! Your networth has unlocked. 20% liquid balance credited.'}
+                  </p>
+                  <button
+                    onClick={() => {
+                      window.location.hash = 'wallet';
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="w-full py-2 px-3 rounded-xl bg-[#00FF88]/15 hover:bg-[#00FF88]/25 text-[#00FF88] border border-[#00FF88]/40 font-mono text-[11px] font-bold uppercase transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <span>Open Full BAACOIN Wallet (Base L2)</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
 

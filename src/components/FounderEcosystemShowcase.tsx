@@ -531,8 +531,9 @@ export const FounderEcosystemShowcase: React.FC = () => {
           Headquarters: No. 5 Ordu Street, Rumuola/Stadium Link Road, Port Harcourt, Rivers State, Nigeria.
         </p>
 
-        <div className="pt-2 text-[11px] text-zinc-500 border-t border-zinc-900">
-          Partnerships via MODE Digital Creations Limited | Co-Founder Holdings: Automode AI, Autostack AI, CodeOrbit Limited | Address: No.5 Ordu Street, PH
+        <div className="pt-2 text-[11px] text-zinc-500 border-t border-zinc-900 flex flex-wrap items-center justify-between gap-2">
+          <span>Partnerships: autonomousagentscommerce@gmail.com • Tel: +2348025516793</span>
+          <span>Headquarters: No. 5 Ordu Street, Port Harcourt</span>
         </div>
       </div>
     </div>

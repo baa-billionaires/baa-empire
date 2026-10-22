@@ -40,6 +40,18 @@ import { AboutPage } from './pages/AboutPage';
 import { PartnersPage } from './pages/PartnersPage';
 import { InvestorOnePagerPage } from './pages/InvestorOnePagerPage';
 import { WalletPage } from './pages/WalletPage';
+import { AIWorkforcePage } from './pages/AIWorkforcePage';
+import { OmniAdGrowthPage } from './pages/OmniAdGrowthPage';
+import { ExchangePage } from './pages/ExchangePage';
+import { ReferralHubPage } from './pages/ReferralHubPage';
+import { ProjectsFundingPage } from './pages/ProjectsFundingPage';
+import { GeneralMarketplacePage } from './pages/GeneralMarketplacePage';
+import { AutonomousCyberEcoDashboard } from './components/AutonomousCyberEcoDashboard';
+import { SpotlightNewsDrawer } from './components/SpotlightNewsDrawer';
+import { AmbienceProvider } from './context/AmbienceContext';
+import { AmbienceBackground } from './components/AmbienceBackground';
+import { AmbienceCustomizerModal } from './components/AmbienceCustomizerModal';
+import { GlobalLiveClassroomModal } from './components/GlobalLiveClassroomModal';
 
 import { CertificateNFT } from './types';
 import { ArrowLeft } from 'lucide-react';
@@ -66,6 +78,34 @@ function AppContent() {
         setCurrentPage('wallet');
         return;
       }
+      if (window.location.pathname === '/ai-workforce' || window.location.pathname === '/ai-workforce/') {
+        setCurrentPage('ai-workforce');
+        return;
+      }
+      if (window.location.pathname === '/omni-ad-swarm' || window.location.pathname === '/omni-ad-swarm/') {
+        setCurrentPage('omni-ad-swarm');
+        return;
+      }
+      if (window.location.pathname === '/exchange' || window.location.pathname === '/exchange/') {
+        setCurrentPage('exchange');
+        return;
+      }
+      if (window.location.pathname === '/cyber-eco' || window.location.pathname === '/cyber-eco/') {
+        setCurrentPage('cyber-eco');
+        return;
+      }
+      if (window.location.pathname === '/referrals' || window.location.pathname === '/referral-hub') {
+        setCurrentPage('referrals');
+        return;
+      }
+      if (window.location.pathname === '/projects' || window.location.pathname === '/funding') {
+        setCurrentPage('projects');
+        return;
+      }
+      if (window.location.pathname === '/general-marketplace' || window.location.pathname === '/general-market') {
+        setCurrentPage('general-marketplace');
+        return;
+      }
 
       const hash = window.location.hash.replace('#', '');
       if (hash) {
@@ -83,16 +123,23 @@ function AppContent() {
           setCurrentPage('tv-watch');
         } else if (hash === 'admin') {
           setCurrentPage('admin');
+        } else if (hash === 'referral-hub' || hash === 'referrals') {
+          setCurrentPage('referrals');
+        } else if (hash === 'funding' || hash === 'projects') {
+          setCurrentPage('projects');
+        } else if (hash === 'general-marketplace' || hash === 'general-market') {
+          setCurrentPage('general-marketplace');
         } else if ([
           'home', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
-          'course-studio', 'bulk-videos'
+          'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace'
         ].includes(hash)) {
           setCurrentPage(hash);
         }
       }
+
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -146,7 +193,10 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen text-slate-100 flex flex-col font-sans relative">
+      {/* Dynamic Animated Canvas & Video Ambience Background */}
+      <AmbienceBackground />
+
       {/* Top Autonomous Live Breaking Video News & Headlines Header */}
       <BaaLiveNewsHeader onNavigate={handleNav} />
 
@@ -212,6 +262,33 @@ function AppContent() {
           <PartnersPage onNavigate={handleNav} />
         )}
 
+        {currentPage === 'ai-workforce' && (
+          <AIWorkforcePage />
+        )}
+
+        {currentPage === 'omni-ad-swarm' && (
+          <OmniAdGrowthPage />
+        )}
+
+        {currentPage === 'exchange' && (
+          <ExchangePage />
+        )}
+
+        {currentPage === 'cyber-eco' && (
+          <div className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+            <AutonomousCyberEcoDashboard onNavigate={handleNav} />
+          </div>
+        )}
+
+        {currentPage === 'referrals' && (
+          <ReferralHubPage />
+        )}
+
+        {currentPage === 'projects' && (
+          <ProjectsFundingPage />
+        )}
+
+
         {currentPage === 'datacenter' && (
           <DataCenterPage />
         )}
@@ -228,6 +305,13 @@ function AppContent() {
           <MarketplacePage
             onSelectTutor={handleSelectTutor}
             onSelectCertificate={handleSelectCertificate}
+          />
+        )}
+
+        {currentPage === 'general-marketplace' && (
+          <GeneralMarketplacePage
+            onNavigateToAcademy={() => handleNav('academy')}
+            onNavigateToWallet={() => handleNav('wallet')}
           />
         )}
 
@@ -427,6 +511,14 @@ function AppContent() {
             onNavigateToAcademy={() => handleNav('academy')}
           />
         )}
+        {/* Floating Spotlight & Video News Radar with Periodic Notifications */}
+        <SpotlightNewsDrawer onNavigate={handleNav} />
+
+        {/* Ambience, Color, & Video Theme Customizer Floating Toolbar & Modal */}
+        <AmbienceCustomizerModal />
+
+        {/* Global Live Class Big Screen Theater Modal */}
+        <GlobalLiveClassroomModal />
       </main>
 
       <Footer
@@ -446,7 +538,9 @@ function AppContent() {
 export default function App() {
   return (
     <EcosystemProvider>
-      <AppContent />
+      <AmbienceProvider>
+        <AppContent />
+      </AmbienceProvider>
     </EcosystemProvider>
   );
 }

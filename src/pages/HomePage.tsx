@@ -20,10 +20,14 @@ import {
   ChevronRight,
   Flame,
   Star,
-  Orbit
+  Orbit,
+  Bot,
+  Radio,
+  Gift
 } from 'lucide-react';
 
 import { InternalAdRenderer } from '../components/InternalAdRenderer';
+import { AutonomousCyberEcoDashboard } from '../components/AutonomousCyberEcoDashboard';
 
 interface HomePageProps {
   setCurrentPage: (page: string) => void;
@@ -68,17 +72,31 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage, onSelectCour
                 </span>
               </div>
 
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-6xl font-heading font-black tracking-tight text-white leading-[1.08]">
-                The Trillion-Dollar{' '}
-                <span className="bg-gradient-to-r from-[#FFF275] via-[#FFD700] to-[#E5A800] bg-clip-text text-transparent">
-                  Autonomous
-                </span>{' '}
-                AI &amp; Blockchain University
+              {/* Institution Pre-Title */}
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-xs sm:text-sm font-mono text-[#00D4FF] tracking-[0.22em] uppercase font-bold flex items-center gap-2">
+                  <GraduationCap className="w-4 h-4 text-[#00D4FF]" />
+                  <span>Sovereign Pan-African Institution &bull; EVM Blockchain</span>
+                </span>
+              </div>
+
+              {/* Main Headline - Extra Large App Title */}
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-heading font-black tracking-tight text-white leading-[1.04]">
+                <span className="bg-gradient-to-r from-[#FFF275] via-[#FFD700] to-[#E5A800] bg-clip-text text-transparent drop-shadow-md">
+                  Billionaires AI Academy
+                </span>
+                <span className="block text-2xl sm:text-4xl lg:text-5xl font-heading font-bold text-zinc-200 mt-2">
+                  &amp; Africa Blockchain University
+                </span>
               </h1>
 
+              {/* Powerful Tagline */}
+              <p className="text-lg sm:text-2xl font-heading font-bold bg-gradient-to-r from-[#00D4FF] via-teal-300 to-emerald-400 bg-clip-text text-transparent leading-snug">
+                Pioneering Sovereign African AI, EVM Blockchain Infrastructure &amp; Autonomous Billionaire Wealth Creation
+              </p>
+
               {/* Sub-headline */}
-              <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-3xl font-sans">
+              <p className="text-sm sm:text-base text-zinc-300 leading-relaxed max-w-3xl font-sans">
                 Learn-to-Mine with our <span className="text-[#FFD700] font-bold">10x BaaCoin Networth System</span>. Enroll for $99, instantly receive 990 BaaCoin ($990 networth), mine cryptocurrency as you learn, and command Africa's sovereign 4D autonomous data center.
               </p>
 
@@ -130,6 +148,46 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage, onSelectCour
                   <Sparkles className="w-4 h-4 text-[#00C853]" />
                   <span>Investor Deck ($500k)</span>
                 </button>
+
+                <button
+                  onClick={() => setCurrentPage('ai-workforce')}
+                  className="px-5 py-3.5 rounded-xl bg-purple-500/15 border border-purple-500/50 hover:bg-purple-500/25 text-purple-300 font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2 shadow-lg shadow-purple-500/10"
+                >
+                  <Bot className="w-4 h-4 text-purple-400" />
+                  <span>🤖 AI Workforce</span>
+                </button>
+
+                <button
+                  onClick={() => setCurrentPage('omni-ad-swarm')}
+                  className="px-5 py-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/50 hover:bg-emerald-500/25 text-emerald-300 font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2"
+                >
+                  <Radio className="w-4 h-4 text-emerald-400" />
+                  <span>📡 Omni-Ad Swarm</span>
+                </button>
+
+                <button
+                  onClick={() => setCurrentPage('exchange')}
+                  className="px-5 py-3.5 rounded-xl bg-[#FFD700]/15 border border-[#FFD700]/50 hover:bg-[#FFD700]/25 text-[#FFD700] font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2"
+                >
+                  <Coins className="w-4 h-4 text-[#FFD700]" />
+                  <span>💱 BaaCoin Swap</span>
+                </button>
+
+                <button
+                  onClick={() => setCurrentPage('referrals')}
+                  className="px-5 py-3.5 rounded-xl bg-amber-500/15 border border-amber-500/50 hover:bg-amber-500/25 text-[#FFD700] font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2"
+                >
+                  <Gift className="w-4 h-4 text-[#FFD700]" />
+                  <span>🎁 Referral Hub</span>
+                </button>
+
+                <button
+                  onClick={() => setCurrentPage('projects')}
+                  className="px-5 py-3.5 rounded-xl bg-sky-500/15 border border-sky-500/50 hover:bg-sky-500/25 text-[#00D4FF] font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2"
+                >
+                  <Flame className="w-4 h-4 text-[#00D4FF]" />
+                  <span>🚀 Projects &amp; Grants</span>
+                </button>
               </div>
             </div>
 
@@ -156,7 +214,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage, onSelectCour
 
                 <div className="flex justify-between items-center p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
                   <span className="text-zinc-400">Mesh Idle CPUs:</span>
-                  <span className="text-[#00FF88] font-bold text-sm">4,892 Phones Staked</span>
+                  <span className="text-[#00FF88] font-bold text-sm">2,400+ Phones Active</span>
                 </div>
 
                 <div className="flex justify-between items-center p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
@@ -188,6 +246,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage, onSelectCour
               onSelectCourse={onSelectCourse}
             />
           </div>
+        </div>
+      </section>
+
+      {/* INTERACTIVE AUTONOMOUS CYBER-ACADEMY 5-PILLAR ECOSYSTEM HUB */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 border-b border-zinc-900 bg-gradient-to-b from-black via-zinc-950 to-black">
+        <div className="max-w-7xl mx-auto">
+          <AutonomousCyberEcoDashboard onNavigate={setCurrentPage} />
         </div>
       </section>
 

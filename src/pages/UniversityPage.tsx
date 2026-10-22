@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useEcosystem } from '../context/EcosystemContext';
+import { NFTCertificatePreviewModal } from '../components/NFTCertificatePreviewModal';
+import { CertificateNFT } from '../types';
 import {
   GraduationCap,
   MapPin,
@@ -10,12 +13,21 @@ import {
   ChevronRight,
   BookOpen,
   CheckCircle,
-  FileText
+  FileText,
+  Search,
+  ShieldCheck,
+  Terminal,
+  QrCode,
+  Sparkles,
+  ExternalLink
 } from 'lucide-react';
 
 export const UniversityPage: React.FC<{ onNavigateToAcademy: () => void }> = ({ onNavigateToAcademy }) => {
-  const [activeTab, setActiveTab] = useState<'programs' | 'map' | 'faculty'>('programs');
+  const { certificates } = useEcosystem();
+  const [activeTab, setActiveTab] = useState<'programs' | 'map' | 'faculty' | 'validator'>('programs');
   const [selectedCampusNode, setSelectedCampusNode] = useState<string>('node-1');
+  const [validatorQuery, setValidatorQuery] = useState<string>('0xBAAC-990-SOVEREIGN-MASTER-2026');
+  const [previewCert, setPreviewCert] = useState<CertificateNFT | null>(null);
 
   const campusNodes = [
     {
@@ -78,7 +90,7 @@ export const UniversityPage: React.FC<{ onNavigateToAcademy: () => void }> = ({ 
         </div>
 
         {/* Tab Controls */}
-        <div className="flex p-1.5 bg-zinc-950 border border-zinc-800 rounded-2xl self-center sm:self-auto shrink-0 text-xs">
+        <div className="flex flex-wrap p-1.5 bg-zinc-950 border border-zinc-800 rounded-2xl self-center sm:self-auto shrink-0 text-xs gap-1">
           <button
             onClick={() => setActiveTab('programs')}
             className={`px-4 py-2 rounded-xl font-bold transition ${
@@ -108,6 +120,17 @@ export const UniversityPage: React.FC<{ onNavigateToAcademy: () => void }> = ({ 
             }`}
           >
             Faculty Deans
+          </button>
+          <button
+            onClick={() => setActiveTab('validator')}
+            className={`px-4 py-2 rounded-xl font-bold transition flex items-center gap-1.5 ${
+              activeTab === 'validator'
+                ? 'bg-gradient-to-r from-emerald-400 to-[#00D4FF] text-black shadow-md'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>NFT Credential Validator</span>
           </button>
         </div>
       </div>
@@ -368,7 +391,192 @@ export const UniversityPage: React.FC<{ onNavigateToAcademy: () => void }> = ({ 
             </div>
           </div>
         )}
+
+        {/* ON-CHAIN NFT CREDENTIAL VALIDATOR TAB */}
+        {activeTab === 'validator' && (
+          <div className="space-y-8">
+            {/* Header & Verification Query Bar */}
+            <div className="p-8 rounded-3xl bg-zinc-950 border border-zinc-800 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-emerald-500/10 via-[#00D4FF]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 max-w-3xl">
+                <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>Base L2 Soulbound On-Chain Credential Registry</span>
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-heading font-black text-white mt-2">
+                  Institutional Degree &amp; Fellowship Verification
+                </h2>
+                <p className="text-xs sm:text-sm text-zinc-400 mt-2 leading-relaxed">
+                  Every Africa Blockchain &amp; AI University degree is permanently engraved onto the Base Layer-2 Ethereum Mainnet. Soulbound ERC-721 tokens feature immutable proof of work, an integrated 990 BAA BaaCoin chip, and cryptographic signatures from Academic Deans.
+                </p>
+
+                {/* Search Bar */}
+                <div className="mt-6 flex flex-col sm:flex-row gap-2">
+                  <div className="relative flex-1">
+                    <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={validatorQuery}
+                      onChange={(e) => setValidatorQuery(e.target.value)}
+                      placeholder="Enter Token ID (e.g. 0xBAAC-990-SOVEREIGN...) or Student Name..."
+                      className="w-full pl-10 pr-4 py-3 bg-zinc-900/90 border border-zinc-800 rounded-xl text-xs font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-400"
+                    />
+                  </div>
+                  <button
+                    onClick={() => {
+                      const matched = certificates.find(
+                        (c) =>
+                          c.nft_id.toLowerCase().includes(validatorQuery.trim().toLowerCase()) ||
+                          c.student_name.toLowerCase().includes(validatorQuery.trim().toLowerCase()) ||
+                          c.course_title.toLowerCase().includes(validatorQuery.trim().toLowerCase())
+                      );
+                      if (matched) {
+                        setPreviewCert(matched);
+                      } else if (certificates.length > 0) {
+                        setPreviewCert(certificates[0]);
+                      }
+                    }}
+                    className="px-6 py-3 bg-gradient-to-r from-emerald-400 to-[#00D4FF] hover:from-emerald-300 hover:to-[#5ee7df] text-black font-black text-xs rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-emerald-500/20"
+                  >
+                    <Search className="w-4 h-4" />
+                    <span>Verify &amp; Preview</span>
+                  </button>
+                </div>
+
+                {/* Preset Fast Lookups */}
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-mono text-zinc-400">
+                  <span className="text-zinc-500">Sample Registry Tokens:</span>
+                  <button
+                    onClick={() => {
+                      setValidatorQuery('0xBAAC-990-SOVEREIGN-MASTER-2026');
+                      const found = certificates.find((c) => c.nft_id.includes('MASTER'));
+                      if (found) setPreviewCert(found);
+                    }}
+                    className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 hover:border-emerald-400 text-emerald-400 transition"
+                  >
+                    Tariq Sterling (Chancellor Fellow)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setValidatorQuery('0xBAAC-990-SOVEREIGN-GRAD-2026');
+                      const found = certificates.find((c) => c.nft_id.includes('GRAD'));
+                      if (found) setPreviewCert(found);
+                    }}
+                    className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 hover:border-[#00D4FF] text-[#00D4FF] transition"
+                  >
+                    Chioma Adeyemi (Valedictorian)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Live On-Chain Telemetry & Verified Certificate Cards */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Telemetry Box */}
+              <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-4 font-mono text-xs">
+                <div className="flex items-center justify-between pb-3 border-b border-zinc-900">
+                  <span className="text-zinc-400 uppercase font-bold text-[10px]">SMART CONTRACT TELEMETRY</span>
+                  <span className="flex items-center gap-1.5 text-emerald-400 text-[10px]">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    SYNCED (Block #24,910,211)
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-zinc-300">
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Network:</span>
+                    <span className="text-white font-bold">Base L2 Mainnet (8453)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Contract:</span>
+                    <span className="text-[#00D4FF] font-bold">0x8892BAAC...CertRegistry</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Token Standard:</span>
+                    <span className="text-white font-bold">ERC-721 Soulbound</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Integrated Chip:</span>
+                    <span className="text-[#FFD700] font-bold">990 BAA ($990.00 USD)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Peg Backing:</span>
+                    <span className="text-emerald-400 font-bold">100% Naira / Paystack Escrow</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">Metadata Storage:</span>
+                    <span className="text-zinc-300">IPFS + Arweave Mirror</span>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-black/60 rounded-xl border border-zinc-900 text-[10px] space-y-1 text-zinc-400">
+                  <div className="text-zinc-300 font-bold">Sovereign Validation Rule:</div>
+                  <p>
+                    Transfers are blocked by smart contract code. Credential authenticity is verified by consensus among ABAU Faculty Dean multisig keys.
+                  </p>
+                </div>
+              </div>
+
+              {/* Verified Certificates List */}
+              <div className="lg:col-span-2 space-y-4">
+                <div className="flex justify-between items-center text-xs font-mono">
+                  <span className="text-white font-bold">RECENT INSTITUTIONAL GRADUATES ({certificates.length})</span>
+                  <span className="text-zinc-500 text-[10px]">Real-time Base RPC Sync</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {certificates.map((cert) => (
+                    <div
+                      key={cert.id}
+                      className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 hover:border-[#FFD700]/50 transition flex flex-col justify-between space-y-4 group shadow-xl"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-start">
+                          <span className="text-[10px] font-mono text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">
+                            VERIFIED HONORS
+                          </span>
+                          <span className="text-[10px] font-mono text-[#FFD700] font-bold">
+                            {cert.baacoin_engraved} BAA CHIP
+                          </span>
+                        </div>
+
+                        <h4 className="font-heading font-black text-white text-base group-hover:text-[#FFD700] transition">
+                          {cert.student_name}
+                        </h4>
+                        <p className="text-xs text-zinc-300 font-medium">
+                          {cert.course_title}
+                        </p>
+                        <div className="text-[10px] font-mono text-zinc-500 truncate">
+                          ID: {cert.nft_id}
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-zinc-900 flex items-center justify-between">
+                        <span className="text-[10px] font-mono text-zinc-400">{cert.issue_date}</span>
+                        <button
+                          onClick={() => setPreviewCert(cert)}
+                          className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#FFD700] to-[#FFA500] hover:from-[#FFE234] hover:to-[#FFB733] text-black text-xs font-bold font-mono flex items-center gap-1.5 transition shadow-md"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Preview NFT Certificate</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* High-Resolution NFT Certificate Preview Modal */}
+      <NFTCertificatePreviewModal
+        certificate={previewCert}
+        isOpen={!!previewCert}
+        onClose={() => setPreviewCert(null)}
+      />
     </div>
   );
 };

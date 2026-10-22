@@ -29,21 +29,25 @@ export const Logo: React.FC<LogoProps> = ({
   // If user uploaded a custom logo via /admin/settings branding
   if (customLogoUrl) {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
+      <div className={`flex items-center gap-3.5 ${className}`}>
         <img
           src={customLogoUrl}
           alt="Billionaires AI Academy Logo"
           style={{ width: pixelSize, height: pixelSize }}
-          className="object-contain drop-shadow-[0_0_12px_rgba(255,215,0,0.4)]"
+          className="object-contain drop-shadow-[0_0_16px_rgba(255,215,0,0.5)]"
         />
         {showText && variant !== 'icon' && (
           <div className="flex flex-col text-left leading-tight">
-            <span className="font-heading font-black tracking-tight text-white flex items-center gap-1.5 text-base md:text-lg">
-              <span className="text-[#FFD700]">BILLIONAIRES</span>
-              <span className="text-[#00D4FF]">AI</span>
+            <span className="font-heading font-black tracking-tight text-white flex items-center gap-2 text-lg sm:text-2xl drop-shadow-sm">
+              <span className="bg-gradient-to-r from-[#FFF275] via-[#FFD700] to-[#E5A800] bg-clip-text text-transparent">
+                BILLIONAIRES
+              </span>
+              <span className="bg-gradient-to-r from-[#00F0FF] to-[#00A3FF] bg-clip-text text-transparent">
+                AI ACADEMY
+              </span>
             </span>
-            <span className="text-[10px] tracking-widest font-mono text-zinc-400 uppercase">
-              AFRICA BLOCKCHAIN &amp; DATA CENTER
+            <span className="text-[10px] sm:text-[11px] tracking-[0.14em] font-mono text-zinc-300 uppercase font-semibold">
+              The Sovereign Pan-African Autonomous Intelligence Institution
             </span>
           </div>
         )}
@@ -164,18 +168,18 @@ export const Logo: React.FC<LogoProps> = ({
       {/* Brand Typography */}
       {showText && variant !== 'icon' && (
         <div className="flex flex-col text-left leading-tight">
-          <div className="flex items-center gap-1.5 font-heading font-black tracking-tight text-base md:text-xl">
+          <div className="flex items-center gap-2 font-heading font-black tracking-tight text-lg sm:text-2xl drop-shadow-sm">
             <span className="bg-gradient-to-r from-[#FFF275] via-[#FFD700] to-[#E5A800] bg-clip-text text-transparent">
               BILLIONAIRES
             </span>
             <span className="bg-gradient-to-r from-[#00F0FF] to-[#00A3FF] bg-clip-text text-transparent">
-              AI
+              AI ACADEMY
             </span>
           </div>
-          <div className="flex items-center gap-1.5 text-[9px] md:text-[10px] tracking-[0.16em] font-mono text-zinc-400 font-semibold uppercase">
-            <span className="text-[#FFD700]/90">ACADEMY</span>
-            <span className="text-zinc-600">•</span>
-            <span className="text-[#00D4FF]/90">AFRICA BLOCKCHAIN</span>
+          <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] tracking-[0.14em] font-mono text-zinc-300 font-semibold uppercase">
+            <span className="text-[#FFD700]">SOVEREIGN INSTITUTION</span>
+            <span className="text-zinc-500">•</span>
+            <span className="text-[#00D4FF]">AFRICA BLOCKCHAIN &amp; DATA CENTER</span>
           </div>
         </div>
       )}

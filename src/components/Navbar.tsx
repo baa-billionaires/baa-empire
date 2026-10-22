@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Logo } from './Logo';
 import { useEcosystem } from '../context/EcosystemContext';
+import { SUPPORTED_LANGUAGES, SupportedLanguage } from './LanguageChip';
 import {
   Coins,
   Radar,
@@ -18,8 +19,18 @@ import {
   Gift,
   Radio,
   Briefcase,
-  Brain
+  Brain,
+  Bot,
+  TrendingUp,
+  Globe2,
+  ChevronDown,
+  Layers,
+  Flame,
+  ShoppingCart,
+  Palette,
+  Tv
 } from 'lucide-react';
+import { useAmbience } from '../context/AmbienceContext';
 
 interface NavbarProps {
   currentPage: string;
@@ -32,24 +43,29 @@ export const Navbar: React.FC<NavbarProps> = ({
   setCurrentPage,
   openAdminModal
 }) => {
-  const { profile, isAdmin, scoutStats, customLogoUrl } = useEcosystem();
+  const { profile, isAdmin, scoutStats, customLogoUrl, language, setLanguage, baacoinPrice, baacoinPriceChange } = useEcosystem();
+  const { openThemeModal, openLiveClass, primaryAccent } = useAmbience();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+
+  const activeLangObj = SUPPORTED_LANGUAGES.find(l => l.code === language) || SUPPORTED_LANGUAGES[0];
 
   const navLinks = [
     { id: 'home', label: 'Home', icon: Compass },
+    { id: 'cyber-eco', label: 'Autonomous Hub', icon: Layers, badge: '5-PILLARS' },
+    { id: 'general-marketplace', label: '🛒 General Market', icon: ShoppingCart, badge: 'CARS/TECH' },
+    { id: 'referrals', label: '🎁 Referral Hub', icon: Gift, badge: 'EARN BAA' },
+    { id: 'projects', label: '🚀 Projects & Grants', icon: Flame, badge: 'FUNDING' },
+    { id: 'ai-workforce', label: '🤖 AI Workforce', icon: Bot, badge: '24/7 AGENTS' },
+    { id: 'omni-ad-swarm', label: '📡 Omni-Ad Swarm', icon: Radio, badge: 'GROWTH' },
+    { id: 'exchange', label: '💱 Exchange & Pools', icon: TrendingUp, badge: 'DEFI' },
+    { id: 'uadc-lab', label: 'UADC Lab 🧠', icon: Brain, badge: 'NODES' },
     { id: 'wallet', label: 'Wallet 🪙', icon: Coins, badge: 'BASE' },
-    { id: 'uadc-lab', label: 'UADC Lab 🧠', icon: Brain, badge: 'NEW' },
-    { id: 'investor-one-pager', label: 'Investor Deck', icon: Sparkles, badge: 'SEED' },
-    { id: 'academy', label: 'Academy (100 Courses)', icon: BookOpen },
-    { id: 'tv', label: 'AI TV', icon: Radio, badge: '24/7' },
-    { id: 'bounties', label: 'Bounties', icon: Briefcase, badge: '₦150k' },
-    { id: 'university', label: 'University', icon: GraduationCap },
-    { id: 'datacenter', label: 'AI Data Center', icon: Cpu },
+    { id: 'academy', label: 'Academy', icon: BookOpen },
     { id: 'marketplace', label: 'Marketplace', icon: Store, badge: '60/40' },
-    { id: 'tools', label: 'AI Tools', icon: Sparkles },
-    { id: 'ebooks', label: 'Ebooks', icon: BookOpen },
-    { id: 'free', label: 'Free Magnets', icon: Gift, badge: 'FREE' },
+    { id: 'investor-one-pager', label: 'Investor Deck', icon: Sparkles, badge: 'SEED' },
   ];
+
 
   const handleNav = (page: string) => {
     setCurrentPage(page);
@@ -61,24 +77,69 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-50 w-full bg-black/90 backdrop-blur-xl border-b border-zinc-800/80">
       {/* Top Autonomous Live Ticker Bar */}
       <div className="bg-gradient-to-r from-black via-zinc-950 to-black px-4 py-1.5 border-b border-zinc-800/60 text-[11px] font-mono flex items-center justify-between overflow-x-auto no-scrollbar gap-4">
-        {/* BaaCoin Ticker */}
+        {/* BaaCoin Ticker with Dynamic Perpetual Ratchet */}
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => handleNav('wallet')}
-            className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/30 font-bold hover:bg-[#FFD700]/20 transition cursor-pointer"
+            onClick={() => handleNav('exchange')}
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/30 font-bold hover:bg-[#FFD700]/20 transition cursor-pointer"
+            title="Pegged at $1.00 USD Base + Perpetual Auto-Buyback Scarcity Ratchet"
           >
             <Coins className="w-3.5 h-3.5 text-[#FFD700] animate-spin-slow" />
-            BAACOIN: $1.00 USD
+            <span>$BAA COIN: ${(baacoinPrice || 1.00).toFixed(2)} USD</span>
+            <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/20 px-1 rounded">{baacoinPriceChange || '+12.4%'}</span>
           </button>
-          <span className="text-zinc-500 hidden sm:inline">•</span>
-          <span className="text-zinc-400 hidden sm:inline">10x Tuition Networth Enforced</span>
+          <span className="text-zinc-600 hidden sm:inline">•</span>
+          <span className="text-zinc-400 hidden lg:inline text-[10px]">
+            🔥 Perpetual Scarcity Ratchet (25% Auto-Buyback)
+          </span>
+        </div>
+
+        {/* Instant Multi-Language Switcher (9 Languages) */}
+        <div className="relative shrink-0">
+          <button
+            onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-zinc-900 border border-zinc-700 hover:border-[#FFD700] text-zinc-200 transition cursor-pointer text-xs"
+          >
+            <span>{activeLangObj.flag}</span>
+            <span className="font-semibold">{activeLangObj.name}</span>
+            <ChevronDown className="w-3 h-3 text-zinc-400" />
+          </button>
+
+          {langDropdownOpen && (
+            <div className="absolute top-7 left-0 sm:left-auto sm:right-0 w-52 bg-zinc-950 border border-zinc-800 rounded-xl p-1.5 shadow-2xl z-50 space-y-0.5 backdrop-blur-2xl">
+              <div className="px-2 py-1 text-[9px] text-zinc-500 uppercase tracking-widest font-mono border-b border-zinc-800/80 mb-1 flex items-center justify-between">
+                <span>Select Language</span>
+                <Globe2 className="w-3 h-3 text-[#00D4FF]" />
+              </div>
+              {SUPPORTED_LANGUAGES.map(lang => (
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    setLanguage(lang.code as SupportedLanguage);
+                    setLangDropdownOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition ${
+                    language === lang.code
+                      ? 'bg-[#FFD700]/15 text-[#FFD700] font-bold'
+                      : 'text-zinc-300 hover:bg-zinc-900 hover:text-white'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <span>{lang.flag}</span>
+                    <span>{lang.name}</span>
+                  </span>
+                  <span className="text-[10px] text-zinc-500 font-sans">{lang.native}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* AI Scout Recruiter Live Count */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#00D4FF]/10 text-[#00D4FF] border border-[#00D4FF]/30">
             <Radar className="w-3.5 h-3.5 text-[#00D4FF] animate-pulse" />
-            <span className="font-semibold">AI Scout Discovered:</span>
+            <span className="font-semibold hidden sm:inline">AI Scout:</span>
             <span className="text-white font-bold">{scoutStats.discovered.toLocaleString()}</span>
           </div>
           <span className="text-emerald-400 hidden md:inline font-semibold">
@@ -141,7 +202,29 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right CTA Actions */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
+          {/* Ambience & Theme Quick Trigger */}
+          <button
+            onClick={openThemeModal}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono transition bg-zinc-900/90 border border-zinc-800 hover:border-[#FFD700]/50 text-zinc-300 hover:text-white"
+            title="Configure Ambience, Colors & Backgrounds"
+          >
+            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: primaryAccent }} />
+            <Palette className="w-3.5 h-3.5 text-zinc-400" />
+            <span className="hidden xl:inline">Ambience</span>
+          </button>
+
+          {/* Global Live Class Big Screen Trigger */}
+          <button
+            onClick={openLiveClass}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono transition bg-red-950/60 border border-red-500/40 text-red-400 hover:bg-red-900/60 hover:text-white"
+            title="Open Global Live Class with AI Tutors & Deans"
+          >
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <Tv className="w-3.5 h-3.5 text-red-400" />
+            <span className="hidden xl:inline">Live Class</span>
+          </button>
+
           {/* Student Dashboard Button */}
           <button
             onClick={() => handleNav('dashboard')}

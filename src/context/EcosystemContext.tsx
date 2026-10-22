@@ -11,7 +11,15 @@ import {
   AITutor,
   ScoutLead,
   Referral,
-  Wallet
+  Wallet,
+  EcosystemLanguage,
+  AIWorkforceAgent,
+  OmniAdCampaign,
+  StakingPool,
+  MicroStartupSwarm,
+  ProjectProposal,
+  StudentSpotlight,
+  TopStakerLeaderboardItem
 } from '../types';
 import {
   INITIAL_COURSES,
@@ -21,6 +29,16 @@ import {
   INITIAL_SCOUT_LEADS,
   INITIAL_PROMPT_MARKETPLACE
 } from '../lib/seed';
+import {
+  INITIAL_AI_WORKFORCE,
+  INITIAL_OMNI_AD_CAMPAIGNS,
+  INITIAL_STAKING_POOLS,
+  INITIAL_MICRO_STARTUPS,
+  INITIAL_PROJECT_PROPOSALS,
+  INITIAL_STUDENT_SPOTLIGHTS,
+  INITIAL_TOP_STAKERS
+} from '../lib/autonomousData';
+
 
 interface MiningBlock {
   hash: string;
@@ -92,6 +110,33 @@ interface EcosystemContextType {
     timestamp: string;
     certificate: CertificateNFT;
   };
+
+  // Autonomous Multi-Lingual & Cyber Ecosystem Upgrades
+  language: EcosystemLanguage;
+  setLanguage: (lang: EcosystemLanguage) => void;
+  baacoinPrice: number;
+  baacoinPriceChange: string;
+  aiWorkforce: AIWorkforceAgent[];
+  hireAgent: (agentId: string) => { success: boolean; message: string };
+  createAgent: (agent: Omit<AIWorkforceAgent, 'id' | 'active_deployments' | 'rating' | 'is_verified'>) => void;
+  omniAdCampaigns: OmniAdCampaign[];
+  stakingPools: StakingPool[];
+  stakeInPool: (poolId: string, amount: number) => { success: boolean; message: string };
+  microStartups: MicroStartupSwarm[];
+
+  // Projects & Venture Funding Pipeline
+  projectProposals: ProjectProposal[];
+  submitProjectProposal: (project: Omit<ProjectProposal, 'id' | 'created_at' | 'total_funded_baacoin' | 'status' | 'backers_count'>) => void;
+  backProjectWithBaaCoin: (projectId: string, amountBaacoin: number) => { success: boolean; error?: string };
+  approveProjectFunding: (projectId: string) => void;
+
+  // Student Spotlight Stories & Leaderboard
+  studentSpotlights: StudentSpotlight[];
+  topStakers: TopStakerLeaderboardItem[];
+
+  // Referral Hub Dynamic Engine
+  addReferralSignBonus: (referredName: string, channel: string, targetType?: 'academy' | 'marketplace' | 'node') => { success: boolean; bonusBaa: number };
+  claimReferralBonuses: () => { success: boolean; claimedAmount: number };
 }
 
 const DEFAULT_PROFILE: Profile = {
@@ -117,7 +162,41 @@ const DEFAULT_WALLET: Wallet = {
   total_mined: 84.5
 };
 
+const DEFAULT_CERTIFICATES: CertificateNFT[] = [
+  {
+    id: 'cert-default-1',
+    user_id: DEFAULT_PROFILE.id,
+    student_name: DEFAULT_PROFILE.full_name,
+    course_id: INITIAL_COURSES[0].id,
+    course_title: 'AI Wealth & Sovereign Agent Architecture Capstone',
+    nft_id: '0xBAAC-990-SOVEREIGN-MASTER-2026',
+    baacoin_engraved: 990,
+    ipfs_url: 'ipfs://bafybeictariqsterlingsovereignmastery990baa/certificate.json',
+    qr_data: `https://billionairesai.academy/verify/0xBAAC-990-SOVEREIGN-MASTER-2026?ref=${DEFAULT_PROFILE.referral_code}`,
+    is_tradable: true,
+    issue_date: 'March 28, 2026',
+    transaction_hash: '0x8892baac7f4902189012a98f01bda4821a337190c',
+    referral_code: DEFAULT_PROFILE.referral_code
+  },
+  {
+    id: 'cert-default-2',
+    user_id: 'usr-chioma-092',
+    student_name: 'Chioma Adeyemi',
+    course_id: 'course-sec-02',
+    course_title: 'Smart Contract Security & Base L2 Fuzzing Capstone',
+    nft_id: '0xBAAC-CHIOMA-PAYSTACK-BOUNTY-092',
+    baacoin_engraved: 990,
+    ipfs_url: 'ipfs://bafybeicchiomaadeyemibugbounty/certificate.json',
+    qr_data: 'https://billionairesai.academy/verify/0xBAAC-CHIOMA-PAYSTACK-BOUNTY-092?ref=BAA-CHIOMA-PH',
+    is_tradable: true,
+    issue_date: 'April 4, 2026',
+    transaction_hash: '0x7a30baac990812301824abced0192418a990141f',
+    referral_code: 'BAA-CHIOMA-PH'
+  }
+];
+
 const EcosystemContext = createContext<EcosystemContextType | undefined>(undefined);
+
 
 const LOCAL_STORAGE_PREFIX = 'richconnect_eco_';
 
@@ -177,7 +256,7 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
   });
 
   const [interactions, setInteractions] = useState<Interaction[]>(() => loadFromStorage('interactions', []));
-  const [certificates, setCertificates] = useState<CertificateNFT[]>(() => loadFromStorage('certificates', []));
+  const [certificates, setCertificates] = useState<CertificateNFT[]>(() => loadFromStorage('certificates', DEFAULT_CERTIFICATES));
   const [referrals, setReferrals] = useState<Referral[]>(() => loadFromStorage('referrals', [
     {
       id: 'ref-1',
@@ -191,6 +270,32 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
     }
   ]));
   const [wallet, setWallet] = useState<Wallet>(() => loadFromStorage('wallet', DEFAULT_WALLET));
+
+  // Autonomous Multi-Lingual & Cyber Ecosystem Upgrades
+  const [language, setLanguageState] = useState<EcosystemLanguage>(() => {
+    return (localStorage.getItem('richconnect_lang') as EcosystemLanguage) || 'en';
+  });
+  const [baacoinPrice, setBaacoinPrice] = useState<number>(() => loadFromStorage('baacoin_price', 1.02));
+  const [baacoinPriceChange] = useState<string>('+12.4%');
+  const [aiWorkforce, setAiWorkforce] = useState<AIWorkforceAgent[]>(() => loadFromStorage('ai_workforce', INITIAL_AI_WORKFORCE));
+  const [omniAdCampaigns, setOmniAdCampaigns] = useState<OmniAdCampaign[]>(() => loadFromStorage('omni_ads', INITIAL_OMNI_AD_CAMPAIGNS));
+  const [stakingPools, setStakingPools] = useState<StakingPool[]>(() => loadFromStorage('staking_pools', INITIAL_STAKING_POOLS));
+  const [microStartups] = useState<MicroStartupSwarm[]>(INITIAL_MICRO_STARTUPS);
+
+  // Projects & Venture Funding Pipeline
+  const [projectProposals, setProjectProposals] = useState<ProjectProposal[]>(() =>
+    loadFromStorage('project_proposals', INITIAL_PROJECT_PROPOSALS)
+  );
+
+  // Student Spotlights & Top Stakers Leaderboard
+  const [studentSpotlights] = useState<StudentSpotlight[]>(INITIAL_STUDENT_SPOTLIGHTS);
+  const [topStakers] = useState<TopStakerLeaderboardItem[]>(INITIAL_TOP_STAKERS);
+
+  const setLanguage = (lang: EcosystemLanguage) => {
+    setLanguageState(lang);
+    localStorage.setItem('richconnect_lang', lang);
+    window.dispatchEvent(new CustomEvent('language_changed', { detail: { lang } }));
+  };
 
   // Mining Animation Indicator
   const [latestMiningBlock, setLatestMiningBlock] = useState<MiningBlock | null>(null);
@@ -206,6 +311,12 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
   useEffect(() => { saveToStorage('wallet', wallet); }, [wallet]);
   useEffect(() => { saveToStorage('scout_leads', scoutLeads); }, [scoutLeads]);
   useEffect(() => { saveToStorage('referrals', referrals); }, [referrals]);
+  useEffect(() => { saveToStorage('ai_workforce', aiWorkforce); }, [aiWorkforce]);
+  useEffect(() => { saveToStorage('omni_ads', omniAdCampaigns); }, [omniAdCampaigns]);
+  useEffect(() => { saveToStorage('staking_pools', stakingPools); }, [stakingPools]);
+  useEffect(() => { saveToStorage('baacoin_price', baacoinPrice); }, [baacoinPrice]);
+  useEffect(() => { saveToStorage('project_proposals', projectProposals); }, [projectProposals]);
+
 
   // Set custom logo helper
   const setCustomLogoUrl = (url: string | null) => {
@@ -656,6 +767,182 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
     setCustomLogoUrlState(null);
   };
 
+  // Autonomous Agent Hiring & Deployment
+  const hireAgent = (agentId: string) => {
+    const agent = aiWorkforce.find(a => a.id === agentId);
+    if (!agent) return { success: false, message: 'Agent not found' };
+
+    // Increment active deployments and ratchet token price slightly
+    setAiWorkforce(prev => prev.map(a => a.id === agentId ? { ...a, active_deployments: a.active_deployments + 1 } : a));
+    setBaacoinPrice(prev => +(prev + 0.002).toFixed(4));
+
+    // Deduct spendable BaaCoin if available
+    if (profile.baacoin_balance >= agent.hourly_rate_baacoin) {
+      setProfile(prev => ({
+        ...prev,
+        baacoin_balance: Math.max(0, prev.baacoin_balance - agent.hourly_rate_baacoin)
+      }));
+      setWallet(prev => ({
+        ...prev,
+        balance: Math.max(0, prev.balance - agent.hourly_rate_baacoin)
+      }));
+    }
+
+    return {
+      success: true,
+      message: `Successfully provisioned ${agent.name}! 24/7 terminal loop active on sovereign node cluster.`
+    };
+  };
+
+  const createAgent = (agentData: Omit<AIWorkforceAgent, 'id' | 'active_deployments' | 'rating' | 'is_verified'>) => {
+    const newAgent: AIWorkforceAgent = {
+      ...agentData,
+      id: `agent-custom-${Date.now()}`,
+      active_deployments: 1,
+      rating: 5.0,
+      is_verified: true
+    };
+    setAiWorkforce(prev => [newAgent, ...prev]);
+    setBaacoinPrice(prev => +(prev + 0.005).toFixed(4));
+  };
+
+  const stakeInPool = (poolId: string, amount: number) => {
+    const pool = stakingPools.find(p => p.id === poolId);
+    if (!pool) return { success: false, message: 'Staking pool not found' };
+
+    setStakingPools(prev => prev.map(p => p.id === poolId ? {
+      ...p,
+      total_staked_baacoin: p.total_staked_baacoin + amount,
+      daily_yield_usd: +(p.daily_yield_usd + (amount * (p.apy_percent / 100) / 365)).toFixed(2)
+    } : p));
+
+    setBaacoinPrice(prev => +(prev + 0.003).toFixed(4));
+
+    return {
+      success: true,
+      message: `Successfully locked ${amount.toLocaleString()} BaaCoin into ${pool.name} at ${pool.apy_percent}% APY!`
+    };
+  };
+
+  // 6. PROJECTS & VENTURE FUNDING METHODS
+  const submitProjectProposal = (
+    projectData: Omit<ProjectProposal, 'id' | 'created_at' | 'total_funded_baacoin' | 'status' | 'backers_count'>
+  ) => {
+    const newProject: ProjectProposal = {
+      ...projectData,
+      id: `proj-${Date.now()}`,
+      created_at: new Date().toISOString(),
+      total_funded_baacoin: 0,
+      status: 'community_voting',
+      backers_count: 1
+    };
+    setProjectProposals(prev => [newProject, ...prev]);
+  };
+
+  const backProjectWithBaaCoin = (projectId: string, amountBaacoin: number) => {
+    if (wallet.balance < amountBaacoin) {
+      return {
+        success: false,
+        error: `Insufficient spendable BaaCoin balance. You have ${wallet.balance} BAA, but need ${amountBaacoin} BAA.`
+      };
+    }
+
+    // Deduct from wallet & profile
+    setWallet(prev => ({
+      ...prev,
+      balance: Number((prev.balance - amountBaacoin).toFixed(2))
+    }));
+
+    setProfile(prev => ({
+      ...prev,
+      baacoin_balance: Number((prev.baacoin_balance - amountBaacoin).toFixed(2))
+    }));
+
+    // Update project funding
+    setProjectProposals(prev =>
+      prev.map(p => {
+        if (p.id === projectId) {
+          const updatedFunding = p.total_funded_baacoin + amountBaacoin;
+          const isFunded = updatedFunding >= p.funding_ask_baacoin;
+          return {
+            ...p,
+            total_funded_baacoin: updatedFunding,
+            backers_count: p.backers_count + 1,
+            status: isFunded ? 'funded' : p.status,
+            development_phase: isFunded ? 'Seed Funded & Scaling' : p.development_phase
+          };
+        }
+        return p;
+      })
+    );
+
+    return { success: true };
+  };
+
+  const approveProjectFunding = (projectId: string) => {
+    setProjectProposals(prev =>
+      prev.map(p => {
+        if (p.id === projectId) {
+          return {
+            ...p,
+            status: 'approved',
+            development_phase: 'Approved for Funding'
+          };
+        }
+        return p;
+      })
+    );
+  };
+
+  // 7. REFERRAL HUB DYNAMIC SIGN-UP & BONUS SYSTEM
+  const addReferralSignBonus = (
+    referredName: string,
+    channel: string,
+    targetType: 'academy' | 'marketplace' | 'node' = 'academy'
+  ) => {
+    const bonus = targetType === 'marketplace' ? 35 : targetType === 'node' ? 25 : 50;
+    const newRef: Referral = {
+      id: `ref-${Date.now()}`,
+      referrer_id: profile.id,
+      referred_id: `usr-${Date.now().toString(36)}`,
+      referred_name: referredName,
+      commission: Number((bonus * 0.1).toFixed(2)),
+      baacoin_bonus: bonus,
+      paid: false,
+      created_at: new Date().toISOString()
+    };
+
+    setReferrals(prev => [newRef, ...prev]);
+
+    return { success: true, bonusBaa: bonus };
+  };
+
+  const claimReferralBonuses = () => {
+    const unpaid = referrals.filter(r => !r.paid);
+    if (unpaid.length === 0) {
+      return { success: false, claimedAmount: 0 };
+    }
+
+    const totalBonus = unpaid.reduce((acc, r) => acc + (r.baacoin_bonus || 0), 0);
+
+    // Mark paid
+    setReferrals(prev => prev.map(r => ({ ...r, paid: true })));
+
+    // Credit to spendable wallet and profile
+    setWallet(prev => ({
+      ...prev,
+      balance: Number((prev.balance + totalBonus).toFixed(2)),
+      total_earned: Number((prev.total_earned + totalBonus).toFixed(2))
+    }));
+
+    setProfile(prev => ({
+      ...prev,
+      baacoin_balance: Number((prev.baacoin_balance + totalBonus).toFixed(2))
+    }));
+
+    return { success: true, claimedAmount: totalBonus };
+  };
+
   return (
     <EcosystemContext.Provider
       value={{
@@ -689,7 +976,26 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
         addFreeLead,
         latestMiningBlock,
         resetAllSeedData,
-        mintLectureNFTAndMine
+        mintLectureNFTAndMine,
+        language,
+        setLanguage,
+        baacoinPrice,
+        baacoinPriceChange,
+        aiWorkforce,
+        hireAgent,
+        createAgent,
+        omniAdCampaigns,
+        stakingPools,
+        stakeInPool,
+        microStartups,
+        projectProposals,
+        submitProjectProposal,
+        backProjectWithBaaCoin,
+        approveProjectFunding,
+        studentSpotlights,
+        topStakers,
+        addReferralSignBonus,
+        claimReferralBonuses
       }}
     >
       {children}

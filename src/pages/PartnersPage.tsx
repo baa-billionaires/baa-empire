@@ -113,7 +113,7 @@ export const PartnersPage: React.FC<PartnersPageProps> = ({ onNavigate }) => {
             <span>Request Institutional MOU &amp; Invoice</span>
           </h3>
           <p className="text-xs text-zinc-400 font-sans">
-            Direct institutional contact: <span className="text-[#FFD700] font-mono font-bold">naijaukmusicalfusion@gmail.com</span> or visit our Port Harcourt Head Office at No. 5 Ordu Street, Rumuola/Stadium Link Road.
+            Direct institutional contact: <a href="mailto:autonomousagentscommerce@gmail.com" className="text-[#FFD700] font-mono font-bold underline">autonomousagentscommerce@gmail.com</a> | Phone: <a href="tel:+2348025516793" className="text-white font-mono font-bold">+2348025516793</a> or visit our Port Harcourt Head Office at No. 5 Ordu Street, Rumuola/Stadium Link Road.
           </p>
           <div className="pt-2">
             <button

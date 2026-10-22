@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Globe2, Check, Sparkles } from 'lucide-react';
 
-export type SupportedLanguage = 'en' | 'yo' | 'ig' | 'ha' | 'sw' | 'fr' | 'pcm';
+export type SupportedLanguage = 'en' | 'sw' | 'fr' | 'es' | 'zh' | 'yo' | 'ar' | 'ha' | 'pt';
 
-interface LanguageOption {
+export interface LanguageOption {
   code: SupportedLanguage;
   name: string;
   native: string;
@@ -12,12 +12,14 @@ interface LanguageOption {
 
 export const SUPPORTED_LANGUAGES: LanguageOption[] = [
   { code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
-  { code: 'yo', name: 'Yoruba', native: 'Èdè Yorùbá', flag: '🇳🇬' },
-  { code: 'ig', name: 'Igbo', native: 'Asụsụ Igbo', flag: '🇳🇬' },
-  { code: 'ha', name: 'Hausa', native: 'Harshen Hausa', flag: '🇳🇬' },
-  { code: 'pcm', name: 'Pidgin', native: 'Naija Pidgin', flag: '🇳🇬' },
   { code: 'sw', name: 'Swahili', native: 'Kiswahili', flag: '🇰🇪' },
   { code: 'fr', name: 'French', native: 'Français', flag: '🇫🇷' },
+  { code: 'es', name: 'Spanish', native: 'Español', flag: '🇪🇸' },
+  { code: 'zh', name: 'Mandarin', native: '中文 (Chinese)', flag: '🇨🇳' },
+  { code: 'yo', name: 'Yoruba', native: 'Èdè Yorùbá', flag: '🇳🇬' },
+  { code: 'ar', name: 'Arabic', native: 'العربية (Arabic)', flag: '🇸🇦' },
+  { code: 'ha', name: 'Hausa', native: 'Harshen Hausa', flag: '🇳🇬' },
+  { code: 'pt', name: 'Portuguese', native: 'Português', flag: '🇵🇹' },
 ];
 
 export const LanguageChip: React.FC = () => {

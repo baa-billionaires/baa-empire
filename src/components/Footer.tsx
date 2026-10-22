@@ -139,6 +139,24 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentPage, openAdminModal }
             <h5 className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-3">Portals &amp; Legal</h5>
             <ul className="space-y-2 text-xs">
               <li>
+                <button onClick={() => setCurrentPage('ai-workforce')} className="hover:text-white text-purple-400 font-bold flex items-center gap-1.5 transition">
+                  <span>🤖 AI Workforce Marketplace</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono border border-purple-500/40">24/7 AGENTS</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentPage('omni-ad-swarm')} className="hover:text-white text-emerald-400 font-bold flex items-center gap-1.5 transition">
+                  <span>📡 Omni-Ad Growth Swarm</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono border border-emerald-500/40">AUTO-PROMO</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentPage('exchange')} className="hover:text-white text-[#FFD700] font-bold flex items-center gap-1.5 transition">
+                  <span>💱 BaaCoin Exchange &amp; Pools</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-[#FFD700]/20 text-[#FFD700] font-mono border border-[#FFD700]/40">DEFI</span>
+                </button>
+              </li>
+              <li>
                 <button onClick={() => setCurrentPage('uadc-lab')} className="hover:text-white text-[#00FF88] font-bold flex items-center gap-1.5 transition">
                   <span>UADC Lab 🧠</span>
                   <span className="text-[9px] px-1 py-0.2 rounded bg-[#00FF88]/20 text-[#00FF88] font-mono border border-[#00FF88]/40">15 ENGINES</span>
@@ -188,7 +206,10 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentPage, openAdminModal }
               </li>
               <li className="pt-2">
                 <span className="text-[10px] text-zinc-500 font-mono block">
-                  Admin: naijaukmusicalfusion@gmail.com
+                  Contact: autonomousagentscommerce@gmail.com
+                </span>
+                <span className="text-[10px] text-zinc-500 font-mono block">
+                  Tel: +2348025516793
                 </span>
               </li>
             </ul>

@@ -175,3 +175,192 @@ export interface Wallet {
   total_earned: number;          // From prompt sales (60%) & referrals
   total_mined: number;           // Mined from learning interactions
 }
+
+export type EcosystemLanguage = 'en' | 'sw' | 'fr' | 'es' | 'zh' | 'yo' | 'ar' | 'ha' | 'pt';
+
+export interface AIWorkforceAgent {
+  id: string;
+  name: string;
+  tagline: string;
+  category: 'Personal Assistants' | 'Industry Swarms' | 'Strategic Legions' | 'Corporate Colonies';
+  description: string;
+  hourly_rate_baacoin: number;
+  monthly_rate_usd: number;
+  avatar_url: string;
+  capabilities: string[];
+  autonomous_loop_preview: string[];
+  active_deployments: number;
+  rating: number;
+  system_core: string;
+  creator_name: string;
+  is_verified: boolean;
+}
+
+export interface OmniAdCampaign {
+  id: string;
+  title: string;
+  channel: 'Google Search & SEO' | 'TikTok & Reels Viral' | 'X / Twitter AI Bots' | 'Meta & Instagram' | 'Decentralized Ad Mesh';
+  status: 'active' | 'scaling' | 'optimizing';
+  daily_budget_usd: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  ctr: string;
+  cpa_usd: number;
+  autonomous_trigger: string;
+}
+
+export interface StakingPool {
+  id: string;
+  name: string;
+  tier: string;
+  apy_percent: number;
+  total_staked_baacoin: number;
+  lockup_days: number;
+  daily_yield_usd: number;
+  power_source: string;
+  status: 'active' | 'filled';
+}
+
+export interface MicroStartupSwarm {
+  id: string;
+  name: string;
+  prompt_origin_title: string;
+  student_creator: string;
+  valuation_usd: number;
+  mrr_usd: number;
+  growth_rate: string;
+  agents_deployed: number;
+  autonomous_status: string;
+}
+
+export interface GeneralProductItem {
+  id: string;
+  title: string;
+  category:
+    | 'Cars'
+    | 'Tech'
+    | 'Real Estate'
+    | 'Manufacturing'
+    | 'Agriculture'
+    | 'Education'
+    | 'Lifestyle'
+    | 'Vehicles & Cars'
+    | 'Electronics & Tech'
+    | 'Real Estate & Land'
+    | 'Solar & Energy'
+    | 'Luxury & Lifestyle'
+    | 'Manufacturing & Industrial'
+    | 'Agriculture & AgroTech'
+    | 'Education & Hardware';
+  description: string;
+  price_usd: number;
+  price_baacoin: number;
+  image_url: string;
+  location: string;
+  seller_name: string;
+  seller_verified: boolean;
+  condition: string;
+  specs: string[];
+  is_group_buy_eligible: boolean;
+  group_buy_discount_percent?: number;
+  group_buyers_count?: number;
+  group_buyers_target?: number;
+}
+
+export interface ExternalMarketplaceBridge {
+  id: string;
+  name: 'Amazon' | 'Alibaba' | 'Konga' | 'Jiji' | 'Jumia' | 'AliExpress';
+  logo_badge: string;
+  tagline: string;
+  commission_earned_percent: string;
+  baacoin_checkout_fee_percent: string;
+  affiliate_api_status: 'Connected' | 'Live Synced' | 'Arbitrage Active';
+  popular_deals: {
+    id: string;
+    title: string;
+    price_usd: number;
+    price_baacoin: number;
+    original_price_usd: number;
+    rating: number;
+    image_url: string;
+    category: string;
+    referral_commission_usd: number;
+  }[];
+}
+
+export interface ShopperGroupBuy {
+  id: string;
+  item_title: string;
+  category: string;
+  original_price_usd: number;
+  group_price_baacoin: number;
+  savings_percent: number;
+  joined_users: { name: string; avatar: string; location: string }[];
+  target_slots: number;
+  expires_in: string;
+  cashback_baacoin: number;
+}
+
+export interface MerchantSponsoredAd {
+  id: string;
+  sponsor_name: string;
+  platform: 'Amazon Partner' | 'Alibaba Gold' | 'Konga Prime' | 'Jiji Verified Dealer' | 'Lagos Motors Hub';
+  headline: string;
+  offer_text: string;
+  cta_text: string;
+  daily_budget_baacoin: number;
+  impressions: number;
+  clicks: number;
+  ctr: string;
+}
+
+export interface ProjectProposal {
+  id: string;
+  title: string;
+  category: 'Autonomous AI' | 'FinTech & Lending' | 'Clean Energy & Solar' | 'HealthTech' | 'AgroVision' | 'Web3 & Identity';
+  lead_student: string;
+  student_avatar: string;
+  team_members: string[];
+  description: string;
+  problem_solved: string;
+  development_phase: 'Ideation & Spec' | 'AI Prototyping' | 'Node Compute Allocated' | 'Security & CAC Audited' | 'Approved for Funding' | 'Seed Funded & Scaling';
+  funding_ask_usd: number;
+  funding_ask_baacoin: number;
+  total_funded_baacoin: number;
+  equity_offered_percent: number;
+  milestones: { title: string; completed: boolean; target_date: string }[];
+  status: 'under_review' | 'community_voting' | 'approved' | 'funded';
+  backers_count: number;
+  created_at: string;
+  demo_url?: string;
+  github_url?: string;
+}
+
+export interface StudentSpotlight {
+  id: string;
+  name: string;
+  avatar_url: string;
+  cohort: string;
+  location: string;
+  graduation_status: 'Graduated - Honors' | 'In Progress - Capstone' | 'Incubated Founder';
+  scores: { activity: string; score: number }[];
+  project_lead_title: string;
+  baacoin_earned: number;
+  quote: string;
+  video_clip_url?: string;
+  nft_certificate_id: string;
+}
+
+export interface TopStakerLeaderboardItem {
+  rank: number;
+  name: string;
+  node_id: string;
+  avatar_url: string;
+  staked_baacoin: number;
+  daily_yield_baacoin: number;
+  node_health: 'Optimal' | 'Charging & Cool' | 'High Performance';
+  uptime_percent: string;
+  tier: 'Sovereign Whale' | 'Validator Node' | 'Mobile Compute Miner';
+}
+

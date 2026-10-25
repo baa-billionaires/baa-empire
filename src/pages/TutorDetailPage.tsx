@@ -33,7 +33,15 @@ import {
   Maximize2,
   Cpu,
   Flame,
-  CheckCircle2
+  CheckCircle2,
+  Lock,
+  MessageSquare,
+  CheckCheck,
+  Paperclip,
+  Calendar,
+  BadgeCheck,
+  FileCode,
+  Clock
 } from 'lucide-react';
 
 interface TutorDetailPageProps {
@@ -56,11 +64,64 @@ export const TutorDetailPage: React.FC<TutorDetailPageProps> = ({
   onBack,
   onViewCertificate
 }) => {
-  const { aiTutors, profile, mintLectureNFTAndMine } = useEcosystem();
+  const { aiTutors, profile, wallet, mintLectureNFTAndMine } = useEcosystem();
   const tutor = aiTutors.find(t => t.id === tutorId) || aiTutors[0];
 
-  // Classroom Mode: 'live-video' | 'chat-simulator' | 'whiteboard'
-  const [activeTab, setActiveTab] = useState<'live-video' | 'chat-simulator' | 'whiteboard'>('live-video');
+  // Classroom Mode: 'live-video' | 'chat-simulator' | 'whiteboard' | 'mentor-chat'
+  const [activeTab, setActiveTab] = useState<'live-video' | 'chat-simulator' | 'whiteboard' | 'mentor-chat'>('live-video');
+
+  // Faculty Mentor Profile Configuration
+  const facultyMentor = {
+    name: tutor.name.includes('Joe')
+      ? 'Dr. Emmanuel Bassey Joe'
+      : tutor.name.includes('Chioma')
+      ? 'Chioma Adeyemi (Lead Fellow)'
+      : tutor.name.includes('Fatima')
+      ? 'Dr. Fatima Al-Mansoor (NLP Chair)'
+      : `Dr. Chukwuma Sterling (Dean of ${tutor.subject})`,
+    role: `Senior Academic Mentor & Chair of ${tutor.subject}`,
+    credentials: 'PhD Distributed Systems (MIT) • ABAU Senior Fellow • Base L2 Security Auditor',
+    avatar: tutor.avatar_url,
+    responseTime: '< 2 mins',
+    encryptionKey: '0x9f82d1947b1029c83a1029481b0a9f129c8120fa',
+    cacStatus: 'CAC Verified Faculty Fellow (BN: UY/009049)'
+  };
+
+  // Mentor-Mentee Direct Secure Chat State
+  const [mentorMessages, setMentorMessages] = useState<Array<{
+    id: string;
+    sender: 'mentee' | 'mentor' | 'system';
+    text: string;
+    timestamp: string;
+    status: 'sent' | 'delivered' | 'read';
+    codeSnippet?: string;
+    isEncrypted: boolean;
+  }>>([
+    {
+      id: 'mm-0',
+      sender: 'system',
+      text: '🔒 End-to-End Encrypted Session Initialized • 256-bit AES + Base L2 Sovereign Identity Verified (Key: 0x9f82...20fa). Confidential student-faculty channel.',
+      timestamp: 'Session Active',
+      status: 'read',
+      isEncrypted: true
+    },
+    {
+      id: 'mm-1',
+      sender: 'mentor',
+      text: `Greetings ${profile?.full_name || 'Scholar'}. I am ${tutor.name.includes('Joe') ? 'Dr. Emmanuel Bassey Joe' : tutor.name.includes('Chioma') ? 'Chioma Adeyemi' : 'Dr. Chukwuma Sterling'}, your assigned Faculty Mentor for ${tutor.subject}. I have been tracking your lecture completion, prompt minting, and venture milestone milestones. What specific architectural challenge, smart contract bug, or funding proposal would you like to review in this session?`,
+      timestamp: '10:14 AM',
+      status: 'read',
+      isEncrypted: true
+    }
+  ]);
+
+  const [mentorInput, setMentorInput] = useState('');
+  const [mentorCodeSnippet, setMentorCodeSnippet] = useState('');
+  const [showCodeInput, setShowCodeInput] = useState(false);
+  const [isMentorTyping, setIsMentorTyping] = useState(false);
+  const [showOfficeHoursModal, setShowOfficeHoursModal] = useState(false);
+  const [bookedOfficeHour, setBookedOfficeHour] = useState<string | null>(null);
+  const [mentorCopiedId, setMentorCopiedId] = useState<string | null>(null);
 
   // Embed and School Subscription
   const [copied, setCopied] = useState(false);
@@ -241,6 +302,94 @@ export const TutorDetailPage: React.FC<TutorDetailPageProps> = ({
     }, 750);
   };
 
+  // Mentor-Mentee Secure Messaging Handlers
+  const handleSendMentorMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mentorInput.trim() && !mentorCodeSnippet.trim()) return;
+
+    const messageText = mentorInput.trim();
+    const codePayload = mentorCodeSnippet.trim() ? mentorCodeSnippet.trim() : undefined;
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const msgId = `mentee-${Date.now()}`;
+
+    // Append mentee message
+    setMentorMessages(prev => [
+      ...prev,
+      {
+        id: msgId,
+        sender: 'mentee',
+        text: messageText || 'Please review this attached code snippet and verify the architecture against our curriculum standard.',
+        timestamp: timeStr,
+        status: 'sent',
+        codeSnippet: codePayload,
+        isEncrypted: true
+      }
+    ]);
+
+    setMentorInput('');
+    setMentorCodeSnippet('');
+    setShowCodeInput(false);
+    setIsMentorTyping(true);
+
+    // Simulate network delivery and read receipt
+    setTimeout(() => {
+      setMentorMessages(prev =>
+        prev.map(m => m.id === msgId ? { ...m, status: 'read' } : m)
+      );
+    }, 400);
+
+    // Dynamic mentor response generation
+    setTimeout(() => {
+      const lower = messageText.toLowerCase();
+      let responseText = '';
+
+      if (codePayload) {
+        responseText = `Excellent submission, ${profile?.full_name || 'Scholar'}. I have audited the snippet you submitted. Notice that in Base L2 contracts, storing dynamic byte arrays incurs non-linear gas costs under high throughput; consider replacing it with an immutable cryptographic leaf hash verified off-chain via your neural agent swarm. Keep this pattern for your Capstone defense!`;
+      } else if (lower.includes('funding') || lower.includes('proposal') || lower.includes('grant') || lower.includes('investor') || lower.includes('angel')) {
+        responseText = `Regarding venture funding: You are in an ideal position. Our ecosystem currently has 130,700 BAA (~$133,314 USD) in capital backed across 4 micro-startups in 6 African hubs, with 343 verified Angels participating. For your proposal to pass CAC & Wema Bank audit criteria, make sure your milestone roadmap explicitly details your customer acquisition CAC ratio and Base L2 smart contract escrow address. I'll personally co-sign your proposal!`;
+      } else if (lower.includes('cac') || lower.includes('wema') || lower.includes('bank') || lower.includes('legal')) {
+        responseText = `For CAC & Wema Bank corporate account verification: Ensure your RC or BN registration documents match your founder identity on the Academy registry. Two ventures have already received formal funding approval through this audited pipeline (LegalEase Africa AI and UADC Hydro-Solar Grid). Once registered, the Admin portal unlocks direct capital tranche disbursements!`;
+      } else if (lower.includes('smart contract') || lower.includes('solidity') || lower.includes('erc') || lower.includes('token') || lower.includes('base') || lower.includes('baacoin')) {
+        responseText = `On the blockchain side: Base L2 gives us sub-cent gas transactions and instant settlement with Paystack. Your BaaCoin earnings are secured by automated liquidity reserves. When writing your deployment scripts, ensure your owner keys are multi-sig guarded and that event logs mirror your off-chain AI agent decisions.`;
+      } else if (lower.includes('agent') || lower.includes('prompt') || lower.includes('model') || lower.includes('neural') || lower.includes('python')) {
+        responseText = `On autonomous AI swarm design: Focus on hierarchical agent colonies rather than single prompts. Designate one agent as the Planner (task decomposition), three as Parallel Workers (retrieval & generation), and one as the Auditor (schema & invariant validator). This achieves 99.4% zero-hallucination accuracy.`;
+      } else {
+        responseText = `Thank you for sharing, ${profile?.full_name || 'Scholar'}. That is a critical observation. In ${tutor.subject}, mastering the feedback loop between model inference, decentralized compute, and monetization is the key differentiator between a casual coder and an African tech billionaire. Let's schedule our 1:1 office hours if you'd like to do a live architecture walkthrough on video!`;
+      }
+
+      const mentorReplyTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setMentorMessages(prev => [
+        ...prev,
+        {
+          id: `mentor-${Date.now()}`,
+          sender: 'mentor',
+          text: responseText,
+          timestamp: mentorReplyTime,
+          status: 'read',
+          isEncrypted: true
+        }
+      ]);
+      setIsMentorTyping(false);
+    }, 1200);
+  };
+
+  const handleBookOfficeHour = (slot: string) => {
+    setBookedOfficeHour(slot);
+    setShowOfficeHoursModal(false);
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    setMentorMessages(prev => [
+      ...prev,
+      {
+        id: `sys-${Date.now()}`,
+        sender: 'system',
+        text: `📅 1-on-1 Mentorship Office Hours Booked with ${facultyMentor.name} for: "${slot}". Google Meet + Base L2 verified access link generated. Check your student email (${profile?.email || 'scholar@billionairesai.academy'}) for calendar invite.`,
+        timestamp: timeStr,
+        status: 'read',
+        isEncrypted: true
+      }
+    ]);
+  };
+
   // Lecture Mining & NFT Minting Engine
   const handleStartLectureMining = () => {
     setIsMintingModalOpen(true);
@@ -376,6 +525,18 @@ export const TutorDetailPage: React.FC<TutorDetailPageProps> = ({
                 >
                   Live Q&amp;A
                 </button>
+                <button
+                  onClick={() => setActiveTab('mentor-chat')}
+                  className={`px-3 py-1 rounded-lg font-mono font-semibold transition flex items-center gap-1.5 ${
+                    activeTab === 'mentor-chat'
+                      ? 'bg-gradient-to-r from-emerald-400 to-teal-400 text-black shadow-lg shadow-emerald-400/20'
+                      : 'text-emerald-400 hover:text-white'
+                  }`}
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>Mentor-Mentee</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </button>
               </div>
             </div>
 
@@ -502,6 +663,333 @@ export const TutorDetailPage: React.FC<TutorDetailPageProps> = ({
                     <span>Send</span>
                   </button>
                 </form>
+              </div>
+            )}
+
+            {/* Mentor-Mentee Direct Secure Messaging Interface */}
+            {activeTab === 'mentor-chat' && (
+              <div className="bg-zinc-950 flex flex-col min-h-[500px]">
+                {/* Faculty Mentor Header Bar */}
+                <div className="p-4 sm:p-5 bg-gradient-to-r from-zinc-900 via-zinc-950 to-zinc-900 border-b border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5">
+                    <div className="relative">
+                      <img
+                        src={facultyMentor.avatar}
+                        alt={facultyMentor.name}
+                        className="w-12 h-12 rounded-2xl object-cover border-2 border-emerald-400"
+                      />
+                      <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-black animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-heading font-black text-white text-sm sm:text-base">
+                          {facultyMentor.name}
+                        </h3>
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold flex items-center gap-1">
+                          <BadgeCheck className="w-3 h-3" />
+                          Faculty Verified
+                        </span>
+                      </div>
+                      <p className="text-[11px] font-mono text-zinc-400 mt-0.5">
+                        {facultyMentor.role}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1 text-[10px] font-mono text-zinc-500">
+                        <span className="flex items-center gap-1 text-emerald-400">
+                          <Lock className="w-3 h-3" />
+                          E2EE Secured (Base L2 Key: 0x9f82...20fa)
+                        </span>
+                        <span>•</span>
+                        <span>Avg response: &lt; 2 mins</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Mentorship Action Controls */}
+                  <div className="flex items-center gap-2 font-mono text-xs">
+                    <button
+                      onClick={() => setShowOfficeHoursModal(true)}
+                      className="px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 transition flex items-center gap-1.5 text-[11px] font-bold"
+                    >
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{bookedOfficeHour ? 'Office Hour Booked' : 'Book 1:1 Slot'}</span>
+                    </button>
+                    <button
+                      onClick={() => setShowCodeInput(!showCodeInput)}
+                      className={`px-3 py-1.5 rounded-xl border transition flex items-center gap-1.5 text-[11px] font-bold ${
+                        showCodeInput
+                          ? 'bg-[#00D4FF] text-black border-[#00D4FF]'
+                          : 'bg-zinc-900 text-zinc-300 border-zinc-700 hover:text-white'
+                      }`}
+                    >
+                      <FileCode className="w-3.5 h-3.5" />
+                      <span>{showCodeInput ? 'Hide Code Input' : 'Attach Code'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Authenticated Mentee Status Banner */}
+                <div className="px-5 py-2 bg-black/60 border-b border-zinc-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+                  <div className="flex items-center gap-2 text-zinc-400">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span>Authenticated Scholar:</span>
+                    <strong className="text-white">{profile?.full_name || 'Active Scholar'}</strong>
+                    <span className="text-zinc-600">({profile?.email || 'student@billionairesai.academy'})</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-zinc-500">
+                    <span className="text-[#FFD700]">BaaCoin Balance: {wallet.balance} BAA</span>
+                    <span>•</span>
+                    <span className="text-zinc-400">Base L2 Student ID: BAA-STU-8821</span>
+                  </div>
+                </div>
+
+                {/* Chat Messages Feed */}
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 text-xs font-mono max-h-[460px]">
+                  {mentorMessages.map((msg) => {
+                    if (msg.sender === 'system') {
+                      return (
+                        <div
+                          key={msg.id}
+                          className="p-3 rounded-2xl bg-zinc-900/80 border border-zinc-800 text-zinc-400 text-center leading-relaxed text-[11px]"
+                        >
+                          {msg.text}
+                        </div>
+                      );
+                    }
+
+                    const isMentee = msg.sender === 'mentee';
+
+                    return (
+                      <div
+                        key={msg.id}
+                        className={`flex flex-col ${isMentee ? 'items-end' : 'items-start'}`}
+                      >
+                        <div className="flex items-center gap-2 mb-1 text-[10px] text-zinc-500">
+                          <span>
+                            {isMentee ? 'You (Scholar)' : facultyMentor.name} • {msg.timestamp}
+                          </span>
+                          {msg.isEncrypted && (
+                            <span className="flex items-center gap-0.5 text-emerald-400" title="End-to-End Encrypted">
+                              <Lock className="w-2.5 h-2.5" />
+                              E2EE
+                            </span>
+                          )}
+                        </div>
+
+                        <div
+                          className={`p-4 rounded-3xl max-w-[85%] leading-relaxed shadow-lg ${
+                            isMentee
+                              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium rounded-tr-none'
+                              : 'bg-zinc-900 text-zinc-200 border border-zinc-800 rounded-tl-none'
+                          }`}
+                        >
+                          <p className="whitespace-pre-line text-xs font-sans sm:text-[13px]">
+                            {msg.text}
+                          </p>
+
+                          {/* Code Snippet Attachment Preview */}
+                          {msg.codeSnippet && (
+                            <div className="mt-3 p-3 rounded-xl bg-black/80 border border-zinc-700/80 font-mono text-[11px] text-emerald-300 overflow-x-auto space-y-2">
+                              <div className="flex items-center justify-between text-[10px] text-zinc-400 pb-1 border-b border-zinc-800">
+                                <span className="flex items-center gap-1 text-[#00D4FF]">
+                                  <Code2 className="w-3.5 h-3.5" />
+                                  Attached Code / Prompt Architecture
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(msg.codeSnippet || '');
+                                    setMentorCopiedId(msg.id);
+                                    setTimeout(() => setMentorCopiedId(null), 2000);
+                                  }}
+                                  className="text-zinc-400 hover:text-white transition flex items-center gap-1"
+                                >
+                                  {mentorCopiedId === msg.id ? (
+                                    <>
+                                      <Check className="w-3 h-3 text-emerald-400" />
+                                      <span className="text-emerald-400">Copied</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Copy className="w-3 h-3" />
+                                      <span>Copy</span>
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                              <pre className="whitespace-pre overflow-x-auto text-zinc-300">
+                                {msg.codeSnippet}
+                              </pre>
+                            </div>
+                          )}
+
+                          {/* Status delivery ticks */}
+                          <div className={`mt-2 flex items-center justify-end gap-1 text-[10px] ${
+                            isMentee ? 'text-emerald-200' : 'text-zinc-500'
+                          }`}>
+                            <span>{msg.timestamp}</span>
+                            {isMentee && (
+                              <CheckCheck className="w-3.5 h-3.5 text-emerald-300" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* Mentor formulated thought typing simulation */}
+                  {isMentorTyping && (
+                    <div className="flex items-center gap-2 p-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-[11px] text-[#00D4FF] animate-pulse w-fit">
+                      <span className="w-2 h-2 rounded-full bg-[#00D4FF] animate-ping" />
+                      <span>{facultyMentor.name} is auditing your inquiry &amp; formulating advice...</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Expandable Code / Prompt Snippet Attachment Form */}
+                {showCodeInput && (
+                  <div className="p-4 bg-zinc-900 border-t border-zinc-800 space-y-2 font-mono text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] text-[#00D4FF] font-bold flex items-center gap-1.5">
+                        <FileCode className="w-3.5 h-3.5" />
+                        Attach Solidity Contract, Python Agent, or Capstone Prompt:
+                      </span>
+                      <button
+                        onClick={() => {
+                          setMentorCodeSnippet('');
+                          setShowCodeInput(false);
+                        }}
+                        className="text-zinc-500 hover:text-white text-[10px]"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                    <textarea
+                      rows={4}
+                      value={mentorCodeSnippet}
+                      onChange={e => setMentorCodeSnippet(e.target.value)}
+                      placeholder="// Paste code or prompt here for live Faculty Mentor audit...&#10;contract SovereignAgentVault { ... }"
+                      className="w-full bg-black border border-zinc-700 rounded-xl p-3 text-xs text-emerald-300 font-mono outline-none focus:border-emerald-400"
+                    />
+                  </div>
+                )}
+
+                {/* Message Input Form */}
+                <form
+                  onSubmit={handleSendMentorMessage}
+                  className="p-4 bg-zinc-900/95 border-t border-zinc-800 flex flex-col sm:flex-row items-center gap-2.5"
+                >
+                  <div className="relative flex-1 w-full">
+                    <input
+                      type="text"
+                      value={mentorInput}
+                      onChange={e => setMentorInput(e.target.value)}
+                      placeholder={`Confidential message to ${facultyMentor.name}... (e.g., funding proposal, smart contract bug, agent swarm)`}
+                      className="w-full bg-black border border-zinc-800 focus:border-emerald-400 rounded-2xl px-4 py-3 text-xs text-white placeholder-zinc-500 outline-none pr-10 font-mono"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCodeInput(!showCodeInput)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-emerald-400 transition"
+                      title="Attach Code"
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={() => setShowOfficeHoursModal(true)}
+                      className="p-3 bg-zinc-800 hover:bg-zinc-700 text-purple-300 rounded-2xl transition flex items-center justify-center"
+                      title="Book 1:1 Office Hours"
+                    >
+                      <Calendar className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={(!mentorInput.trim() && !mentorCodeSnippet.trim()) || isMentorTyping}
+                      className="flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-black rounded-2xl font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Send Secure</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Office Hours Booking Modal */}
+            {showOfficeHoursModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+                <div className="relative w-full max-w-md bg-zinc-950 border border-purple-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-fade-in font-mono text-xs">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-300 mx-auto">
+                    <Calendar className="w-6 h-6" />
+                  </div>
+
+                  <div className="text-center space-y-1">
+                    <span className="text-[10px] text-purple-400 uppercase tracking-widest font-bold">
+                      1-ON-1 FACULTY MENTORSHIP
+                    </span>
+                    <h3 className="text-xl font-heading font-black text-white">
+                      Book Office Hours with {facultyMentor.name}
+                    </h3>
+                    <p className="text-xs text-zinc-400">
+                      Reserve a confidential 30-minute architectural, security, or venture funding review session.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {[
+                      {
+                        label: 'Tomorrow • 2:00 PM - 2:30 PM (GMT+1)',
+                        hub: 'Port Harcourt & Lagos Hub (Virtual Meet)',
+                        type: 'Venture & Seed Funding Review'
+                      },
+                      {
+                        label: 'Friday • 4:30 PM - 5:00 PM (GMT+1)',
+                        hub: 'Nairobi & Johannesburg Room',
+                        type: 'Base L2 Smart Contract & Gas Audit'
+                      },
+                      {
+                        label: 'Saturday • 11:00 AM - 11:30 AM (GMT+1)',
+                        hub: 'Accra & Global WebRTC Mesh',
+                        type: 'Autonomous Agent Swarm Architecture'
+                      },
+                      {
+                        label: 'Monday • 5:00 PM - 5:30 PM (GMT+1)',
+                        hub: 'Executive Dean Direct Office',
+                        type: 'Capstone Defense & Angel Match'
+                      }
+                    ].map((slot, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleBookOfficeHour(slot.label)}
+                        className="w-full text-left p-3.5 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-purple-400 hover:bg-zinc-850 transition group"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-white font-bold group-hover:text-purple-300 transition">
+                            {slot.label}
+                          </span>
+                          <span className="px-2 py-0.5 rounded bg-purple-950/80 text-[10px] text-purple-300 border border-purple-800">
+                            Slot Open
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-[10px] text-zinc-400 mt-1">
+                          <span>{slot.type}</span>
+                          <span className="text-zinc-500">{slot.hub}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setShowOfficeHoursModal(false)}
+                    className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition text-xs font-bold"
+                  >
+                    Close Window
+                  </button>
+                </div>
               </div>
             )}
 

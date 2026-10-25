@@ -232,6 +232,17 @@ export interface MicroStartupSwarm {
   growth_rate: string;
   agents_deployed: number;
   autonomous_status: string;
+  hub?: string;
+  hubs?: string[];
+  direct_url?: string;
+  cac_number?: string;
+  wema_verified?: boolean;
+  equity_contract_address?: string;
+  backed_amount_baacoin?: number;
+  backed_amount_usd?: number;
+  angel_backers_count?: number;
+  dashboard_link?: string;
+  venture_capital_backers?: string[];
 }
 
 export interface GeneralProductItem {
@@ -335,6 +346,11 @@ export interface ProjectProposal {
   created_at: string;
   demo_url?: string;
   github_url?: string;
+  cac_number?: string;
+  wema_verified?: boolean;
+  equity_contract_address?: string;
+  vc_backers?: string[];
+  hub_location?: string;
 }
 
 export interface StudentSpotlight {

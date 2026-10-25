@@ -62,6 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'uadc-lab', label: 'UADC Lab 🧠', icon: Brain, badge: 'NODES' },
     { id: 'wallet', label: 'Wallet 🪙', icon: Coins, badge: 'BASE' },
     { id: 'academy', label: 'Academy', icon: BookOpen },
+    { id: 'ebooks', label: 'BAA Library', icon: BookOpen, badge: '4D EMPIRE' },
     { id: 'marketplace', label: 'Marketplace', icon: Store, badge: '60/40' },
     { id: 'investor-one-pager', label: 'Investor Deck', icon: Sparkles, badge: 'SEED' },
   ];

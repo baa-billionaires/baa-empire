@@ -129,14 +129,16 @@ function AppContent() {
           setCurrentPage('projects');
         } else if (hash === 'general-marketplace' || hash === 'general-market') {
           setCurrentPage('general-marketplace');
+        } else if (hash === 'library') {
+          setCurrentPage('ebooks');
         } else if ([
-          'home', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 
+          'home', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
           'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace'
         ].includes(hash)) {
-          setCurrentPage(hash);
+          setCurrentPage(hash === 'library' ? 'ebooks' : hash);
         }
       }
 
@@ -298,7 +300,10 @@ function AppContent() {
         )}
 
         {currentPage === 'ebooks' && (
-          <EbooksPage />
+          <EbooksPage 
+            onNavigateToCourse={handleSelectCourse}
+            onNavigateToAcademy={() => handleNav('academy')}
+          />
         )}
 
         {currentPage === 'marketplace' && (

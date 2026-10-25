@@ -19,8 +19,11 @@ import {
   Radio,
   Server,
   Flame,
-  Check
+  Check,
+  Calculator,
+  TrendingUp
 } from 'lucide-react';
+import { UADCMonetizationModels } from './UADCMonetizationModels';
 
 interface PhoneEntangleHowItWorksProps {
   onEntangleClick?: () => void;
@@ -35,6 +38,41 @@ export const PhoneEntangleHowItWorks: React.FC<PhoneEntangleHowItWorksProps> = (
   const [isEntangling, setIsEntangling] = useState<boolean>(false);
   const [entangledSuccess, setEntangledSuccess] = useState<boolean>(false);
   const [generatedNodeId, setGeneratedNodeId] = useState<string>('');
+
+  // Interactive Sleep Yield Calculator State
+  const [calcPhones, setCalcPhones] = useState<number>(1);
+  const [calcRamTier, setCalcRamTier] = useState<'standard' | 'high' | 'super'>('standard');
+
+  const calculatedYield = React.useMemo(() => {
+    // Standard: ₦500 - ₦2,000 / night per phone
+    // High (6-8GB RAM): ₦2,500 - ₦5,500 / night
+    // Super (12GB+ / NPU): ₦5,000 - ₦8,500 / night
+    let baseNightly = 1250; // midpoint of ₦500 - ₦2,000
+    let minNightly = 500;
+    let maxNightly = 2000;
+
+    if (calcRamTier === 'high') {
+      baseNightly = 4000;
+      minNightly = 2500;
+      maxNightly = 5500;
+    } else if (calcRamTier === 'super') {
+      baseNightly = 6750;
+      minNightly = 5000;
+      maxNightly = 8500;
+    }
+
+    const nightlyTotalMin = minNightly * calcPhones;
+    const nightlyTotalMax = maxNightly * calcPhones;
+    const monthlyTotalMin = nightlyTotalMin * 30;
+    const monthlyTotalMax = nightlyTotalMax * 30;
+    const baacoinMonthly = Math.round((monthlyTotalMin + monthlyTotalMax) / (2 * 1550));
+
+    return {
+      nightlyText: `₦${nightlyTotalMin.toLocaleString()} - ₦${nightlyTotalMax.toLocaleString()}`,
+      monthlyText: `₦${monthlyTotalMin.toLocaleString()} - ₦${monthlyTotalMax.toLocaleString()}`,
+      baacoinMonthly
+    };
+  }, [calcPhones, calcRamTier]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -59,108 +97,153 @@ export const PhoneEntangleHowItWorks: React.FC<PhoneEntangleHowItWorksProps> = (
   const faqs = [
     {
       q: 'Do I need to bring my phone to Port Harcourt?',
-      a: 'NO! 100% remote. Your phone stays with you. You just leave our app open at night. No shipping, no USB.'
+      a: 'NO! 100% remote. Your phone stays with you. You just leave our app open at night while charging. No shipping, no USB cable to a computer.'
     },
     {
       q: 'Will it spoil my phone / battery?',
-      a: 'NO. We use only 20% of idle CPU when phone is charging + cool. Like watching YouTube. We auto-stop if phone heats up. 2,400 phones already running safely.'
+      a: 'NO. We use only 15-20% of idle CPU when phone is plugged into its charger and cool. Similar to playing low-resolution background audio. The app auto-pauses computation if your battery reaches 38°C.'
     },
     {
       q: 'What kind of phone can plug?',
-      a: 'Any Android 8+ or iPhone with 3GB RAM and above. The stronger the phone, the more you earn. You can plug 1-3 phones per account (use family phones to earn 3x!).'
+      a: 'Any Android 8+ or iPhone with 3GB RAM and above. The stronger your processor, the higher your nightly reward. You can entangle 1 to 3 family phones on the same account to multiply your earnings 3x!'
     },
     {
-      q: 'Do I need data?',
-      a: 'Yes, small data - WiFi is best. Uses ~200MB per night (less than TikTok). We pay you 10x the data cost back.'
-    },
-    {
-      q: 'Is this crypto mining that police will arrest?',
-      a: 'NO. This is legal AI compute + data processing under MODE Digital Creations Limited (BN: UY/009049). CAC registered, Paystack verified. Not Bitcoin mining. We process real AI tasks for our own platforms (WorkOS, Automode AI).'
+      q: 'How do I withdraw my earnings?',
+      a: 'Every morning at 6:00 AM, your validated computations convert into spendable BaaCoin. You can instantly withdraw cash straight to your Nigerian bank account via Paystack, or reinvest into autonomous swarm startups.'
     }
   ];
 
   return (
-    <div className="w-full my-8 bg-gradient-to-b from-zinc-950 via-[#030a06] to-zinc-950 border-2 border-[#00FF88]/40 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-[#00FF88]/10 relative overflow-hidden font-sans">
-      {/* Background Pi Network / Grass.io Cyber Grid Glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#00FF88]/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FFD700]/10 rounded-full blur-[140px] pointer-events-none" />
+    <div className="rounded-3xl bg-gradient-to-b from-zinc-950 via-zinc-900 to-black border-2 border-emerald-500/40 p-6 sm:p-10 shadow-2xl relative overflow-hidden space-y-10">
+      {/* Subtle Matrix Ambient Glow */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#00D4FF]/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* TOP LIVE STATUS BAR: Pi Network + Grass.io Style Live Counter */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800/80 relative z-10">
-        <div className="flex items-center gap-2.5">
-          <div className="w-3.5 h-3.5 rounded-full bg-[#00FF88] animate-ping" />
-          <span className="text-sm sm:text-base font-mono font-black text-white">
-            <span className="text-[#00FF88]">{livePhonesCount.toLocaleString()}</span> Phones Plugged In Right Now — Earning
-          </span>
-        </div>
+      {/* TOP HEADER: EXACT REQUESTED EARNINGS UPGRADE */}
+      <div className="relative z-10 space-y-6">
+        <div className="p-6 sm:p-8 rounded-3xl bg-zinc-950/80 border border-emerald-500/30 flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-xl">
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#00FF88]/15 border border-[#00FF88]/40 flex items-center justify-center shrink-0 relative">
+              <Smartphone className="w-7 h-7 text-[#00FF88]" />
+              <div className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400/40 animate-ping pointer-events-none" />
+            </div>
 
-        <div className="flex items-center gap-2 font-mono text-xs">
-          <span className="px-3 py-1 rounded-full bg-emerald-950/80 border border-[#00FF88]/40 text-[#00FF88] font-bold flex items-center gap-1.5">
-            <Wifi className="w-3.5 h-3.5 text-[#00FF88]" />
-            <span>0 CABLE REQUIRED</span>
-          </span>
-          <span className="px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hidden md:inline">
-            Overnight Idle Mining
-          </span>
-        </div>
-      </div>
-
-      {/* REQUIRED EXACT SUB-HEADLINE: BOLD WHITE TEXT ON GREEN BACKGROUND */}
-      <div className="my-6 relative z-10">
-        <div className="inline-block w-full text-center sm:text-left">
-          <div className="bg-[#00C853] text-white font-extrabold text-sm sm:text-lg uppercase tracking-wide px-4 sm:px-6 py-3 rounded-2xl shadow-lg shadow-[#00C853]/25 flex items-center justify-center sm:justify-start gap-2">
-            <span>👇</span>
-            <span>HOW TO PLUG YOUR PHONE IN 60 SECONDS (NO CABLE NEEDED)</span>
-          </div>
-        </div>
-      </div>
-
-      {/* PHONE MINING VISUAL GRAPHIC: Grass / Pi Network Glowing Node Animation */}
-      <div className="mb-8 p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-        <div className="flex items-center gap-4">
-          {/* Animated Glowing Phone Mockup */}
-          <div className="relative shrink-0">
-            <div className="w-14 h-24 sm:w-16 sm:h-28 rounded-2xl bg-black border-2 border-[#00FF88] p-1 shadow-lg shadow-[#00FF88]/30 flex flex-col items-center justify-between relative overflow-hidden">
-              <div className="w-5 h-1 bg-zinc-800 rounded-full" />
-              <div className="w-full flex-1 flex flex-col items-center justify-center space-y-1">
-                <BatteryCharging className="w-5 h-5 text-[#00FF88] animate-pulse" />
-                <span className="text-[8px] font-mono text-emerald-400 font-bold">20% CPU</span>
+            <div className="space-y-1.5 text-left">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded bg-[#00FF88]/20 text-[#00FF88] border border-[#00FF88]/40 text-[10px] font-mono font-bold uppercase tracking-wider">
+                  GRASS.IO + PI NETWORK + DEEPSEEK ARCHITECTURE
+                </span>
+                <span className="text-zinc-500 text-xs hidden sm:inline">•</span>
+                <span className="text-zinc-400 text-xs hidden sm:inline font-mono">100% Safe Background Protocol</span>
               </div>
-              <div className="w-2 h-2 rounded-full bg-[#00FF88] animate-ping mb-0.5" />
 
-              {/* Shimmer overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#00FF88]/20 via-transparent to-transparent pointer-events-none" />
+              {/* EXACT REQUESTED HEADLINE */}
+              <h3 className="text-xl sm:text-2xl font-heading font-black text-white">
+                Turn Your Sleeping Hours into Passive Cash Flow
+              </h3>
+
+              {/* EXACT REQUESTED COPY */}
+              <p className="text-xs sm:text-sm text-zinc-300 max-w-2xl leading-relaxed">
+                While you sleep, your idle smartphone validates encrypted student micro-transactions and AI model checkpoints. Zero battery degradation.
+              </p>
             </div>
-
-            {/* Glowing wireless waves */}
-            <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-400/30 animate-ping pointer-events-none" />
           </div>
 
-          <div className="space-y-1 text-left">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-[#00FF88]/20 text-[#00FF88] border border-[#00FF88]/40 text-[10px] font-mono font-bold uppercase">
-                GRASS.IO + PI NETWORK ARCHITECTURE
+          {/* EXACT REQUESTED STAT BADGES (ELEVATED) */}
+          <div className="flex flex-wrap items-center gap-3 shrink-0 text-center font-mono">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-emerald-500/40 shadow-[0_0_20px_rgba(0,255,136,0.15)] min-w-[150px]">
+              <span className="text-[10px] text-zinc-400 block uppercase tracking-wider font-semibold">
+                Nightly Yield
               </span>
-              <span className="text-zinc-500 text-xs hidden sm:inline">•</span>
-              <span className="text-zinc-400 text-xs hidden sm:inline font-mono">100% Safe Background Protocol</span>
+              <span className="text-lg sm:text-2xl font-heading font-black text-[#00FF88] block mt-0.5">
+                ₦500 - ₦2,000
+              </span>
+              <span className="text-[10px] text-zinc-500 block">Up to ₦8,500 on Supernodes</span>
             </div>
-            <h4 className="text-base sm:text-lg font-bold text-white">
-              Turn Your Sleeping Hours into Passive Cash Flow
-            </h4>
-            <p className="text-xs text-zinc-400 max-w-xl">
-              While you sleep, your idle smartphone validates encrypted student micro-transactions and AI model checkpoints. Zero battery degradation.
-            </p>
+
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-zinc-800 min-w-[120px]">
+              <span className="text-[10px] text-zinc-400 block uppercase tracking-wider font-semibold">
+                Data Usage
+              </span>
+              <span className="text-lg sm:text-2xl font-heading font-black text-[#FFD700] block mt-0.5">
+                ~200 MB
+              </span>
+              <span className="text-[10px] text-zinc-500 block">Compressed Edge Protocol</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0 text-center font-mono">
-          <div className="p-3 rounded-xl bg-black/60 border border-zinc-800">
-            <span className="text-[10px] text-zinc-400 block uppercase">Nightly Yield</span>
-            <span className="text-base sm:text-lg font-black text-[#00FF88]">₦100 - ₦500</span>
+        {/* INTERACTIVE SLEEPING YIELD CALCULATOR */}
+        <div className="p-5 sm:p-6 rounded-2xl bg-zinc-950/60 border border-zinc-800 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Calculator className="w-4 h-4 text-[#00FF88]" />
+              <h4 className="text-xs sm:text-sm font-heading font-bold text-white uppercase tracking-wider">
+                Live Sleep Yield Calculator
+              </h4>
+              <span className="text-[11px] font-mono text-zinc-400">
+                (Real-World Nigerian Naira Payout)
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs font-mono">
+              <span className="text-zinc-400">Phones Connected:</span>
+              <div className="flex items-center gap-1">
+                {[1, 2, 3].map(num => (
+                  <button
+                    key={num}
+                    onClick={() => setCalcPhones(num)}
+                    className={`px-3 py-1 rounded-lg border font-bold transition cursor-pointer ${
+                      calcPhones === num
+                        ? 'bg-[#00FF88] text-black border-[#00FF88]'
+                        : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white'
+                    }`}
+                  >
+                    {num} {num === 1 ? 'Phone' : 'Phones'}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="p-3 rounded-xl bg-black/60 border border-zinc-800">
-            <span className="text-[10px] text-zinc-400 block uppercase">Data Usage</span>
-            <span className="text-base sm:text-lg font-black text-[#FFD700]">~200 MB</span>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+            {[
+              { id: 'standard', label: 'Standard Phone (3-4GB RAM)', yieldNote: '₦500 - ₦2,000 / night per phone' },
+              { id: 'high', label: 'High-Throughput (6-8GB RAM)', yieldNote: '₦2,500 - ₦5,500 / night per phone' },
+              { id: 'super', label: 'Flagship AI Supernode (12GB+ / NPU)', yieldNote: '₦5,000 - ₦8,500 / night per phone' }
+            ].map(tier => (
+              <button
+                key={tier.id}
+                onClick={() => setCalcRamTier(tier.id as any)}
+                className={`p-3 rounded-xl border text-left transition cursor-pointer ${
+                  calcRamTier === tier.id
+                    ? 'bg-zinc-900 border-[#00FF88] text-white shadow-lg'
+                    : 'bg-black/40 border-zinc-800 text-zinc-400 hover:text-white'
+                }`}
+              >
+                <div className="text-xs font-bold text-white">{tier.label}</div>
+                <div className="text-[10px] font-mono text-emerald-400 mt-0.5">{tier.yieldNote}</div>
+              </button>
+            ))}
+          </div>
+
+          {/* Calculator Output Banner */}
+          <div className="p-4 rounded-xl bg-black/80 border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+            <div>
+              <span className="text-zinc-400 block text-[11px]">Calculated Nightly Passive Payout:</span>
+              <span className="text-lg font-heading font-black text-[#00FF88]">
+                {calculatedYield.nightlyText} / night
+              </span>
+            </div>
+            <div className="border-t sm:border-t-0 sm:border-l border-zinc-800 pt-2 sm:pt-0 sm:pl-4">
+              <span className="text-zinc-400 block text-[11px]">Monthly Passive Income:</span>
+              <span className="text-base sm:text-lg font-heading font-black text-[#FFD700]">
+                {calculatedYield.monthlyText} / month
+              </span>
+              <span className="text-[10px] text-zinc-400 ml-1">
+                (≈ {calculatedYield.baacoinMonthly} BaaCoin)
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -183,7 +266,7 @@ export const PhoneEntangleHowItWorks: React.FC<PhoneEntangleHowItWorksProps> = (
           </div>
 
           <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-            Click the big green button on your dashboard. We generate your unique <strong>Node ID</strong> — This is your phone's passport in our Data Center.
+            Click the big green button on your dashboard. We generate your unique <strong>Node ID</strong> — This is your phone's passport in our sovereign Data Center.
           </p>
 
           <div className="pt-2">
@@ -209,7 +292,7 @@ export const PhoneEntangleHowItWorks: React.FC<PhoneEntangleHowItWorksProps> = (
           </div>
 
           <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-            Go to BAA Dashboard &gt; Click "Start Mining" &gt; Leave phone plugged to charger + connected to WiFi + screen on overnight. That's it. Your idle CPU becomes a money node.
+            Go to BAA Dashboard &gt; Click "Start Mining" &gt; Leave phone plugged to charger + connected to WiFi + screen on overnight. Your idle CPU becomes a money node.
           </p>
 
           <div className="pt-2">
@@ -235,23 +318,23 @@ export const PhoneEntangleHowItWorks: React.FC<PhoneEntangleHowItWorksProps> = (
           </div>
 
           <div className="text-xs text-zinc-300 leading-relaxed font-sans space-y-1">
-            <p className="font-semibold text-white">Your phone is now part of UADC Protocol:</p>
+            <p className="font-semibold text-white">Your phone executes sovereign UADC tasks:</p>
             <ul className="space-y-1 text-[11px] text-zinc-300">
               <li className="flex items-start gap-1.5">
                 <span className="text-[#00D4FF]">•</span>
-                <span>Processes small AI tasks (CAPTCHA, data labeling, model training)</span>
+                <span>Distributed DeepSeek-R1 AI Sharding &amp; local translation</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-[#00D4FF]">•</span>
-                <span>Validates student business transactions</span>
+                <span>Zero-knowledge Base L2 student payment proof relay</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-[#00D4FF]">•</span>
-                <span>Mines our BAA Coin</span>
+                <span>Mines verified BaaCoin directly to wallet</span>
               </li>
             </ul>
             <p className="text-[11px] font-bold text-[#00FF88] pt-1">
-              Earn ₦100-₦500 per night per phone (depends on RAM &amp; time left on)
+              Earn ₦500 - ₦2,000/night base (High-compute clusters earn up to ₦8,500 - ₦22,000)
             </p>
           </div>
         </div>
@@ -272,15 +355,20 @@ export const PhoneEntangleHowItWorks: React.FC<PhoneEntangleHowItWorksProps> = (
           </div>
 
           <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-            Morning: Tap "Stop &amp; Claim" -&gt; Your earnings go to your BAA Wallet.
+            Morning: Tap "Stop &amp; Claim" -&gt; Your earnings go straight to your active BAA Wallet.
           </p>
 
           <div className="p-2.5 rounded-xl bg-black/60 border border-zinc-800 text-[11px] font-mono text-zinc-300 space-y-1">
-            <span className="text-white font-bold block">You can:</span>
+            <span className="text-white font-bold block">Instant Options:</span>
             <div className="text-emerald-400">1. Withdraw to bank via Paystack</div>
-            <div className="text-[#FFD700]">2. Stake to start business in TrillionaresOS</div>
+            <div className="text-[#FFD700]">2. Stake in TrillionaresOS Startups</div>
           </div>
         </div>
+      </div>
+
+      {/* NEW UADC SOVEREIGN MONETIZATION MODELS SHOWCASE */}
+      <div className="pt-4 relative z-10">
+        <UADCMonetizationModels />
       </div>
 
       {/* ACCORDION STYLE FAQ BOX RIGHT UNDER STEPS */}
@@ -359,9 +447,9 @@ export const PhoneEntangleHowItWorks: React.FC<PhoneEntangleHowItWorksProps> = (
         </p>
 
         {entangledSuccess && (
-          <div className="p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-xs font-mono text-emerald-300 flex items-center gap-2">
+          <div className="p-3.5 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-xs font-mono text-emerald-300 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>Success: Your phone is provisioned on Node {generatedNodeId}. Leave your phone connected to WiFi &amp; charging tonight to accumulate ₦100-₦500.</span>
+            <span>Success: Your phone is provisioned on Node {generatedNodeId}. Leave your phone connected to WiFi &amp; charging tonight to accumulate ₦500 - ₦2,000+ into your BAA Wallet.</span>
           </div>
         )}
       </div>

@@ -1,0 +1,837 @@
+# BAA EMPIRE MASTER UPGRADE PROMPT
+
+## Autonomous AI Publishing Swarm, Billionaire AI Academy Full Digital Library, Global Book Marketplace, BaaCoin Reader Economy, AI Courses and Multimedia Learning Ecosystem
+
+**Platform:** Billionaire AI Academy (BAA) / BAA Empire
+**Founder and author branding:** Ambassador/Engineer Emmanuel Bassey Joe — aka Titowise (DeOrbitMan)
+**Official contact for book branding:** +2348025516793
+**Existing production website:** https://baa-empire.vercel.app
+**Primary objective:** Upgrade the existing BAA application into an intelligent, scalable, revenue-generating publishing and learning ecosystem without destroying existing features, data, authentication, working integrations, or the current deployment.
+
+---
+
+# 1. YOUR ROLE
+
+Act as a coordinated team of senior software engineers, AI architects, autonomous-agent developers, publishing professionals, editorial directors, book-cover designers, instructional designers, audio-production specialists, video-generation engineers, digital librarians, e-commerce architects, accessibility experts, marketing strategists, cybersecurity engineers, and DevOps specialists.
+
+Your mission is to inspect, improve, and extend the existing BAA application into a premium digital publishing and education ecosystem called:
+
+**BAA AUTONOMOUS PUBLISHING & KNOWLEDGE EMPIRE**
+
+The platform should combine:
+
+* Autonomous Multi-Agent AI.
+* Personal Entrepreneur 24/7 AI Workforce.
+* Autonomous AI Publishing Swarm.
+* BAA Full Digital Library.
+* Global Book and E-book Marketplace.
+* AI Book Distributor and Marketing Workforce.
+* Interactive and Animated Book Studio.
+* Audiobook and Text-to-Speech Studio.
+* AI Course and Certification Academy.
+* Book Seller and Affiliate Network.
+* Reader Community and Knowledge Economy.
+* BaaCoin loyalty and rewards system.
+* Publisher analytics and revenue management.
+
+Do not merely produce a dashboard mock-up. Build functional features that are connected to the existing application and its actual backend capabilities.
+
+# 2. FIRST: INSPECT THE EXISTING APP BEFORE EDITING
+
+Before making any changes:
+
+1. Inspect the complete existing source code, project structure, framework, dependencies, routes, components, API endpoints, database configuration, authentication, payment integrations, environment variables, and deployment settings.
+2. Identify the current BAA Library, existing book catalogue, book detail pages, user accounts, admin dashboard, marketplace, BaaCoin logic, courses, sales functions, and other implemented features.
+3. Produce an internal implementation map identifying existing components to preserve, components to upgrade, missing components to add, and potential conflicts.
+4. Check the existing GitHub-connected project and preserve its current repository and deployment workflow.
+5. Inspect whether a backend or database provider is already configured. Reuse the existing provider where appropriate. Do not assume Supabase is installed or create a second database unnecessarily.
+6. Preserve existing user accounts, books, purchases, payment records, BaaCoin balances, settings, and business data.
+7. Back up or use reversible migrations before making potentially destructive database changes.
+8. Do not replace the entire project with a new template or remove features merely to simplify implementation.
+
+**Non-negotiable rule:** Upgrade the existing BAA platform incrementally. Maintain backward compatibility wherever possible and report any required breaking change before applying it.
+
+# 3. TRANSFORM THE EXISTING CATALOGUE INTO THE BAA FULL DIGITAL LIBRARY
+
+Replace the old catalogue-only experience with a comprehensive, searchable, browsable, continuously expanding digital library.
+
+Create these main sections:
+
+* BAA Library Home.
+* Explore All Books.
+* New Releases.
+* Best Sellers.
+* Most Read Books.
+* Most Shared Books.
+* Recommended for You.
+* Free Books.
+* Premium Books.
+* Short Reads and Microbooks.
+* Professional and Academic Books.
+* AI Engineering Library.
+* Entrepreneurship and Business Library.
+* Science and Technology Library.
+* Industry-Specific AI Library.
+* Audiobook Library.
+* Interactive Book Library.
+* Animated Book and Explainer Library.
+* Courses and Learning Paths.
+* Author and Publisher Directory.
+* Book Seller Marketplace.
+* Research and Innovation Library.
+* Reader Clubs and Book Challenges.
+
+Each book must have its own permanent identifier, searchable title, subtitle, author, category, description, cover images, publication status, edition, language, intended audience, difficulty level, keywords, price, access rights, formats, reading progress, reviews, and distribution status.
+
+Support collections containing 250, 500, and eventually 1,000 or more distinct titles. Implement pagination, efficient search, filters, sorting, caching where appropriate, and lazy loading. Do not attempt to load every manuscript or every book cover into one enormous page.
+
+The library must support book records before a manuscript is completed, but clearly label each item as an idea, outline, draft, in editorial review, ready for publication, published, or archived.
+
+Never display an incomplete manuscript as a finished book.
+
+# 4. CREATE THE BAA BOOK MASTER CATALOGUE
+
+Build the initial catalogue around the 250-book collection previously developed for BAA. Use the existing catalogue where available, reconcile duplicates, and retain valid existing book records.
+
+If the existing title list is not present in the codebase, create and import a structured catalogue with at least the following 25 categories and 10 distinct titles per category.
+
+### Collection A: Autonomous Intelligence and AI Engineering
+
+1. Autonomous Multi-Agent AI Systems.
+2. Personal Entrepreneur 24/7 AI Workforce.
+3. Personal Digital Employees and Workforce Engineering.
+4. AI Engineering Foundations and Scaling.
+5. Cognitive AI and Intelligent Reasoning.
+6. Autotelic Symbiosis Architecture AI.
+7. Entangled AI and Collaborative Intelligence.
+8. Regenerative, Enzymic and Catalytic AI.
+9. Economic AI and Strategic Revenue Generation.
+10. AI Entrepreneurship and Business Creation.
+
+### Collection B: Digital Economy and Business
+
+11. AI and Blockchain Wealth Engineering.
+12. AI in Investing, Finance and Wealth Management.
+13. AI in Sales, Marketing and Advertising.
+14. AI in HR and People Empowerment.
+15. AI in Education and Future of Learning.
+16. AI in Science, Research and Discovery.
+17. AI in Medicine, Wellness and Health Systems.
+18. AI in Maritime, Marine and Blue Economy.
+19. AI in Manufacturing, Robotics and Industrial Systems.
+20. AI in Agriculture and Food Security.
+
+### Collection C: Advanced Technology and Society
+
+21. AI in Space, Energy and Advanced Infrastructure.
+22. AI in Environment, Climate and Humanity.
+23. AI in Politics, Governance, Culture and Religion.
+24. AI in Media, Entertainment, Tourism and Communication.
+25. AI in Networking, Technology and Universal Sovereign Empowerment.
+
+For each category, generate 10 distinct titles, giving an initial target of 250 books. Avoid repetitive titles and shallow variations of the same idea.
+
+Extend the catalogue toward 500 and 1,000 titles through controlled generation batches, editorial review, uniqueness checks, and quality scoring.
+
+The platform should support importing additional titles from CSV or JSON, exporting catalogue data, bulk editing, duplicate detection, and bulk assignment of categories and tags.
+
+Treat terms such as Autotelic Symbiosis AI, Entangled Cognitive AI, Enzymic AI, Catalytic AI, Regenerative AI, and Economic AI as proposed frameworks where they are not established scientific disciplines. Clearly distinguish established research, original BAA frameworks, hypotheses, and experimental concepts. Define proposed frameworks and provide testable models rather than presenting unverified claims as scientific facts.
+
+# 5. AUTONOMOUS BOOK CREATION SWARM
+
+Build a modular publishing-agent workforce with individual responsibilities, clear permissions, task queues, audit logs, and human approval checkpoints.
+
+Create the following agents:
+
+1. **Publishing Orchestrator Agent:** Coordinates the complete book-production workflow.
+2. **Research Agent:** Finds credible sources and builds research notes.
+3. **Opportunity Discovery Agent:** Identifies reader needs, market gaps, and emerging subjects.
+4. **Book Concept Agent:** Generates differentiated book concepts and value propositions.
+5. **Title and Positioning Agent:** Creates titles, subtitles, descriptions, and audience positioning.
+6. **Outline Architect Agent:** Develops detailed chapter-by-chapter outlines.
+7. **Writing Agent:** Drafts original manuscripts in clearly defined stages.
+8. **Technical Specialist Agent:** Reviews technical depth, terminology, and domain accuracy.
+9. **Fact-Checking Agent:** Flags unsupported claims, outdated information, and questionable references.
+10. **Citation and Research Integrity Agent:** Verifies references and distinguishes sourced facts from original ideas.
+11. **Developmental Editor Agent:** Reviews structure, logic, depth, and completeness.
+12. **Copyediting Agent:** Checks grammar, readability, clarity, and consistency.
+13. **Plagiarism-Risk and Copyright Agent:** Flags possible copying, unattributed passages, and rights concerns without claiming that automated checks guarantee originality.
+14. **Cover Design Agent:** Creates front-cover and back-cover artwork.
+15. **Interior Design Agent:** Formats professional digital book layouts.
+16. **Illustration Agent:** Creates original diagrams, charts, illustrations, and learning graphics.
+17. **Accessibility Agent:** Checks navigation, text contrast, alt text, headings, and accessible reading formats.
+18. **Audiobook Agent:** Prepares narration scripts, pronunciations, chapter divisions, and audio-generation jobs.
+19. **Animation and Video Agent:** Converts eligible books into storyboards, explainers, animated lessons, and video chapters.
+20. **Course Architect Agent:** Converts books into courses, lessons, quizzes, projects, and assessments.
+21. **Assessment Agent:** Creates knowledge checks and evaluates answer quality.
+22. **Metadata and Discoverability Agent:** Prepares keywords, summaries, categories, and search-friendly metadata.
+23. **Pricing Agent:** Recommends pricing using transparent, editable business rules.
+24. **Marketing Campaign Agent:** Develops audience-specific promotional materials.
+25. **Distribution Agent:** Prepares publication packages and coordinates authorized distribution.
+26. **Book Seller Agent:** Supports seller onboarding, product listings, commissions, and sales reporting.
+27. **Reader Engagement Agent:** Recommends books, reading challenges, and relevant learning paths.
+28. **BaaCoin Rewards Agent:** Calculates eligible rewards through a secure, auditable ledger.
+29. **Analytics Agent:** Reports actual reading, sales, conversion, retention, and distribution metrics.
+30. **Continuous Improvement Agent:** Uses approved analytics and feedback to recommend improvements.
+
+Agents must not all run uncontrolled at once. Implement orchestration, queues, task dependencies, retry limits, resource budgets, failure handling, and human review where necessary.
+
+Use real configured AI providers and models. If an API key or external capability is missing, show a clear configuration requirement and preserve the rest of the workflow. Never fabricate research results, successful API calls, generated audio, completed uploads, or business metrics.
+
+# 6. FULL BOOK PRODUCTION WORKFLOW
+
+Create a production pipeline:
+
+**Idea → Research → Concept Approval → Outline → Chapter Drafts → Technical Review → Editing → Fact-Checking → Design → Format Conversion → Quality Assurance → Author Approval → Publication → Marketing → Distribution → Analytics.**
+
+Each book must have:
+
+* A book ID and version number.
+* Title and subtitle.
+* Target reader and reader outcomes.
+* Detailed table of contents.
+* Introduction and complete chapters.
+* Practical examples and case studies.
+* Exercises, discussion questions, and chapter summaries.
+* Glossary where appropriate.
+* References and bibliography where applicable.
+* Author biography and publication details.
+* Copyright page and edition information.
+* Front cover and back cover.
+* Interior layout.
+* Accessibility checks.
+* Publication-ready metadata.
+* Change history and approval records.
+
+Require the configured word count, minimum content depth, and number of chapters to be specified per book type. Do not fill books with repetitive text merely to satisfy a word count.
+
+Create a “Generate Next Batch” feature. It should let the owner select titles, batch size, book type, language, desired depth, priority, model, estimated cost, and review requirements.
+
+Provide pause, resume, cancel, retry, and regenerate controls. Save completed work progressively so a session interruption does not destroy manuscript progress.
+
+# 7. PROFESSIONAL FRONT AND BACK COVER STUDIO
+
+Create a dedicated cover-design interface for every book.
+
+All BAA books must consistently display the official branding:
+
+**Ambassador/Engineer Emmanuel Bassey Joe**
+**aka Titowise (DeOrbitMan)**
+**Contact: +2348025516793**
+
+Place the author name, alias, and contact details legibly on every book’s front and back cover. Use tasteful typography, strong visual hierarchy, and a premium professional style appropriate to the book’s subject. Do not allow the contact details to obscure the title or important artwork.
+
+The owner must be able to edit the cover layout, author branding, contact details, logo, colour scheme, and placement globally and override them for an individual title when needed.
+
+For every book, generate:
+
+**Front cover**
+
+* Main title.
+* Subtitle where appropriate.
+* Author name and alias.
+* Subject-specific artwork.
+* BAA branding.
+* Consistent premium visual identity.
+
+**Back cover**
+
+* Compelling but truthful book description.
+* Reader benefits and learning outcomes.
+* Short author biography.
+* Author name and alias.
+* +2348025516793.
+* BAA publishing identity.
+* ISBN and barcode area only when valid information is supplied or assigned by an authorized provider.
+* Publisher, edition, website, or other publication details where appropriate.
+
+Generate a flat front cover and back cover separately. Also support a combined full-wrap print-cover layout when the correct trim size, page count, paper stock, bleed, and spine width are known.
+
+Support editable cover templates, multiple design variations, previews, regeneration, high-resolution exports, and per-book design approval.
+
+Use the configured image-generation provider for artwork. If unavailable, clearly identify the missing integration rather than pretending a cover was generated.
+
+# 8. DIGITAL BOOK FORMATS AND READING OPTIONS
+
+For each approved book, support the formats that can actually be generated and validated:
+
+* Responsive online reader.
+* EPUB.
+* Accessible PDF.
+* Print-ready PDF when required specifications are known.
+* HTML reading edition.
+* TXT or Markdown source where appropriate.
+* Audiobook audio files.
+* Captioned book-video or lesson-video editions.
+* Interactive learning edition.
+
+Create a format-generation service with version tracking and file validation.
+
+For downloads, enforce the owner’s pricing and licensing settings. Support free, paid, subscription-based, preview-only, and institutionally licensed books.
+
+Where feasible, include bookmarks, notes, highlights, reading history, adjustable fonts, dark mode, font-size controls, table of contents, chapter navigation, reading progress, search within a book, and text-to-speech playback.
+
+Protect paid content using server-side authorization and expiring download links where supported. Do not treat a hidden button or frontend-only check as security.
+
+Provide DRM-free and protected distribution options according to the owner’s rights and platform capabilities. Explain any format limitations.
+
+# 9. IMMERSIVE READING AND READER RETENTION
+
+Make BAA Library a place people genuinely enjoy visiting, learning, and returning to.
+
+Implement:
+
+* Personalized reading recommendations.
+* “Continue Reading” and “Continue Learning.”
+* Daily reading goals.
+* Reading streaks with fair recovery rules.
+* Chapter completion celebrations.
+* Reading-time estimates.
+* Progress rings and learning milestones.
+* Personal bookshelves and collections.
+* Save for later.
+* Notes, highlights, and bookmarks.
+* Reader journals.
+* Vocabulary builder and glossary cards.
+* AI explanations of difficult passages.
+* Ask-the-Book conversational assistant.
+* Chapter summaries.
+* Practice questions and flashcards.
+* Concept maps and visual explanations.
+* Reader discussion rooms.
+* Book clubs and reading circles.
+* Author Q&A sessions.
+* Book challenges and reading competitions.
+* Certificates for eligible completed courses.
+* Shareable reading milestones.
+* Accessible reading settings.
+* Family, school, and institutional reading options where supported.
+
+Include a choice of reading styles: focused reading, quick review, study mode, audio listening, interactive practice, and visual learning.
+
+Provide optional reading reminders that users can control or disable.
+
+Do not use manipulative countdowns, deceptive progress indicators, fabricated reviews, or pressure tactics. Encourage sustained learning and genuine comprehension rather than endless screen time.
+
+# 10. AUDIOBOOK AND VOICE LEARNING STUDIO
+
+Create a workflow to convert authorized manuscripts into audiobooks.
+
+Features:
+
+* Chapter-by-chapter narration.
+* Voice selection and preview.
+* Configurable narration speed.
+* Pronunciation dictionary.
+* Chapter introductions and transitions.
+* Audio progress synchronization.
+* Resume playback.
+* Sleep timer.
+* Background playback where supported.
+* Downloadable audio where licensed.
+* Narration quality checks.
+* Optional multilingual editions.
+* Captions and text synchronization where available.
+
+Allow the author or administrator to approve the voice and pronunciation before large-scale generation.
+
+Use only licensed or appropriately authorized voices. Do not clone a real person's voice without the required permission.
+
+Track generation status, provider usage, file duration, cost, failures, and completed outputs.
+
+# 11. INTERACTIVE AND ANIMATED BOOK VIDEO STUDIO
+
+Convert suitable books into multimedia experiences.
+
+Generate:
+
+* Chapter explainer videos.
+* Animated diagrams.
+* Concept animations.
+* Illustrated storytelling.
+* Character-led lessons where appropriate.
+* Motion-graphic summaries.
+* Narrated slide lessons.
+* Interactive video checkpoints.
+* Short educational clips.
+* Course introduction videos.
+* Promotional book trailers.
+* Social-media preview clips.
+* Captioned and transcript-supported videos.
+
+The workflow should be:
+
+**Book Chapter → Learning Objective → Script → Storyboard → Scene Assets → Narration → Animation or Video Generation → Captions → Review → Export → Publish.**
+
+Include aspect-ratio presets for online learning, landscape video, vertical short videos, and square promotional content.
+
+Provide scene editing, regeneration of selected scenes, subtitles, voice synchronization, visual consistency checks, and approval before publication.
+
+Do not claim that a finished video exists until the rendering job has completed and the output has been validated.
+
+If video generation requires an external provider, create a provider adapter and a clear setup screen.
+
+# 12. CONVERT EVERY SUITABLE BOOK INTO COURSES
+
+Create a connected BAA Courses and Certification Academy.
+
+For each selected book, allow the Course Architect Agent to generate:
+
+* Course title and description.
+* Intended learners and prerequisites.
+* Learning outcomes.
+* Modules and lessons.
+* Reading assignments.
+* Audio and video lessons.
+* Quizzes and answer explanations.
+* Practical exercises.
+* Projects and case studies.
+* Assessment rubrics.
+* Final examination where appropriate.
+* Completion requirements.
+* Certificate template.
+* Instructor notes.
+* Downloadable study resources.
+
+Offer foundation, beginner, intermediate, advanced, professional, specialist, and research-oriented pathways when suitable.
+
+Create course bundles, book-and-course bundles, subscriptions, cohort learning, instructor-led learning, corporate packages, and institutional licences where the existing commerce architecture can support them.
+
+Certificates must reflect genuine completion requirements. Distinguish participation certificates from competency-based certificates and externally accredited qualifications.
+
+# 13. BAACOIN: BOOK PURCHASE, READING AND SHARING REWARD ECONOMY
+
+Integrate BaaCoin into the book marketplace, reader experience, seller network, and course platform.
+
+First inspect the existing BaaCoin implementation. Preserve valid balances, transaction history, reward rules, and payment integrations.
+
+If BaaCoin is currently only a points or loyalty system, continue to treat it as a loyalty balance unless a separate, properly designed and authorized token implementation exists. Do not represent reward points as cash, a cryptocurrency, a bank deposit, or a redeemable asset without the required legal and technical arrangements.
+
+Create an administrator-configurable rewards engine for eligible actions such as:
+
+* Purchasing an eligible book.
+* Completing a verified reading milestone.
+* Passing a comprehension quiz.
+* Completing a course.
+* Writing a useful, authentic review.
+* Referring a new reader who completes an eligible action.
+* Sharing a book through an approved referral link that produces a valid conversion.
+* Participating in reading challenges.
+* Helping identify factual or accessibility errors.
+* Publishing eligible original content through the approved contributor programme.
+
+Rewards must be based on clear published rules, budget limits, and auditable records.
+
+**Reading rewards must not depend solely on opening pages or leaving a book running.** Use reasonable reading-progress signals, quiz participation, milestone validation, and fraud controls. Do not collect unnecessary invasive monitoring data.
+
+Implement:
+
+* BaaCoin rewards dashboard.
+* Earned, pending, spent, reversed, and expired balances where applicable.
+* Transaction ledger.
+* Reward rule management.
+* Referral tracking.
+* Daily and monthly caps.
+* Duplicate-event protection.
+* Anti-bot and anti-fraud checks.
+* Dispute and correction workflow.
+* Administrative audit trail.
+* Reward budget and liability reports.
+* Clear terms and conditions.
+* User-visible reward explanations.
+
+Never award points twice for the same qualifying event. Never permit the frontend alone to modify balances.
+
+If BaaCoin supports redemption, allow only approved and configured redemption options. Show eligibility, rates, fees, limits, and processing status accurately. Cash-out, transferability, exchange listings, or on-chain features must not be advertised unless implemented and legally reviewed.
+
+# 14. GLOBAL BOOK MARKETPLACE AND COMMERCE
+
+Upgrade the catalogue into a real marketplace for books, courses, audio editions, video editions, bundles, subscriptions, and authorised third-party publications.
+
+Support:
+
+* Free and paid listings.
+* One-time purchases.
+* Subscriptions where configured.
+* Book bundles.
+* Course bundles.
+* Institutional licences.
+* Author storefronts.
+* Publisher storefronts.
+* Book seller storefronts.
+* Seller dashboards.
+* Sales reports.
+* Commission configuration.
+* Affiliate links.
+* Coupon codes.
+* Gift purchases where supported.
+* Customer receipts.
+* Refund and dispute workflows.
+* Inventory and availability for physical books if physical fulfilment is added.
+* Currency-aware display and payment processing supported by the existing payment provider.
+
+Inspect the current payment provider before changing anything. Reuse the configured provider if suitable. Do not assume that a new payment account exists.
+
+If Paystack is already configured, preserve it and verify the implementation. Use secure server-side transactions, verified webhooks, idempotency, reconciliation, and appropriate error handling. Do not expose secret keys in browser code or commit them to the repository.
+
+For every order, track pending, successful, failed, refunded, and disputed states. Grant paid access only after authoritative payment verification.
+
+Allow the administrator to configure author royalties, platform commissions, seller commissions, and affiliate commissions with transparent calculations and clear records.
+
+# 15. AUTONOMOUS BOOK DISTRIBUTOR AI
+
+Create an AI distribution workforce that prepares and manages authorized distribution across the internet.
+
+Potential distribution destinations include:
+
+* BAA's own public book pages.
+* The BAA marketplace.
+* The publisher's authorized website.
+* Search-engine discovery and indexing.
+* Book discovery directories.
+* Bookstore and library supplier programmes.
+* E-book retailers.
+* Audiobook platforms.
+* Online learning marketplaces.
+* Educational institutions.
+* Public libraries and digital library networks.
+* Corporate and professional training buyers.
+* Authorised affiliate and reseller networks.
+* Social media and content channels.
+* Email newsletters to consenting subscribers.
+* Relevant book communities and professional networks.
+
+Build a destination registry showing:
+
+* Platform or organisation.
+* Distribution method.
+* Supported book formats.
+* Metadata requirements.
+* Pricing and royalty terms.
+* Rights and territory restrictions.
+* Integration status.
+* Authentication status.
+* Submission status.
+* Publication status.
+* Last successful verification.
+* Error logs and next required action.
+
+Use official APIs, approved distributor integrations, authorised feeds, or legitimate manual submission workflows. Where a platform has no supported integration, prepare a publication package and clear instructions for the administrator.
+
+Do not scrape private systems, bypass access controls, violate platform terms, or send unsolicited bulk messages. Do not claim that a title is listed on a retailer, bookstore, library, or search engine until the listing is confirmed.
+
+Create a distribution package containing the manuscript files, cover files, metadata, synopsis, author biography, pricing recommendations, keywords, category mappings, rights information, and any destination-specific requirements.
+
+Support the administrator's review and approval of distribution targets, pricing, territories, licences, and publication dates.
+
+# 16. AUTONOMOUS MARKETING AND READER ACQUISITION SWARM
+
+Build an authorised book marketing system that helps readers discover books relevant to their needs.
+
+Agents should perform:
+
+* Audience research.
+* Search-intent analysis.
+* Keyword and topic research.
+* Book positioning.
+* Search-friendly book descriptions.
+* Landing-page generation.
+* Book trailer scripts.
+* Short-video scripts.
+* Newsletter drafting.
+* Reader-segment recommendations.
+* Affiliate campaign generation.
+* Seller campaign kits.
+* Course upsell recommendations.
+* Book launch planning.
+* Seasonal campaign planning.
+* A/B test planning.
+* Conversion and sales analysis.
+* Reader retention analysis.
+
+Support SEO metadata, structured data where appropriate, canonical URLs, sitemaps, social-sharing previews, accessible pages, and public book landing pages.
+
+Connect to external email, advertising, analytics, and social publishing systems only through supported, authorised integrations.
+
+Require appropriate consent for marketing communications. Respect unsubscribes, platform rules, privacy requirements, rate limits, and advertising policies.
+
+Do not promise top search-engine rankings or guaranteed sales. Measure actual impressions, clicks, leads, purchases, reading engagement, and campaign costs.
+
+# 17. BOOK SELLERS, AFFILIATES AND INDEPENDENT MARKETERS
+
+Create a BAA Book Seller and Marketing Partner Network.
+
+Allow eligible users to apply to become:
+
+* Affiliate marketers.
+* Book ambassadors.
+* Independent book sellers.
+* Educational resellers.
+* Corporate learning partners.
+* Institutional procurement partners.
+* Regional distribution partners.
+* Book-club organisers.
+* Course promotion partners.
+
+Include seller registration and approval, profile pages, unique tracking links, approved marketing assets, commission terms, conversion reporting, sales statements, payment eligibility, fraud detection, and dispute handling.
+
+Provide seller toolkits with book covers, descriptions, preview links, approved excerpts, course summaries, promotional videos, and campaign templates.
+
+Support multi-level or network-based commissions only if explicitly configured, legally reviewed, transparently disclosed, and financially sustainable. Do not create hidden fees, misleading income promises, or rewards based solely on recruitment.
+
+Sellers must only market books and assets they are authorised to promote.
+
+# 18. PUBLIC READER DATABASE AND PRIVACY
+
+Create a privacy-conscious reader and customer management system.
+
+Store only necessary information for account administration, purchases, reading progress, preferences, rewards, customer support, and consented marketing.
+
+Provide:
+
+* Reader profiles.
+* Consent and communication preferences.
+* Book interest tags.
+* Purchase and reading history where appropriate.
+* Course progress.
+* Referral attribution.
+* Customer support history.
+* Export and deletion request workflows.
+* Retention policies.
+* Access controls.
+* Audit logs.
+
+Build audience segments based on permitted, relevant signals such as opted-in interests, book categories, purchase history, and declared learning goals.
+
+Never expose private reader lists to sellers or third-party distributors. Give partners only the information required for an authorised transaction or campaign.
+
+Do not buy, harvest, or scrape private personal databases. Do not expose personal contact details in public APIs or marketing exports.
+
+# 19. BAA LIBRARY AI ASSISTANT
+
+Create a contextual AI assistant inside each book and course.
+
+The reader can ask:
+
+* Explain this chapter in simple English.
+* Summarise the main ideas.
+* Give practical examples.
+* Explain a difficult word.
+* Compare two concepts.
+* Create flashcards.
+* Test my understanding.
+* Build a revision plan.
+* Turn this chapter into a concept map.
+* Suggest related books.
+* Create a practical project.
+* Explain how to apply this idea to my business or career.
+
+Answers should be grounded in the relevant book or course whenever possible. Show references to relevant chapters or passages where technically feasible.
+
+Clearly distinguish what the book states from additional AI-generated explanations. Do not fabricate quotations or page references.
+
+Use access controls so free readers cannot use the assistant to extract entire paid books or bypass the purchase system. Apply appropriate limits to AI usage and display relevant usage restrictions.
+
+# 20. OWNER ADMINISTRATION AND PUBLISHER CONTROL CENTRE
+
+Create a unified BAA Publishing Control Centre with:
+
+* Catalogue management.
+* Bulk title generation.
+* Book production queues.
+* Manuscript editor.
+* Cover studio.
+* Audio studio.
+* Video studio.
+* Course studio.
+* Editorial approval queue.
+* Publication scheduler.
+* Distribution control centre.
+* Marketing campaign manager.
+* Seller management.
+* Affiliate management.
+* Reader management.
+* BaaCoin rules and ledger.
+* Pricing and commission controls.
+* Revenue dashboard.
+* Cost and usage dashboard.
+* AI provider settings.
+* Integration health.
+* Security and audit logs.
+* Backups and recovery controls.
+* Quality assurance dashboard.
+
+Include global branding controls for the author name, alias, phone number, BAA logo, default cover styles, publication templates, default copyright wording, and approved author biography.
+
+Provide a preview of any global change before applying it to all books.
+
+Use role-based permissions for owner, administrator, editor, author, marketer, seller, support staff, and reader. Keep private owner functions inaccessible to public visitors.
+
+# 21. REVENUE AND BUSINESS INTELLIGENCE
+
+Build a revenue dashboard based on verified data.
+
+Track:
+
+* Book sales.
+* Course sales.
+* Subscription revenue.
+* Audiobook revenue.
+* Licensing revenue.
+* Seller and affiliate sales.
+* Refunds.
+* Payment processing fees.
+* Publisher royalties.
+* Marketing expenses.
+* AI model and generation costs.
+* Distribution expenses.
+* Net revenue estimates.
+* BaaCoin rewards issued and redeemed.
+* Reading-to-purchase conversion.
+* Course completion and retention.
+* Best-performing categories.
+* Distribution channel performance.
+
+Separate actual, pending, projected, and estimated values. Show the source and calculation for each financial metric.
+
+Do not invent sales, customers, readers, profit, or distribution results. Clearly mark demo data if the application already contains demo data and allow the owner to distinguish it from live business records.
+
+# 22. TECHNICAL ARCHITECTURE AND DEPLOYMENT
+
+Work with the project's actual stack rather than assuming a new one.
+
+Use modular services for:
+
+* Catalogue and library.
+* Manuscripts and versioning.
+* Book generation jobs.
+* Cover and media assets.
+* Reading progress.
+* Purchases and entitlements.
+* BaaCoin ledger.
+* Courses and assessments.
+* Distribution destinations.
+* Marketing campaigns.
+* Sellers and affiliate tracking.
+* Analytics and audit logs.
+
+Use durable storage for manuscripts and generated media. Use background jobs for lengthy book, audio, video, and distribution workflows. Support job status, retries, cancellation, rate limits, and recovery after interruption.
+
+Use database migrations, validation, server-side authorization, secure secret management, and appropriate indexes.
+
+Do not place private API keys in frontend bundles. Do not store important business records only in browser storage. Do not rely on frontend checks for payment verification, BaaCoin balances, paid-content access, or administrative privileges.
+
+Maintain compatibility with the current GitHub repository and Vercel deployment. If a feature requires background workers, persistent storage, scheduled tasks, or server-side processing that the current deployment cannot reliably support, explain the requirement and implement a compatible service boundary. Do not silently break the current deployment.
+
+Add or update environment-variable documentation and provide an example configuration without real secrets.
+
+# 23. COPYRIGHT, AUTHORSHIP AND PUBLISHING RIGHTS
+
+The BAA owner must be able to review, approve, edit, version, publish, unpublish, and archive every generated book.
+
+Use original writing and properly licensed assets. Track the provenance of research, images, audio, fonts, and other materials where possible.
+
+Do not copy entire copyrighted books, reproduce protected works without permission, or falsely claim rights to third-party content.
+
+Use clear publishing terms, author attribution, edition records, and rights metadata. Where external publishers or distributors require additional identifiers, permissions, or contracts, clearly identify those requirements.
+
+For ISBNs, do not invent valid-looking identifiers. Support entering an assigned ISBN or using an authorised registration workflow.
+
+Provide appropriate disclaimers for medical, financial, legal, and other high-impact educational content. Require specialist review for high-risk material before publication.
+
+# 24. QUALITY CONTROL AND ACCEPTANCE TESTS
+
+Before declaring any feature complete, test it.
+
+Minimum test areas:
+
+1. Existing BAA homepage and routes still work.
+2. Existing user authentication still works.
+3. Existing owner access and permissions remain intact.
+4. Existing books and catalogue records are preserved.
+5. The new library can search, filter, sort, paginate, and open books.
+6. A book can move through the production pipeline.
+7. A manuscript can be saved and resumed.
+8. Front and back covers can be previewed and exported.
+9. Supported e-book formats can be generated and validated.
+10. Reading progress and bookmarks persist correctly.
+11. Audio and video jobs show genuine status.
+12. Course modules, quizzes, and completion rules work.
+13. BaaCoin events are idempotent and server-validated.
+14. Paid access requires verified purchase entitlement.
+15. Seller commissions are calculated from recorded eligible sales.
+16. Distribution records reflect confirmed outcomes.
+17. Marketing workflows respect consent and authorisation.
+18. Administrative functions are protected.
+19. Secret values are not exposed to the frontend.
+20. The production build and existing deployment workflow pass.
+
+Add automated tests for key business rules, API authorization, ledger integrity, purchase flows, file access, and failure handling.
+
+Do not report all tests as passing unless they actually ran and passed.
+
+# 25. IMPLEMENTATION ORDER
+
+Implement in the following phases.
+
+**Phase 1 — Audit and preservation**
+Inspect the existing codebase, document the current architecture, preserve the existing app, and identify the smallest safe upgrade path.
+
+**Phase 2 — Full BAA Library**
+Upgrade the catalogue, create structured book records, add search and filtering, and implement book detail pages and reader interfaces.
+
+**Phase 3 — Book and cover production**
+Build the manuscript workflow, editing tools, front/back cover studio, metadata, approval stages, and export capabilities.
+
+**Phase 4 — Reader experience**
+Implement online reading, bookmarks, notes, progress, recommendations, reading challenges, and the contextual book assistant.
+
+**Phase 5 — Multimedia and courses**
+Add validated EPUB/PDF exports, audiobook workflows, interactive books, animated-video workflows, and book-to-course generation.
+
+**Phase 6 — BaaCoin and marketplace**
+Connect existing rewards, verified purchases, entitlements, commissions, and marketplace functions.
+
+**Phase 7 — Publishing and distribution swarm**
+Add authorised distribution packages, destination management, marketing workflows, seller onboarding, and affiliate tracking.
+
+**Phase 8 — Analytics, security, and scale**
+Complete observability, costs, permissions, privacy controls, automated tests, performance optimisation, and deployment verification.
+
+Prioritise working end-to-end vertical slices instead of creating dozens of empty screens. If a phase exceeds the available context, quota, time, or infrastructure, save progress and continue in the next session without deleting completed work.
+
+# 26. FINAL EXECUTION INSTRUCTIONS
+
+Start by inspecting the current BAA application and identifying its existing features. Then implement the first practical phase directly in the existing project.
+
+Do not respond with a generic plan alone. Make the supported code changes, connect the relevant components, run available tests, and report what was actually completed.
+
+At the end of each implementation session, provide:
+
+* Features implemented.
+* Files and modules changed.
+* Existing features preserved.
+* Tests actually executed and their results.
+* Integrations working.
+* Integrations requiring credentials or external approval.
+* Known limitations and unresolved errors.
+* Any database migrations or manual steps required.
+* The next exact implementation step.
+
+Use the following operational status format, reporting only verified facts:
+
+* **Existing app preservation:** Verified / Issues found.
+* **BAA Library:** Implemented / In progress / Not started.
+* **Book creation:** Implemented / In progress / Not started.
+* **Cover generation:** Implemented / In progress / Not started.
+* **Audio/video:** Implemented / In progress / Not started.
+* **Courses:** Implemented / In progress / Not started.
+* **BaaCoin:** Verified / In progress / Requires configuration.
+* **Marketplace and payments:** Verified / In progress / Requires configuration.
+* **Distribution:** Verified / In progress / Requires configuration.
+* **Tests:** Actual pass/fail results.
+* **Deployment:** Actual current status.
+
+The long-term vision is to make BAA a continuously improving global knowledge platform in which authors, readers, learners, publishers, bookstores, libraries, educational institutions, sellers, and AI agents can work together through a secure, ethical, measurable, and economically sustainable publishing ecosystem.
+
+Begin with the codebase audit and Phase 1 now. Preserve the existing BAA Empire deployment and build forward from the real application.

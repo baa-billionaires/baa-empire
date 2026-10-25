@@ -21,8 +21,10 @@ import {
   Lock,
   Layers,
   Sparkles,
-  Download
+  Download,
+  Coins
 } from 'lucide-react';
+import { AdminCentralEarningsDashboard } from '../components/AdminCentralEarningsDashboard';
 
 export interface AdminPageProps {
   onNavigate?: (page: string) => void;
@@ -471,12 +473,12 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
               onClick={() => setActiveTab('revenue')}
               className={`px-3.5 py-2 rounded-xl font-bold transition flex items-center gap-1.5 ${
                 activeTab === 'revenue'
-                  ? 'bg-[#FFD700] text-black shadow-md'
+                  ? 'bg-emerald-400 text-black shadow-md font-black'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
-              <DollarSign className="w-3.5 h-3.5" />
-              <span>60/40 Split Vault</span>
+              <Coins className="w-3.5 h-3.5" />
+              <span>Central Earnings (7 Currencies)</span>
             </button>
 
             <button
@@ -980,9 +982,18 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
           </div>
         )}
 
-        {/* TAB 2: 60/40 REVENUE SPLIT VAULT */}
+        {/* TAB 2: CENTRAL EARNINGS DASHBOARD (7 CURRENCIES) & 60/40 SPLIT VAULT */}
         {activeTab === 'revenue' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
+            {/* 7-CURRENCY CENTRAL EARNINGS DASHBOARD */}
+            <AdminCentralEarningsDashboard />
+
+            <div className="pt-6 border-t border-zinc-800">
+              <h3 className="text-xl font-heading font-black text-white mb-4">
+                Prompt Marketplace 60/40 Settlement Vault
+              </h3>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="p-6 rounded-3xl bg-zinc-950 border border-zinc-800">
                 <span className="text-[10px] font-mono text-zinc-400 uppercase">Gross Prompt Revenue</span>

@@ -4,6 +4,7 @@ import { Certificate } from '../components/Certificate';
 import { NFTCertificatePreviewModal } from '../components/NFTCertificatePreviewModal';
 import { CertificateNFT } from '../types';
 import { InternalAdRenderer } from '../components/InternalAdRenderer';
+import { DailyMiningTargetWidget } from '../components/DailyMiningTargetWidget';
 import {
   getStoredSubscriptions,
   getStoredTransactions,
@@ -185,6 +186,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         {/* TAB 1: OVERVIEW & 10X NETWORTH SYSTEM */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
+            {/* DAILY MINING TARGET WIDGET */}
+            <DailyMiningTargetWidget
+              onOpenReader={() => {
+                window.location.hash = 'library';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onNavigateToUADC={() => {
+                window.location.hash = 'uadc-lab';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+
             {/* Top 3 Metric Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Card 1: BaaCoin 10x Networth (Locked/Unlocked) */}

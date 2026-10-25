@@ -189,11 +189,69 @@ export const BaaLiveNewsHeader: React.FC<BaaLiveNewsHeaderProps> = ({ onNavigate
   const [speechRate, setSpeechRate] = useState<number>(1);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Dynamic news list supporting autonomous book release bulletins
+  const [newsList, setNewsList] = useState<NewsItem[]>(() => {
+    let storedNews: NewsItem[] = [];
+    try {
+      const raw = localStorage.getItem('baa_autonomous_books_v1');
+      if (raw) {
+        const books = JSON.parse(raw);
+        storedNews = books.map((b: any) => ({
+          id: `auto-news-${b.id}`,
+          sourceName: b.authorAlias || 'Ambassador Emmanuel Bassey Joe',
+          sourceRole: 'Founder & Master Architect',
+          sourceOrg: 'BAA Autonomous Publishing Swarm',
+          category: 'Tech Giants' as const,
+          headline: `⚡ BREAKING RELEASE: "${b.title}" autonomously synthesized & published live in BAA Library with full manuscript & interactive study modules.`,
+          fullQuote: `“Knowledge democratization has reached escape velocity. The BAA Swarm compiled and minted '${b.title}' with on-chain Base L2 hash: ${b.baseL2Hash}.”`,
+          analysis: `Autonomous AI Book Creator engine synthesized this comprehensive 5-chapter manuscript upon live user demand. Verified by Ambassador Emmanuel Bassey Joe.`,
+          avatarUrl: b.frontCover?.artworkUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+          timestamp: 'Live release',
+          views: 9420,
+          featuredTopic: b.category,
+          relatedActionText: `Read "${b.title.slice(0, 24)}..." in Library`,
+          relatedActionPage: 'library'
+        }));
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+    return [...storedNews, ...BREAKING_NEWS_ITEMS];
+  });
+
+  // Listen for real-time autonomous book compilation events
+  useEffect(() => {
+    const handleAutoBook = (e: any) => {
+      const b = e.detail?.book;
+      if (!b) return;
+      const newStory: NewsItem = {
+        id: `auto-news-${b.id}-${Date.now()}`,
+        sourceName: b.authorAlias || 'Ambassador Emmanuel Bassey Joe',
+        sourceRole: 'Founder & Master Architect',
+        sourceOrg: 'BAA Autonomous Publishing Swarm',
+        category: 'Tech Giants',
+        headline: `⚡ BREAKING RELEASE: "${b.title}" autonomously synthesized & published live in BAA Library with full manuscript & interactive study modules.`,
+        fullQuote: `“Knowledge democratization has reached escape velocity. The BAA Swarm compiled and minted '${b.title}' with on-chain Base L2 hash: ${b.baseL2Hash}.”`,
+        analysis: `Autonomous AI Book Creator engine synthesized this comprehensive 5-chapter manuscript upon live user demand. Verified by Ambassador Emmanuel Bassey Joe.`,
+        avatarUrl: b.frontCover?.artworkUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+        timestamp: 'Just now',
+        views: 120,
+        featuredTopic: b.category,
+        relatedActionText: `Read "${b.title.slice(0, 24)}..." in Library`,
+        relatedActionPage: 'library'
+      };
+      setNewsList(prev => [newStory, ...prev.filter(item => item.id !== newStory.id)]);
+    };
+
+    window.addEventListener('baa_book_autonomously_generated', handleAutoBook);
+    return () => window.removeEventListener('baa_book_autonomously_generated', handleAutoBook);
+  }, []);
+
   const categories = ['All', 'Tech Giants', 'Robotics & AI', 'Government Policy', 'Student Stars', 'AI TV Live'];
 
   const filteredNews = activeCategory === 'All'
-    ? BREAKING_NEWS_ITEMS
-    : BREAKING_NEWS_ITEMS.filter(item => item.category === activeCategory);
+    ? newsList
+    : newsList.filter(item => item.category === activeCategory);
 
   // Auto-scroll ticker smoothly
   useEffect(() => {

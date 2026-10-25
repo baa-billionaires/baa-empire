@@ -723,8 +723,8 @@ export const UADCLab: React.FC = () => {
               {/* Entangle Device Action */}
               <div className="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-zinc-400">Idle CPU Yield Last Night:</span>
-                  <span className="text-[#00FF88] font-bold">+$5.20 earned while sleeping</span>
+                  <span className="text-zinc-400">Nightly Sleeping Yield:</span>
+                  <span className="text-[#00FF88] font-bold">₦2,500 ($16.20) earned while sleeping</span>
                 </div>
                 <button
                   onClick={() => setIsDeviceEntangled(!isDeviceEntangled)}
@@ -737,8 +737,8 @@ export const UADCLab: React.FC = () => {
                   <Cpu className="w-4 h-4" />
                   <span>
                     {isDeviceEntangled
-                      ? '✓ This Device is Entangled (Earning $5.20/night)'
-                      : 'Entangle This Device -> Earn while sleeping'}
+                      ? '✓ This Device is Entangled (Earning ₦500 - ₦2,000+/night)'
+                      : 'Entangle This Device -> Earn ₦500 - ₦2,000/night while sleeping'}
                   </span>
                 </button>
               </div>

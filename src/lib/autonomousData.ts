@@ -287,29 +287,84 @@ export const INITIAL_MICRO_STARTUPS: MicroStartupSwarm[] = [
     mrr_usd: 4800,
     growth_rate: '+34% MoM',
     agents_deployed: 6,
-    autonomous_status: 'Self-serving 42 law firms in Lagos & Abuja'
+    autonomous_status: 'Self-serving 42 law firms in Lagos & Abuja',
+    hub: 'Lagos & Abuja Hubs',
+    hubs: ['Lagos Hub', 'Abuja Hub'],
+    direct_url: 'https://legalease-ai.africa',
+    dashboard_link: '#venture-dashboard-legalease',
+    cac_number: 'RC: 1948201',
+    wema_verified: true,
+    equity_contract_address: '0x71c8a392b44c10283f98c21a37829100fa1b392e',
+    backed_amount_baacoin: 21500,
+    backed_amount_usd: 21930,
+    angel_backers_count: 64,
+    venture_capital_backers: ['Synergy African Angels', 'MicroWork Capital', 'Ventures Platform']
   },
   {
     id: 'startup-02',
-    name: 'AgroScanner Vision',
+    name: 'AgroScanner Vision & Drone Mesh',
     prompt_origin_title: 'Cassava Blight & Maize Pest Identification Model',
     student_creator: 'Amina Bello (BAA Cohort 2)',
     valuation_usd: 220000,
     mrr_usd: 7200,
     growth_rate: '+48% MoM',
     agents_deployed: 14,
-    autonomous_status: 'Integrated with 18 cooperatives in Northern Nigeria'
+    autonomous_status: 'Integrated with 18 cooperatives in Northern Nigeria & Rift Valley',
+    hub: 'Nairobi & Abuja Hubs',
+    hubs: ['Nairobi Hub', 'Abuja Hub', 'Accra Hub'],
+    direct_url: 'https://agroscanner.vision',
+    dashboard_link: '#venture-dashboard-agroscan',
+    cac_number: 'BN: KD/384910',
+    wema_verified: false,
+    equity_contract_address: '0x3841fb20a94b8102d9a3857b291a4b8301ec9481',
+    backed_amount_baacoin: 28000,
+    backed_amount_usd: 28560,
+    angel_backers_count: 92,
+    venture_capital_backers: ['Pan-African Agritech Syndicate', 'East African Angel Network']
   },
   {
     id: 'startup-03',
-    name: 'Nollywood Voice Studio',
+    name: 'Nollywood & Pan-African Voice Studio',
     prompt_origin_title: 'Hyper-Realistic Multi-Lingual African Voice Clone',
     student_creator: 'Kofi Mensah (BAA Cohort 4)',
     valuation_usd: 350000,
     mrr_usd: 12500,
     growth_rate: '+62% MoM',
     agents_deployed: 22,
-    autonomous_status: 'Dubbed 4 feature films on Netflix and YouTube'
+    autonomous_status: 'Dubbed 4 feature films on Netflix and YouTube across 9 languages',
+    hub: 'Accra & Johannesburg Hubs',
+    hubs: ['Accra Hub', 'Johannesburg Hub', 'Lagos Hub'],
+    direct_url: 'https://nollywoodvoice.ai',
+    dashboard_link: '#venture-dashboard-voice',
+    cac_number: 'GH-CS/094821',
+    wema_verified: false,
+    equity_contract_address: '0x9482a17cb49a0293d8471b028471038491028371',
+    backed_amount_baacoin: 9200,
+    backed_amount_usd: 9384,
+    angel_backers_count: 39,
+    venture_capital_backers: ['AfroBeat Media Ventures', 'Base Ecosystem Innovation Fund']
+  },
+  {
+    id: 'startup-04',
+    name: 'Port Harcourt Hydro-Solar Compute Grid & UADC Node Mesh',
+    prompt_origin_title: 'Universal Autonomous AI Data Center (2,400 Nodes)',
+    student_creator: 'Emmanuel Bassey Joe (Cohort 1 Lead Fellow)',
+    valuation_usd: 580000,
+    mrr_usd: 21400,
+    growth_rate: '+74% MoM',
+    agents_deployed: 36,
+    autonomous_status: '2,400+ charging smartphone nodes providing continuous off-grid inference',
+    hub: 'Port Harcourt & Lagos Hubs',
+    hubs: ['Port Harcourt Hub', 'Lagos Hub', 'Johannesburg Hub'],
+    direct_url: 'https://billionairesai.academy/#uadc-lab',
+    dashboard_link: '#venture-dashboard-uadc',
+    cac_number: 'BN: UY/009049',
+    wema_verified: true,
+    equity_contract_address: '0xb44c91f4a9831002bf092837418291048201fa92',
+    backed_amount_baacoin: 72000,
+    backed_amount_usd: 73440,
+    angel_backers_count: 148,
+    venture_capital_backers: ['Rossyst Technical Guild', 'UAIDC Clean Power Labs', 'Wema ALAT Accelerator']
   }
 ];
 
@@ -960,7 +1015,12 @@ export const INITIAL_PROJECT_PROPOSALS: ProjectProposal[] = [
     backers_count: 64,
     created_at: '2026-03-12T10:00:00Z',
     demo_url: 'https://billionairesai.academy/#marketplace',
-    github_url: 'https://github.com/mode-digital/legalease-ai-autonomous'
+    github_url: 'https://github.com/mode-digital/legalease-ai-autonomous',
+    cac_number: 'RC: 1948201',
+    wema_verified: true,
+    equity_contract_address: '0x71c8a392b44c10283f98c21a37829100fa1b392e',
+    vc_backers: ['Synergy African Angels', 'MicroWork Capital', 'Ventures Platform'],
+    hub_location: 'Lagos & Abuja Hubs'
   },
   {
     id: 'proj-02',
@@ -985,7 +1045,12 @@ export const INITIAL_PROJECT_PROPOSALS: ProjectProposal[] = [
     status: 'community_voting',
     backers_count: 92,
     created_at: '2026-03-24T14:30:00Z',
-    demo_url: 'https://billionairesai.academy/#uadc-lab'
+    demo_url: 'https://billionairesai.academy/#uadc-lab',
+    cac_number: 'BN: KD/384910',
+    wema_verified: false,
+    equity_contract_address: '0x3841fb20a94b8102d9a3857b291a4b8301ec9481',
+    vc_backers: ['Pan-African Agritech Syndicate', 'East African Angel Network'],
+    hub_location: 'Nairobi & Abuja Hubs'
   },
   {
     id: 'proj-03',
@@ -1010,7 +1075,12 @@ export const INITIAL_PROJECT_PROPOSALS: ProjectProposal[] = [
     status: 'approved',
     backers_count: 148,
     created_at: '2026-02-15T09:00:00Z',
-    demo_url: 'https://billionairesai.academy/#uadc-lab'
+    demo_url: 'https://billionairesai.academy/#uadc-lab',
+    cac_number: 'BN: UY/009049',
+    wema_verified: true,
+    equity_contract_address: '0xb44c91f4a9831002bf092837418291048201fa92',
+    vc_backers: ['Rossyst Technical Guild', 'UAIDC Clean Power Labs', 'Wema ALAT Accelerator'],
+    hub_location: 'Port Harcourt & Lagos Hubs'
   },
   {
     id: 'proj-04',
@@ -1033,7 +1103,12 @@ export const INITIAL_PROJECT_PROPOSALS: ProjectProposal[] = [
     ],
     status: 'community_voting',
     backers_count: 39,
-    created_at: '2026-03-28T18:00:00Z'
+    created_at: '2026-03-28T18:00:00Z',
+    cac_number: 'GH-CS/094821',
+    wema_verified: false,
+    equity_contract_address: '0x9482a17cb49a0293d8471b028471038491028371',
+    vc_backers: ['AfroBeat Media Ventures', 'Base Ecosystem Innovation Fund'],
+    hub_location: 'Accra & Johannesburg Hubs'
   }
 ];
 

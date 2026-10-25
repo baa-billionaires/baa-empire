@@ -137,6 +137,9 @@ interface EcosystemContextType {
   // Referral Hub Dynamic Engine
   addReferralSignBonus: (referredName: string, channel: string, targetType?: 'academy' | 'marketplace' | 'node') => { success: boolean; bonusBaa: number };
   claimReferralBonuses: () => { success: boolean; claimedAmount: number };
+
+  // Manuscript Reading Proof & BaaCoin Rewards
+  claimReadingReward: (bookId: string, bookTitle: string, baacoinReward?: number) => { success: boolean; rewardAmount: number; alreadyClaimed?: boolean; message: string };
 }
 
 const DEFAULT_PROFILE: Profile = {
@@ -943,6 +946,77 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
     return { success: true, claimedAmount: totalBonus };
   };
 
+  // 4. MANUSCRIPT READING PROOF & REWARD CLAIM
+  const claimReadingReward = (bookId: string, bookTitle: string, baacoinReward: number = 100) => {
+    const claimKey = `baa_reward_claimed_${bookId}_${profile.id}`;
+    if (localStorage.getItem(claimKey)) {
+      return {
+        success: false,
+        alreadyClaimed: true,
+        rewardAmount: 0,
+        message: `Reward for "${bookTitle}" has already been claimed and credited to your wallet.`
+      };
+    }
+
+    const reward = baacoinReward;
+
+    // Credit to spendable wallet and profile
+    setWallet(prev => ({
+      ...prev,
+      balance: Number((prev.balance + reward).toFixed(2)),
+      total_earned: Number((prev.total_earned + reward).toFixed(2)),
+      total_mined: Number((prev.total_mined + reward).toFixed(2))
+    }));
+
+    setProfile(prev => {
+      const newXp = prev.xp + 250;
+      const newLevel = Math.floor(newXp / 250) + 1;
+      return {
+        ...prev,
+        baacoin_balance: Number((prev.baacoin_balance + reward).toFixed(2)),
+        xp: newXp,
+        level: newLevel
+      };
+    });
+
+    // Record interaction in ledger
+    const newInteraction: Interaction = {
+      id: `int-read-${Date.now()}`,
+      user_id: profile.id,
+      course_id: bookId,
+      type: 'research_submit',
+      xp_earned: 250,
+      baacoin_mined: reward,
+      prompt_data: `100% Manuscript Mastery & Proof of Read: ${bookTitle}`,
+      created_at: new Date().toISOString()
+    };
+    setInteractions(prev => [newInteraction, ...prev]);
+
+    // Record Mining Block
+    const blockHash = '0xbaaread' + Array.from({ length: 28 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    const newBlock: MiningBlock = {
+      hash: blockHash,
+      nonce: Math.floor(Math.random() * 9999999),
+      reward,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      courseTitle: `Manuscript Proof: ${bookTitle}`
+    };
+    setLatestMiningBlock(newBlock);
+
+    try {
+      localStorage.setItem(claimKey, new Date().toISOString());
+    } catch (e) {
+      console.warn('Could not store claim state', e);
+    }
+
+    return {
+      success: true,
+      alreadyClaimed: false,
+      rewardAmount: reward,
+      message: `Congratulations! +${reward} BaaCoin has been credited directly to your active spendable wallet.`
+    };
+  };
+
   return (
     <EcosystemContext.Provider
       value={{
@@ -995,7 +1069,8 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
         studentSpotlights,
         topStakers,
         addReferralSignBonus,
-        claimReferralBonuses
+        claimReferralBonuses,
+        claimReadingReward
       }}
     >
       {children}

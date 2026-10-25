@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BAABook } from '../../types/library';
-import { X, RotateCw, Eye, Download, Check, Sparkles, Shield, Bookmark, ExternalLink, Printer } from 'lucide-react';
+import { X, RotateCw, Eye, Download, Check, Sparkles, Shield, Bookmark, ExternalLink, Printer, Clapperboard } from 'lucide-react';
+import { AttractiveBookCover } from './AttractiveBookCover';
+import { BookToVideoPlayerModal } from './BookToVideoPlayerModal';
 
 interface CoverStudioModalProps {
   book: BAABook;
@@ -11,6 +13,7 @@ export const CoverStudioModal: React.FC<CoverStudioModalProps> = ({ book, onClos
   const [viewMode, setViewMode] = useState<'3d-flip' | 'print-jacket' | 'front-only' | 'back-only'>('3d-flip');
   const [isFlipped, setIsFlipped] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const front = book.frontCover;
   const back = book.backCover;
@@ -171,6 +174,15 @@ export const CoverStudioModal: React.FC<CoverStudioModalProps> = ({ book, onClos
 
           <div className="flex items-center gap-2">
             <button
+              onClick={() => setShowVideoModal(true)}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-red-600/30 to-amber-600/30 border border-red-500/50 text-amber-300 hover:text-white font-bold transition shadow"
+              title="Watch book as a cinematic AI film"
+            >
+              <Clapperboard className="w-3.5 h-3.5 text-amber-400" />
+              <span>Watch Film</span>
+            </button>
+
+            <button
               onClick={() => handleDownloadCoverAsset(viewMode === 'print-jacket' ? 'jacket' : isFlipped ? 'back' : 'front')}
               className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#FFD700] to-[#E5A800] text-black font-bold hover:brightness-110 active:scale-95 transition shadow"
             >
@@ -196,7 +208,7 @@ export const CoverStudioModal: React.FC<CoverStudioModalProps> = ({ book, onClos
             <div className="w-full flex flex-col items-center">
               <div 
                 className="relative perspective-[1200px] cursor-pointer group"
-                style={{ width: '340px', height: '520px', maxWidth: '100%' }}
+                style={{ width: '340px', height: '510px', maxWidth: '100%' }}
                 onClick={() => setIsFlipped(!isFlipped)}
               >
                 <div 
@@ -206,58 +218,12 @@ export const CoverStudioModal: React.FC<CoverStudioModalProps> = ({ book, onClos
                     transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
                   }}
                 >
-                  {/* FRONT SIDE */}
+                  {/* FRONT SIDE - High-Fidelity Attractive Book Cover */}
                   <div 
-                    className="absolute inset-0 w-full h-full rounded-2xl border-2 border-[#FFD700]/40 overflow-hidden flex flex-col justify-between p-6 shadow-2xl bg-gradient-to-br from-zinc-950 via-slate-950 to-zinc-900 backface-hidden"
+                    className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-2xl backface-hidden"
                     style={{ backfaceVisibility: 'hidden' }}
                   >
-                    {/* Top holographic header */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono tracking-widest text-[#00D4FF] uppercase font-bold px-2 py-0.5 rounded bg-[#00D4FF]/10 border border-[#00D4FF]/20">
-                          {book.category}
-                        </span>
-                        <span className="text-[10px] font-mono text-[#FFD700] font-bold">
-                          {front.edition}
-                        </span>
-                      </div>
-                      <div className="text-[11px] font-mono text-zinc-400 tracking-wider">
-                        BAA MASTER MONOGRAPH • BOOK #{book.categoryNumber.toString().padStart(3, '0')}
-                      </div>
-                    </div>
-
-                    {/* Title and Subtitle */}
-                    <div className="my-auto space-y-3">
-                      <div className="w-12 h-1 bg-gradient-to-r from-[#FFD700] to-[#00D4FF] rounded-full" />
-                      <h3 className="text-2xl font-heading font-black text-white leading-tight">
-                        {book.title}
-                      </h3>
-                      <p className="text-xs text-zinc-300 font-sans leading-relaxed line-clamp-3">
-                        {book.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Central Emblem / Hologram */}
-                    <div className="relative py-4 my-auto flex items-center justify-center">
-                      <div className="w-24 h-24 rounded-full border border-[#FFD700]/30 flex items-center justify-center relative bg-black/40">
-                        <div className="absolute inset-0 rounded-full border border-dashed border-[#00D4FF]/40 animate-spin-slow" />
-                        <Sparkles className="w-8 h-8 text-[#FFD700]" />
-                      </div>
-                    </div>
-
-                    {/* Author Stamp */}
-                    <div className="pt-4 border-t border-zinc-800/80 space-y-1">
-                      <div className="text-[11px] font-sans font-bold text-white tracking-wide">
-                        {book.authorName}
-                      </div>
-                      <div className="text-[10px] font-mono text-[#FFD700]">
-                        {book.authorAlias}
-                      </div>
-                      <div className="text-[9px] font-mono text-zinc-400 flex items-center justify-between">
-                        <span>Direct: {book.contactNumber}</span>
-                        <span className="text-emerald-400 font-bold">Base L2 Verified</span>
-                      </div>
-                    </div>
+                    <AttractiveBookCover book={book} className="w-full h-full" />
                   </div>
 
                   {/* BACK SIDE */}
@@ -416,39 +382,8 @@ export const CoverStudioModal: React.FC<CoverStudioModalProps> = ({ book, onClos
 
           {/* FRONT ONLY MODE */}
           {viewMode === 'front-only' && (
-            <div className="w-full max-w-sm rounded-2xl border-2 border-[#FFD700]/50 overflow-hidden shadow-2xl p-6 bg-gradient-to-br from-zinc-950 via-slate-950 to-zinc-900">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-[#00D4FF] uppercase font-bold px-2 py-0.5 rounded bg-[#00D4FF]/10 border border-[#00D4FF]/20">
-                    {book.category}
-                  </span>
-                  <span className="text-xs font-mono text-[#FFD700] font-bold">
-                    {front.edition}
-                  </span>
-                </div>
-                <div className="text-xs font-mono text-zinc-400">
-                  BAA MASTER MONOGRAPH • BOOK #{book.categoryNumber.toString().padStart(3, '0')}
-                </div>
-                <h3 className="text-2xl font-heading font-black text-white leading-tight">
-                  {book.title}
-                </h3>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  {book.subtitle}
-                </p>
-
-                <div className="py-6 flex justify-center">
-                  <div className="w-24 h-24 rounded-full border border-[#FFD700]/40 flex items-center justify-center bg-black/40 shadow-inner">
-                    <Sparkles className="w-10 h-10 text-[#FFD700]" />
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-zinc-800 space-y-1">
-                  <div className="text-sm font-bold text-white">{book.authorName}</div>
-                  <div className="text-xs font-mono text-[#FFD700]">{book.authorAlias}</div>
-                  <div className="text-xs font-mono text-zinc-400">Direct Contact: {book.contactNumber}</div>
-                  <div className="text-xs font-mono text-emerald-400">Base L2 Contract: {book.baseL2Hash}</div>
-                </div>
-              </div>
+            <div className="w-full max-w-[340px] h-[510px] rounded-2xl shadow-2xl flex flex-col items-center">
+              <AttractiveBookCover book={book} className="w-full h-full" />
             </div>
           )}
 
@@ -529,6 +464,10 @@ export const CoverStudioModal: React.FC<CoverStudioModalProps> = ({ book, onClos
           </div>
         </div>
       </div>
+
+      {showVideoModal && (
+        <BookToVideoPlayerModal book={book} onClose={() => setShowVideoModal(false)} />
+      )}
     </div>
   );
 };

@@ -27,13 +27,16 @@ import {
   ExternalLink,
   HelpCircle,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Clapperboard
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { BAABook, ReaderProgress } from '../../types/library';
 import { useEcosystem } from '../../context/EcosystemContext';
 import { askBaaAi, ChatMessage, AskBaaContext } from '../../lib/askBaaService';
 import { getAllCatalogueBooks } from '../../lib/autonomousBookGenerator';
+import { BookToVideoPlayerModal } from './BookToVideoPlayerModal';
+import { ViewModeSwitcherBar } from '../viewmodes/ViewModeSwitcherBar';
 
 export interface BookmarkItem {
   id: string;
@@ -111,6 +114,7 @@ export const OnlineReader: React.FC<OnlineReaderProps> = ({
   const [viewMode, setViewMode] = useState<'single' | 'spread'>('single');
   const [showSettingsDrawer, setShowSettingsDrawer] = useState(false);
   const [showTocDrawer, setShowTocDrawer] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   // Pagination & Progress State
   const [currentPage, setCurrentPage] = useState<number>(initialPage);
@@ -808,8 +812,25 @@ Direct Author Contact: ${activeBook.contactNumber}
           </div>
         </div>
 
-        {/* Right: Actions, Ask Baa & Tools */}
+        {/* Right: Actions, Video, Ask Baa & Tools */}
         <div className="flex items-center gap-2 shrink-0">
+          {/* View Mode Switcher: Mobile Phone, IPAD, Computer Smart Reading Assistant */}
+          <div className="hidden xl:flex items-center">
+            <ViewModeSwitcherBar variant="navbar" />
+          </div>
+
+          {/* CONVERT BOOK TO VIDEO / WATCH FILM BUTTON */}
+          {activeBook && (
+            <button
+              onClick={() => setShowVideoModal(true)}
+              className="px-3 py-1.5 rounded-xl border border-red-500/50 bg-gradient-to-r from-red-600/30 to-amber-600/30 hover:from-red-600/50 hover:to-amber-600/50 text-amber-300 hover:text-white font-mono text-xs font-bold transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(239,68,68,0.2)] active:scale-95"
+              title="Watch this book as a clean visual documentary film with voiceover narration"
+            >
+              <Clapperboard className="w-4 h-4 text-amber-400" />
+              <span className="hidden sm:inline">Watch Film</span>
+            </button>
+          )}
+
           {/* ASK BAA BUTTON */}
           <button
             onClick={() => setShowAskBaaDrawer(true)}
@@ -1568,6 +1589,14 @@ Direct Author Contact: ${activeBook.contactNumber}
             </div>
           </div>
         </div>
+      )}
+
+      {/* CINEMATIC BOOK-TO-VIDEO PLAYER */}
+      {showVideoModal && activeBook && (
+        <BookToVideoPlayerModal
+          book={activeBook}
+          onClose={() => setShowVideoModal(false)}
+        />
       )}
     </div>
   );

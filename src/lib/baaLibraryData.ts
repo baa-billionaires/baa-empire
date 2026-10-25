@@ -1,4 +1,5 @@
 import { BAABook, PublishingAgent } from '../types/library';
+import { BAA_STORY_BOOKS } from './baaStoryBooksData';
 
 export const FOUNDER_BRANDING = {
   name: 'Ambassador/Engineer Emmanuel Bassey Joe',
@@ -41,7 +42,8 @@ export const BAA_CATEGORIES = [
   { id: 'cat-22', number: 22, name: 'AI in Environment, Climate and Humanity', collection: 'Collection C: Advanced Technology and Society' as const },
   { id: 'cat-23', number: 23, name: 'AI in Politics, Governance, Culture and Religion', collection: 'Collection C: Advanced Technology and Society' as const },
   { id: 'cat-24', number: 24, name: 'AI in Media, Entertainment, Tourism and Communication', collection: 'Collection C: Advanced Technology and Society' as const },
-  { id: 'cat-25', number: 25, name: 'AI in Networking, Technology and Universal Sovereign Empowerment', collection: 'Collection C: Advanced Technology and Society' as const }
+  { id: 'cat-25', number: 25, name: 'AI in Networking, Technology and Universal Sovereign Empowerment', collection: 'Collection C: Advanced Technology and Society' as const },
+  { id: 'cat-26', number: 26, name: 'AI Sci-Fi & Visionary Stories', collection: 'Collection C: Advanced Technology and Society' as const }
 ];
 
 // The 30 Specialized Autonomous Publishing Swarm Agents
@@ -108,7 +110,7 @@ export const FLAGSHIP_BOOK: BAABook = {
   readersCount: 2480,
   isFlagship: true,
   tags: ['Autonomous AI', 'Multi-Agent Swarms', 'Smart Contracts', 'Base L2', 'Economic AI', 'BaaCoin', 'Enterprise Automation'],
-  formats: ['reader', 'epub', 'pdf', 'audio', 'course'],
+  formats: ['reader', 'epub', 'pdf', 'audio', 'course', 'video'],
   audiobookDurationMinutes: 285,
   audiobookNarrator: 'Dr. Chukwuma Sterling (Executive AI Voice Synthesis)',
 
@@ -817,7 +819,7 @@ function generateMasterCatalogue(): BAABook[] {
         reviewsCount: 15 + ((globalIdCounter * 13) % 180),
         readersCount: 120 + ((globalIdCounter * 37) % 1200),
         tags: [cat.name, 'Autonomous AI', 'BAA Playbook', 'Africa 2026', 'High-Growth Tech'],
-        formats: status === 'ready_for_pub' ? ['reader', 'epub', 'pdf'] : ['reader'],
+        formats: status === 'ready_for_pub' ? ['reader', 'epub', 'pdf', 'video'] : ['reader', 'video'],
         frontCover: {
           title,
           subtitle: `A Sovereign Manual for ${cat.name}`,
@@ -837,7 +839,8 @@ function generateMasterCatalogue(): BAABook[] {
             '1622979135225-d2ba269bc1df',
             '1625314897518-bb79cb38b14e'
           ][globalIdCounter % 10]}?w=800&auto=format&fit=crop&q=80`,
-          badge: `BAA MASTER CATALOGUE #${padId}`
+          badge: `BAA MASTER CATALOGUE #${padId}`,
+          accentColor: ['#00D4FF', '#FFD700', '#10B981', '#A855F7', '#EC4899', '#F59E0B'][cat.number % 6]
         },
         backCover: {
           synopsis: `An essential operational volume in the BAA 250-book autonomous knowledge series. Details structural frameworks for deploying self-sustaining intelligence in ${cat.name}.`,
@@ -877,9 +880,12 @@ function generateMasterCatalogue(): BAABook[] {
     });
   });
 
-  return books;
+  // Merge the captivating BAA Story Books into the master catalogue
+  return [...BAA_STORY_BOOKS, ...books];
 }
 
+export { generateMasterCatalogue };
+export { BAA_STORY_BOOKS } from './baaStoryBooksData';
 export const BAA_MASTER_CATALOGUE: BAABook[] = generateMasterCatalogue();
 
 // Export convenient aliases

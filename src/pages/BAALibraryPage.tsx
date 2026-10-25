@@ -30,8 +30,13 @@ import {
   ChevronRight,
   GraduationCap,
   Zap,
-  Loader2
+  Loader2,
+  Clapperboard,
+  Film
 } from 'lucide-react';
+import { AttractiveBookCover } from '../components/library/AttractiveBookCover';
+import { BookToVideoPlayerModal } from '../components/library/BookToVideoPlayerModal';
+import { useViewMode } from '../context/ViewModeContext';
 
 interface BAALibraryPageProps {
   onNavigateToCourse?: (courseId: string) => void;
@@ -47,11 +52,21 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
   const [selectedCategoryNumber, setSelectedCategoryNumber] = useState<number | 'all'>('all');
   const [selectedCollection, setSelectedCollection] = useState<'all' | 'A' | 'B' | 'C'>('all');
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'published' | 'pipeline'>('all');
+  const [filterOnlyStories, setFilterOnlyStories] = useState(false);
   const [isCompilingBook, setIsCompilingBook] = useState(false);
   const [compilationSuccessMessage, setCompilationSuccessMessage] = useState<string | null>(null);
 
+  const { setSelectedBook, setViewMode, setIsAssistantOpen } = useViewMode();
+
+  const handleStudyWithAssistant = (book: BAABook) => {
+    setSelectedBook(book);
+    setViewMode('desktop');
+    setIsAssistantOpen(true);
+  };
+
   // Modals state
   const [activeOnlineReaderBook, setActiveOnlineReaderBook] = useState<BAABook | null>(null);
+  const [activeVideoBook, setActiveVideoBook] = useState<BAABook | null>(null);
   const [activeReaderBook, setActiveReaderBook] = useState<BAABook | null>(null);
   const [activeCoverBook, setActiveCoverBook] = useState<BAABook | null>(null);
   const [activeDownloadBook, setActiveDownloadBook] = useState<BAABook | null>(null);
@@ -157,9 +172,11 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
         (selectedStatus === 'published' && book.publicationStatus === 'published') ||
         (selectedStatus === 'pipeline' && book.publicationStatus !== 'published');
 
-      return matchesSearch && matchesCategory && matchesCollection && matchesStatus;
+      const matchesStories = !filterOnlyStories || book.isStoryBook || book.categoryNumber === 26;
+
+      return matchesSearch && matchesCategory && matchesCollection && matchesStatus && matchesStories;
     });
-  }, [booksList, searchQuery, selectedCategoryNumber, selectedCollection, selectedStatus]);
+  }, [booksList, searchQuery, selectedCategoryNumber, selectedCollection, selectedStatus, filterOnlyStories]);
 
   // Update book publication status (from Swarm Modal)
   const handleUpdateBookStatus = (bookId: string, newStatus: BookPublicationStatus) => {
@@ -187,42 +204,14 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#00D4FF]/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Cover Preview Column */}
+            {/* Left Cover Preview Column - High-Fidelity Attractive Book Cover */}
             <div className="lg:col-span-4 flex justify-center">
               <div 
                 onClick={() => setActiveCoverBook(flagshipBook)}
-                className="group relative cursor-pointer rounded-2xl overflow-hidden border-2 border-[#FFD700] shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,215,0,0.35)] w-64 aspect-[3/4.6] bg-zinc-950 p-5 flex flex-col justify-between"
+                className="cursor-pointer transition-all duration-500 hover:scale-105 w-64 max-w-full drop-shadow-[0_0_35px_rgba(255,215,0,0.3)]"
+                title="Click to inspect 3D front & back covers in Studio"
               >
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-[#00D4FF] uppercase font-bold">
-                    <span>{flagshipBook.category}</span>
-                    <span className="text-[#FFD700]">1st Edition</span>
-                  </div>
-                  <div className="text-[11px] font-mono text-zinc-400">BAA FLAGSHIP #001</div>
-                </div>
-
-                <div className="my-auto space-y-2">
-                  <div className="w-10 h-1 bg-[#FFD700] rounded-full" />
-                  <h3 className="font-heading font-black text-white text-lg leading-tight">
-                    {flagshipBook.title}
-                  </h3>
-                  <p className="text-[11px] text-zinc-300 line-clamp-2">
-                    {flagshipBook.subtitle}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-zinc-800 text-[10px] font-mono">
-                  <div className="text-white font-bold">{flagshipBook.authorName}</div>
-                  <div className="text-[#FFD700]">{flagshipBook.authorAlias}</div>
-                  <div className="text-zinc-500 text-[9px] mt-0.5">Tel: {flagshipBook.contactNumber}</div>
-                </div>
-
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                  <span className="px-3 py-1.5 rounded-xl bg-[#FFD700] text-black font-mono font-bold text-xs flex items-center gap-1.5 shadow-lg">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Inspect 3D Cover</span>
-                  </span>
-                </div>
+                <AttractiveBookCover book={flagshipBook} />
               </div>
             </div>
 
@@ -236,6 +225,10 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
                 <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>100% Original Complete Manuscript Working End-to-End</span>
+                </span>
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-red-500/20 text-amber-300 border border-red-500/40 flex items-center gap-1.5">
+                  <Clapperboard className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Cinematic Film Adaptation Available</span>
                 </span>
               </div>
 
@@ -268,11 +261,29 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <button
+                  onClick={() => setActiveVideoBook(flagshipBook)}
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-600 via-amber-500 to-[#FFD700] text-black font-heading font-black text-xs sm:text-sm uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-2xl flex items-center gap-2 border border-amber-300/50"
+                  title="Watch book as a clean visual documentary film"
+                >
+                  <Clapperboard className="w-4 h-4 fill-black text-black" />
+                  <span>Watch as AI Film (Book-to-Video)</span>
+                </button>
+
+                <button
                   onClick={() => setActiveOnlineReaderBook(flagshipBook)}
                   className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#FFD700] via-[#FFB800] to-[#E5A800] text-black font-heading font-black text-xs sm:text-sm uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-xl flex items-center gap-2"
                 >
                   <BookOpen className="w-4 h-4 fill-black text-black" />
                   <span>Online Paginated Reader</span>
+                </button>
+
+                <button
+                  onClick={() => handleStudyWithAssistant(flagshipBook)}
+                  className="px-4 py-3 rounded-xl bg-purple-950/80 hover:bg-purple-900 text-purple-200 border border-purple-500/40 font-mono text-xs font-bold transition flex items-center gap-2 shadow"
+                  title="Open Smart Reading Assistant docked for this book"
+                >
+                  <Bot className="w-4 h-4 text-purple-400" />
+                  <span>Smart Reading AI</span>
                 </button>
 
                 <button
@@ -410,24 +421,46 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
           </div>
         </div>
 
-        {/* 25 Category Quick Chips */}
+        {/* 25 Category & Story Quick Chips */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar text-[11px] font-mono">
+          {/* Quick Filter for BAA AI Stories & Sagas */}
           <button
-            onClick={() => setSelectedCategoryNumber('all')}
-            className={`px-3 py-1 rounded-full whitespace-nowrap border transition ${
-              selectedCategoryNumber === 'all'
+            onClick={() => {
+              setFilterOnlyStories(!filterOnlyStories);
+              setSelectedCategoryNumber('all');
+            }}
+            className={`px-3.5 py-1.5 rounded-full whitespace-nowrap border transition font-bold flex items-center gap-1.5 shadow ${
+              filterOnlyStories
+                ? 'bg-gradient-to-r from-red-600 via-amber-500 to-[#FFD700] text-black border-amber-300'
+                : 'bg-zinc-900/90 text-amber-300 border-amber-500/40 hover:bg-zinc-800'
+            }`}
+          >
+            <Clapperboard className="w-3.5 h-3.5" />
+            <span>★ AI Stories &amp; Sagas (6 Bestsellers)</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setSelectedCategoryNumber('all');
+              setFilterOnlyStories(false);
+            }}
+            className={`px-3 py-1.5 rounded-full whitespace-nowrap border transition ${
+              selectedCategoryNumber === 'all' && !filterOnlyStories
                 ? 'bg-[#00D4FF] text-black border-[#00D4FF] font-bold'
                 : 'bg-zinc-900/80 text-zinc-400 border-zinc-800 hover:text-white'
             }`}
           >
-            All 25 Categories
+            All 250 Books
           </button>
           {BAA_25_CATEGORIES.map((cat: any) => (
             <button
               key={cat.number}
-              onClick={() => setSelectedCategoryNumber(cat.number)}
-              className={`px-3 py-1 rounded-full whitespace-nowrap border transition ${
-                selectedCategoryNumber === cat.number
+              onClick={() => {
+                setSelectedCategoryNumber(cat.number);
+                setFilterOnlyStories(false);
+              }}
+              className={`px-3 py-1.5 rounded-full whitespace-nowrap border transition ${
+                selectedCategoryNumber === cat.number && !filterOnlyStories
                   ? 'bg-[#00D4FF] text-black border-[#00D4FF] font-bold'
                   : 'bg-zinc-900/80 text-zinc-400 border-zinc-800 hover:text-white'
               }`}
@@ -523,47 +556,30 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
               return (
                 <div
                   key={book.id}
-                  className={`group rounded-2xl bg-zinc-950 border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xl hover:-translate-y-1 ${
+                  className={`group rounded-2xl bg-zinc-950 border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xl hover:-translate-y-1.5 ${
                     book.isFlagship
-                      ? 'border-[#FFD700] hover:shadow-[0_0_25px_rgba(255,215,0,0.2)]'
-                      : 'border-zinc-800 hover:border-[#00D4FF]/50'
+                      ? 'border-[#FFD700] hover:shadow-[0_0_30px_rgba(255,215,0,0.3)]'
+                      : book.isStoryBook
+                      ? 'border-cyan-500/60 hover:shadow-[0_0_30px_rgba(0,212,255,0.35)]'
+                      : 'border-zinc-800 hover:border-[#00D4FF]/60 hover:shadow-[0_0_25px_rgba(0,212,255,0.15)]'
                   }`}
                 >
-                  {/* Book Card Top Cover Area */}
-                  <div className="relative aspect-[3/4.2] w-full overflow-hidden bg-gradient-to-br from-zinc-900 to-black p-5 flex flex-col justify-between">
-                    {/* Category & Edition Badges */}
-                    <div className="flex items-center justify-between z-10">
-                      <span className="text-[10px] font-mono text-[#00D4FF] uppercase font-bold px-2 py-0.5 rounded bg-black/80 border border-zinc-800">
-                        #{book.categoryNumber.toString().padStart(2, '0')}
-                      </span>
-                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase ${
-                        isPublished 
-                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                          : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                      }`}>
-                        {book.publicationStatus.replace(/_/g, ' ')}
-                      </span>
-                    </div>
-
-                    {/* Visual Center Graphic */}
-                    <div className="my-auto space-y-2 z-10">
-                      <div className="w-8 h-1 bg-gradient-to-r from-[#FFD700] to-[#00D4FF] rounded-full" />
-                      <h3 className="font-heading font-black text-white text-base leading-snug group-hover:text-[#FFD700] transition">
-                        {book.title}
-                      </h3>
-                      <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
-                        {book.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Footer Meta */}
-                    <div className="pt-2 border-t border-zinc-800/80 z-10 flex items-center justify-between text-[10px] font-mono text-zinc-400">
-                      <span>{book.pages} Pages</span>
-                      <span className="text-[#FFD700] font-bold">${book.priceUsd} USD</span>
-                    </div>
+                  {/* High-Fidelity Attractive Book Cover Container */}
+                  <div className="relative w-full overflow-hidden">
+                    <AttractiveBookCover book={book} />
 
                     {/* Hover Overlay Quick Actions */}
-                    <div className="absolute inset-0 bg-black/75 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2.5 p-4 z-20">
+                    <div className="absolute inset-0 bg-black/85 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-4 z-30">
+                      {/* Video Film Button */}
+                      <button
+                        onClick={() => setActiveVideoBook(book)}
+                        className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600 via-amber-500 to-[#FFD700] text-black font-heading font-black text-xs uppercase tracking-wider hover:brightness-110 transition flex items-center justify-center gap-1.5 shadow-xl active:scale-95"
+                        title="Watch book as an AI film with scene visuals and narration"
+                      >
+                        <Clapperboard className="w-3.5 h-3.5 fill-black text-black" />
+                        <span>Watch as AI Film</span>
+                      </button>
+
                       {hasCompleteManuscript ? (
                         <button
                           onClick={() => setActiveOnlineReaderBook(book)}
@@ -591,6 +607,14 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
                       </button>
 
                       <button
+                        onClick={() => handleStudyWithAssistant(book)}
+                        className="w-full py-2 px-3 rounded-xl bg-purple-950/90 hover:bg-purple-900 text-purple-200 border border-purple-500/40 font-mono font-bold text-xs transition flex items-center justify-center gap-1.5 shadow"
+                      >
+                        <Bot className="w-3.5 h-3.5 text-purple-400" />
+                        <span>Smart Reading AI</span>
+                      </button>
+
+                      <button
                         onClick={() => setActiveDownloadBook(book)}
                         className="w-full py-2 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-700 font-mono text-xs font-bold transition flex items-center justify-center gap-1.5"
                       >
@@ -601,32 +625,51 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
                   </div>
 
                   {/* Card Bottom Info Bar */}
-                  <div className="p-4 space-y-3 bg-zinc-950 border-t border-zinc-900">
-                    <div className="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-                      <span className="truncate">Author: <strong>{book.authorAlias}</strong></span>
-                      <span className="text-zinc-500">Tel: {book.contactNumber}</span>
+                  <div className="p-3.5 space-y-2.5 bg-zinc-950 border-t border-zinc-900">
+                    <div className="text-[10px] font-mono text-zinc-400 flex items-center justify-between">
+                      <span className="truncate">Author: <strong className="text-white">{book.authorAlias}</strong></span>
+                      <span className="text-[#FFD700] font-bold">${book.priceUsd} USD</span>
                     </div>
 
-                    <div className="flex items-center gap-2 pt-1 border-t border-zinc-900 text-xs font-mono">
+                    <div className="flex items-center gap-1.5 pt-1 border-t border-zinc-900 text-xs font-mono">
+                      <button
+                        onClick={() => setActiveVideoBook(book)}
+                        className="py-1.5 px-2.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 text-amber-300 border border-red-500/30 transition flex items-center gap-1 text-[11px] font-bold"
+                        title="Watch as AI Film"
+                      >
+                        <Clapperboard className="w-3 h-3 text-amber-400" />
+                        <span>Film</span>
+                      </button>
+
                       <button
                         onClick={() => setActiveOnlineReaderBook(book)}
-                        className="flex-1 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 transition text-center font-bold"
+                        className="flex-1 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 transition text-center font-bold text-[11px]"
                       >
                         {hasCompleteManuscript ? '📖 Read' : '📋 Pipeline'}
                       </button>
+
                       <button
                         onClick={() => setActiveCoverBook(book)}
-                        className="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-[#00D4FF] transition"
+                        className="px-2 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-[#00D4FF] transition"
                         title="Cover Studio"
                       >
-                        <Eye className="w-3.5 h-3.5" />
+                        <Eye className="w-3 h-3" />
                       </button>
+
+                      <button
+                        onClick={() => handleStudyWithAssistant(book)}
+                        className="px-2 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-purple-400 hover:text-white transition"
+                        title="Study with Computer Smart Reading Assistant"
+                      >
+                        <Bot className="w-3 h-3" />
+                      </button>
+
                       <button
                         onClick={() => setActiveDownloadBook(book)}
-                        className="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-emerald-400 transition"
+                        className="px-2 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-emerald-400 transition"
                         title="Download E-Book"
                       >
-                        <Download className="w-3.5 h-3.5" />
+                        <Download className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
@@ -749,6 +792,19 @@ export const BAALibraryPage: React.FC<BAALibraryPageProps> = ({
           onClose={() => setActiveDownloadBook(null)}
           onOpenReader={() => setActiveReaderBook(activeDownloadBook)}
           onOpenCompanionCourse={() => setCompanionCourseModalBook(activeDownloadBook)}
+        />
+      )}
+
+      {/* CINEMATIC BOOK-TO-VIDEO PLAYER MODAL */}
+      {activeVideoBook && (
+        <BookToVideoPlayerModal
+          book={activeVideoBook}
+          onClose={() => setActiveVideoBook(null)}
+          onSwitchToReader={() => {
+            const b = activeVideoBook;
+            setActiveVideoBook(null);
+            setActiveOnlineReaderBook(b);
+          }}
         />
       )}
 

@@ -61,6 +61,19 @@ export interface CompanionCourseData {
   quizQuestionsCount: number;
 }
 
+export interface BookFilmScene {
+  id: string;
+  sceneNumber: number;
+  title: string;
+  narrativeScript: string;
+  visualPrompt: string;
+  artworkUrl: string;
+  durationSeconds: number;
+  cameraMovement?: 'pan-left' | 'pan-right' | 'zoom-in' | 'zoom-out' | 'cinematic-drift';
+  keyQuote?: string;
+  chapterAnchor?: number;
+}
+
 export interface BAABook {
   id: string;
   slug: string;
@@ -68,7 +81,7 @@ export interface BAABook {
   subtitle: string;
   category: string;
   collection: BookCollection;
-  categoryNumber: number; // 1 to 25
+  categoryNumber: number; // 1 to 25, or 26 for Stories
   authorName: string;
   authorAlias: string;
   contactNumber: string;
@@ -91,8 +104,10 @@ export interface BAABook {
   companionCourse?: CompanionCourseData;
   audiobookDurationMinutes?: number;
   audiobookNarrator?: string;
+  filmScenes?: BookFilmScene[];
+  isStoryBook?: boolean;
   tags: string[];
-  formats: ('reader' | 'epub' | 'pdf' | 'audio' | 'course')[];
+  formats: ('reader' | 'epub' | 'pdf' | 'audio' | 'course' | 'video')[];
 }
 
 export interface PublishingAgent {

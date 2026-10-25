@@ -31,6 +31,7 @@ import {
   Tv
 } from 'lucide-react';
 import { useAmbience } from '../context/AmbienceContext';
+import { ViewModeSwitcherBar } from './viewmodes/ViewModeSwitcherBar';
 
 interface NavbarProps {
   currentPage: string;
@@ -204,6 +205,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right CTA Actions */}
         <div className="flex items-center gap-2">
+          {/* Device View Mode Switcher: Mobile Phone, IPAD, Computer Smart Reading Assistant */}
+          <div className="hidden lg:flex items-center">
+            <ViewModeSwitcherBar variant="navbar" />
+          </div>
+
           {/* Ambience & Theme Quick Trigger */}
           <button
             onClick={openThemeModal}
@@ -343,6 +349,14 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
         <div className="xl:hidden bg-zinc-950 border-b border-zinc-800 px-4 pt-2 pb-6 space-y-1">
+          {/* Device Simulator Switcher in Mobile Drawer */}
+          <div className="py-2 mb-2 border-b border-zinc-800">
+            <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-1.5 font-bold">
+              Choose Viewport Mode:
+            </span>
+            <ViewModeSwitcherBar variant="navbar" />
+          </div>
+
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = currentPage === link.id;

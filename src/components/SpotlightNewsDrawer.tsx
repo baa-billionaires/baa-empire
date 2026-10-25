@@ -25,7 +25,10 @@ import {
   Flame,
   Globe,
   Bell,
-  Eye
+  Eye,
+  GripVertical,
+  Move,
+  RotateCcw
 } from 'lucide-react';
 import { BREAKING_NEWS_ITEMS, NewsItem } from './BaaLiveNewsHeader';
 
@@ -102,6 +105,102 @@ export const SpotlightNewsDrawer: React.FC<SpotlightNewsDrawerProps> = ({ onNavi
     setToastNotification(null);
   };
 
+  // Moveable Spotlight Button position state
+  const [spotlightPos, setSpotlightPos] = useState<{ x: number; y: number } | null>(() => {
+    try {
+      const saved = localStorage.getItem('baa_spotlight_btn_pos');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return null;
+  });
+  const [isDraggingSpotlight, setIsDraggingSpotlight] = useState(false);
+  const dragStartRef = React.useRef<{
+    startX: number;
+    startY: number;
+    initX: number;
+    initY: number;
+    moved: boolean;
+  }>({
+    startX: 0,
+    startY: 0,
+    initX: 0,
+    initY: 0,
+    moved: false
+  });
+
+  const handleSpotlightPointerDown = (e: React.MouseEvent | React.TouchEvent) => {
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+
+    const currentX = spotlightPos?.x ?? (window.innerWidth - 180);
+    const currentY = spotlightPos?.y ?? (window.innerHeight * 0.45);
+
+    dragStartRef.current = {
+      startX: clientX,
+      startY: clientY,
+      initX: currentX,
+      initY: currentY,
+      moved: false
+    };
+
+    const handlePointerMove = (moveEvt: MouseEvent | TouchEvent) => {
+      const moveX = 'touches' in moveEvt ? moveEvt.touches[0].clientX : moveEvt.clientX;
+      const moveY = 'touches' in moveEvt ? moveEvt.touches[0].clientY : moveEvt.clientY;
+
+      const deltaX = moveX - dragStartRef.current.startX;
+      const deltaY = moveY - dragStartRef.current.startY;
+
+      if (Math.abs(deltaX) > 4 || Math.abs(deltaY) > 4) {
+        dragStartRef.current.moved = true;
+        setIsDraggingSpotlight(true);
+      }
+
+      if (dragStartRef.current.moved) {
+        const nextX = Math.max(10, Math.min(window.innerWidth - 170, dragStartRef.current.initX + deltaX));
+        const nextY = Math.max(70, Math.min(window.innerHeight - 80, dragStartRef.current.initY + deltaY));
+        setSpotlightPos({ x: nextX, y: nextY });
+      }
+    };
+
+    const handlePointerUp = () => {
+      window.removeEventListener('mousemove', handlePointerMove);
+      window.removeEventListener('mouseup', handlePointerUp);
+      window.removeEventListener('touchmove', handlePointerMove);
+      window.removeEventListener('touchend', handlePointerUp);
+
+      setTimeout(() => {
+        setIsDraggingSpotlight(false);
+      }, 50);
+
+      setSpotlightPos(latest => {
+        if (latest) {
+          localStorage.setItem('baa_spotlight_btn_pos', JSON.stringify(latest));
+        }
+        return latest;
+      });
+    };
+
+    window.addEventListener('mousemove', handlePointerMove);
+    window.addEventListener('mouseup', handlePointerUp);
+    window.addEventListener('touchmove', handlePointerMove, { passive: false });
+    window.addEventListener('touchend', handlePointerUp);
+  };
+
+  const handleSpotlightClick = (e: React.MouseEvent) => {
+    if (dragStartRef.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    handleOpenSpotlight('video');
+  };
+
+  const resetSpotlightPosition = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSpotlightPos(null);
+    localStorage.removeItem('baa_spotlight_btn_pos');
+  };
+
   return (
     <>
       {/* 1. Periodic Subtle Pop-up Toast in Bottom-Right */}
@@ -140,31 +239,72 @@ export const SpotlightNewsDrawer: React.FC<SpotlightNewsDrawerProps> = ({ onNavi
         </div>
       )}
 
-      {/* 2. Floating Spotlight Button Docked on the Right Edge */}
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-end">
-        <button
-          onClick={() => handleOpenSpotlight('video')}
-          className="group relative flex items-center gap-2.5 py-3 px-3.5 bg-zinc-950 hover:bg-black text-[#FFD700] border-l-2 border-y border-[#FFD700] rounded-l-2xl shadow-2xl shadow-[#FFD700]/20 transition-all hover:pr-5 cursor-pointer backdrop-blur-xl"
-          title="Open Video News, Student Stories & Top Stakers Spotlight"
-        >
-          <div className="relative flex items-center justify-center">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#FFD700] animate-ping absolute" />
-            <Radio className="w-4 h-4 text-[#FFD700] relative" />
+      {/* 2. Floating Movable Spotlight Button */}
+      <div
+        style={
+          spotlightPos
+            ? {
+                left: `${spotlightPos.x}px`,
+                top: `${spotlightPos.y}px`,
+                position: 'fixed',
+                zIndex: 40
+              }
+            : {
+                right: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                position: 'fixed',
+                zIndex: 40
+              }
+        }
+        className={`transition-shadow ${isDraggingSpotlight ? 'cursor-grabbing select-none scale-105' : ''}`}
+      >
+        <div className="relative group/spotlight flex items-center shadow-2xl">
+          {/* Drag Handle */}
+          <div
+            onMouseDown={handleSpotlightPointerDown}
+            onTouchStart={handleSpotlightPointerDown}
+            className="p-1.5 bg-black/90 text-zinc-400 hover:text-[#FFD700] rounded-l-xl border-y border-l border-zinc-700 cursor-grab active:cursor-grabbing flex items-center justify-center hover:bg-zinc-900 transition shadow"
+            title="Click & Drag to move Spotlight button anywhere"
+          >
+            <GripVertical className="w-3.5 h-3.5" />
           </div>
 
-          <div className="hidden sm:flex flex-col text-left">
-            <span className="text-[10px] font-mono text-[#00D4FF] font-bold tracking-widest uppercase flex items-center gap-1">
-              <span>● LIVE SPOTLIGHT</span>
-            </span>
-            <span className="font-heading font-black text-white text-xs whitespace-nowrap">
-              News &amp; Stars
-            </span>
-          </div>
+          <button
+            onClick={handleSpotlightClick}
+            className="group relative flex items-center gap-2 py-2.5 px-3 bg-zinc-950 hover:bg-black text-[#FFD700] border-y border-r border-[#FFD700] rounded-r-2xl shadow-2xl shadow-[#FFD700]/25 transition-all hover:pr-4 cursor-pointer backdrop-blur-xl"
+            title="Open Video News, Student Stories & Top Stakers Spotlight (Drag handle to reposition)"
+          >
+            <div className="relative flex items-center justify-center">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FFD700] animate-ping absolute" />
+              <Radio className="w-4 h-4 text-[#FFD700] relative" />
+            </div>
 
-          <div className="w-5 h-5 rounded-full bg-[#FFD700]/20 flex items-center justify-center text-[#FFD700]">
-            <Play className="w-3 h-3 fill-[#FFD700]" />
-          </div>
-        </button>
+            <div className="hidden sm:flex flex-col text-left">
+              <span className="text-[9px] font-mono text-[#00D4FF] font-bold tracking-widest uppercase flex items-center gap-1">
+                <span>● SPOTLIGHT</span>
+              </span>
+              <span className="font-heading font-black text-white text-xs whitespace-nowrap">
+                News &amp; Stars
+              </span>
+            </div>
+
+            <div className="w-5 h-5 rounded-full bg-[#FFD700]/20 flex items-center justify-center text-[#FFD700]">
+              <Play className="w-3 h-3 fill-[#FFD700]" />
+            </div>
+          </button>
+
+          {/* Reset Position badge when custom placed */}
+          {spotlightPos && (
+            <button
+              onClick={resetSpotlightPosition}
+              className="absolute -top-3 -right-2 p-1 rounded-full bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white opacity-0 group-hover/spotlight:opacity-100 transition shadow"
+              title="Reset Spotlight button to default right edge"
+            >
+              <RotateCcw className="w-2.5 h-2.5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 3. Full Rich Spotlight Drawer / Modal */}

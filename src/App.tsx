@@ -55,6 +55,10 @@ import { GlobalLiveClassroomModal } from './components/GlobalLiveClassroomModal'
 
 import { CertificateNFT } from './types';
 import { ArrowLeft } from 'lucide-react';
+import { ViewModeProvider } from './context/ViewModeContext';
+import { DeviceViewportFrame } from './components/viewmodes/DeviceViewportFrame';
+import { ComputerSmartReadingAssistant } from './components/viewmodes/ComputerSmartReadingAssistant';
+import { ViewModeSwitcherBar } from './components/viewmodes/ViewModeSwitcherBar';
 
 function AppContent() {
   const { isAdmin } = useEcosystem();
@@ -195,7 +199,8 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col font-sans relative">
+    <DeviceViewportFrame>
+      <div className="min-h-screen text-slate-100 flex flex-col font-sans relative">
       {/* Dynamic Animated Canvas & Video Ambience Background */}
       <AmbienceBackground />
 
@@ -536,7 +541,14 @@ function AppContent() {
         onClose={() => setIsAdminModalOpen(false)}
         onSuccess={() => handleNav('admin')}
       />
+
+      {/* Floating Device View Mode Switcher (Mobile Phone, IPAD, Computer Smart Reading Assistant) */}
+      <ViewModeSwitcherBar />
+
+      {/* Computer Smart Reading Assistant Companion Console */}
+      <ComputerSmartReadingAssistant />
     </div>
+    </DeviceViewportFrame>
   );
 }
 
@@ -544,7 +556,9 @@ export default function App() {
   return (
     <EcosystemProvider>
       <AmbienceProvider>
-        <AppContent />
+        <ViewModeProvider>
+          <AppContent />
+        </ViewModeProvider>
       </AmbienceProvider>
     </EcosystemProvider>
   );

@@ -24,11 +24,13 @@ import {
   Layers,
   PhoneCall,
   Clock,
-  FileText
+  FileText,
+  Clapperboard
 } from 'lucide-react';
 import { BAABook, BookChapter, ReaderProgress } from '../../types/library';
 import { useEcosystem } from '../../context/EcosystemContext';
 import { OnlineReader } from './OnlineReader';
+import { BookToVideoPlayerModal } from './BookToVideoPlayerModal';
 
 interface BookReaderModalProps {
   book: BAABook;
@@ -56,6 +58,7 @@ export const BookReaderModal: React.FC<BookReaderModalProps> = ({
   const [theme, setTheme] = useState<'dark' | 'sepia' | 'cyber' | 'light'>('dark');
   const [showChapterDrawer, setShowChapterDrawer] = useState(false);
   const [showAIAssistant, setShowAIAssistant] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   // Text-To-Speech (TTS) State
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -285,6 +288,16 @@ export const BookReaderModal: React.FC<BookReaderModalProps> = ({
 
           {/* Right: Customization & Actions */}
           <div className="flex items-center gap-2">
+            {/* Watch as AI Film (Convert Book to Video) */}
+            <button
+              onClick={() => setShowVideoModal(true)}
+              className="px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-red-600/30 to-amber-600/30 border border-red-500/50 text-amber-300 hover:text-white transition flex items-center gap-1.5 shadow"
+              title="Convert and watch this book as a cinematic AI video film"
+            >
+              <Clapperboard className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Watch as AI Film</span>
+            </button>
+
             {/* Paginated OnlineReader Mode Toggle */}
             <button
               onClick={() => setUsePaginatedMode(true)}
@@ -707,6 +720,10 @@ export const BookReaderModal: React.FC<BookReaderModalProps> = ({
         </div>
 
       </div>
+
+      {showVideoModal && (
+        <BookToVideoPlayerModal book={book} onClose={() => setShowVideoModal(false)} />
+      )}
     </div>
   );
 };

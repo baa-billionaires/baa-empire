@@ -239,6 +239,17 @@ const ECOSYSTEM_PLANETS: PlanetNode[] = [
   }
 ];
 
+function checkWebGLSupport(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const testCanvas = document.createElement('canvas');
+    const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+    return !!gl;
+  } catch (e) {
+    return false;
+  }
+}
+
 export const Baa4DEcosystemHero: React.FC<Baa4DEcosystemHeroProps> = ({
   onNavigate,
   onSelectCourse
@@ -247,6 +258,7 @@ export const Baa4DEcosystemHero: React.FC<Baa4DEcosystemHeroProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Interaction State
+  const [webglFailed, setWebglFailed] = useState<boolean>(false);
   const [selectedPlanet, setSelectedPlanet] = useState<PlanetNode | null>(ECOSYSTEM_PLANETS[3]); // BAA Academy default
   const [hoveredPlanet, setHoveredPlanet] = useState<PlanetNode | null>(null);
   const [speedMultiplier, setSpeedMultiplier] = useState<number>(1.0);
@@ -263,7 +275,7 @@ export const Baa4DEcosystemHero: React.FC<Baa4DEcosystemHeroProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Three.js & WebGL Setup
+  // Three.js & WebGL Setup with High-Fidelity 2D Canvas Fallback
   useEffect(() => {
     const container = mountRef.current;
     const canvas = canvasRef.current;
@@ -272,23 +284,244 @@ export const Baa4DEcosystemHero: React.FC<Baa4DEcosystemHeroProps> = ({
     let width = container.clientWidth || 800;
     let height = container.clientHeight || 560;
 
+    // 2D CANVAS FALLBACK HANDLER (Protects against missing WebGL or headless contexts)
+    const run2DFallback = () => {
+      setWebglFailed(true);
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return () => {};
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      let animId: number;
+      const startTime = performance.now();
+      let dragAngle = 0;
+      let isDragging = false;
+      let lastX = 0;
+
+      const handleResize2D = () => {
+        if (!container || !canvas) return;
+        width = container.clientWidth || 800;
+        height = container.clientHeight || 560;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+      };
+      window.addEventListener('resize', handleResize2D);
+
+      const onPointerDown = (e: MouseEvent) => {
+        isDragging = true;
+        lastX = e.clientX;
+      };
+
+      const onPointerMove = (e: MouseEvent) => {
+        if (isDragging) {
+          const dx = e.clientX - lastX;
+          dragAngle += dx * 0.005;
+          lastX = e.clientX;
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const time = (performance.now() - startTime) * 0.001;
+
+        let found: PlanetNode | null = null;
+        ECOSYSTEM_PLANETS.forEach(node => {
+          const effectiveSpeed = node.speed * speedMultiplier;
+          const angle = node.phase + (isPaused ? 0 : time * 0.4 * effectiveSpeed) + dragAngle;
+          const rX = Math.min(rect.width, rect.height) * 0.42 * (node.orbitRadius / 58);
+          const rY = rX * (viewMode === 'topdown' ? 0.95 : 0.45);
+          const px = cx + Math.cos(angle) * rX;
+          const py = cy + Math.sin(angle) * rY;
+          if (Math.hypot(mx - px, my - py) < node.size * 6 + 10) {
+            found = node;
+          }
+        });
+        setHoveredPlanet(found);
+        canvas.style.cursor = found ? 'pointer' : isDragging ? 'grabbing' : 'grab';
+      };
+
+      const onPointerUp = () => {
+        isDragging = false;
+      };
+
+      const onCanvasClick = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const time = (performance.now() - startTime) * 0.001;
+
+        ECOSYSTEM_PLANETS.forEach(node => {
+          const effectiveSpeed = node.speed * speedMultiplier;
+          const angle = node.phase + (isPaused ? 0 : time * 0.4 * effectiveSpeed) + dragAngle;
+          const rX = Math.min(rect.width, rect.height) * 0.42 * (node.orbitRadius / 58);
+          const rY = rX * (viewMode === 'topdown' ? 0.95 : 0.45);
+          const px = cx + Math.cos(angle) * rX;
+          const py = cy + Math.sin(angle) * rY;
+          if (Math.hypot(mx - px, my - py) < node.size * 6 + 12) {
+            setSelectedPlanet(node);
+          }
+        });
+      };
+
+      canvas.addEventListener('mousedown', onPointerDown);
+      canvas.addEventListener('mousemove', onPointerMove);
+      window.addEventListener('mouseup', onPointerUp);
+      canvas.addEventListener('click', onCanvasClick);
+
+      const render2D = (now: number) => {
+        animId = requestAnimationFrame(render2D);
+        const time = (now - startTime) * 0.001;
+        const w = canvas.width;
+        const h = canvas.height;
+        const cx = w / 2;
+        const cy = h / 2;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Cosmic gradient background
+        const bg = ctx.createRadialGradient(cx, cy, 30, cx, cy, Math.max(w, h) * 0.65);
+        bg.addColorStop(0, '#060a18');
+        bg.addColorStop(0.4, '#02040b');
+        bg.addColorStop(1, '#000000');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        // Ambient cyber starfield
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        for (let i = 0; i < 90; i++) {
+          const sa = (i * 137.5 * Math.PI) / 180 + time * 0.015;
+          const sr = ((i * 19) % (Math.min(w, h) * 0.48)) + 25;
+          const sx = cx + Math.cos(sa) * sr;
+          const sy = cy + Math.sin(sa) * (sr * 0.48);
+          ctx.beginPath();
+          ctx.arc(sx, sy, i % 4 === 0 ? 1.6 : 0.9, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Orbit ellipses
+        if (showRings) {
+          ECOSYSTEM_PLANETS.forEach(node => {
+            const rX = Math.min(w, h) * 0.42 * (node.orbitRadius / 58);
+            const rY = rX * (viewMode === 'topdown' ? 0.95 : 0.45);
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, rX, rY, 0, 0, Math.PI * 2);
+            ctx.strokeStyle = `${node.color}25`;
+            ctx.lineWidth = selectedPlanet?.id === node.id ? 2 : 1;
+            ctx.stroke();
+          });
+        }
+
+        // Central Sovereign Nucleus (Sun)
+        const sunRadius = (22 + Math.sin(time * 2.2) * 2) * dpr;
+        const sunGlow = ctx.createRadialGradient(cx, cy, 6 * dpr, cx, cy, sunRadius * 2.4);
+        sunGlow.addColorStop(0, '#FFF5AA');
+        sunGlow.addColorStop(0.3, '#FFD700');
+        sunGlow.addColorStop(0.7, '#00FF8835');
+        sunGlow.addColorStop(1, 'transparent');
+        ctx.fillStyle = sunGlow;
+        ctx.beginPath();
+        ctx.arc(cx, cy, sunRadius * 2.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFD700';
+        ctx.beginPath();
+        ctx.arc(cx, cy, sunRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 11 Planetary Nodes
+        ECOSYSTEM_PLANETS.forEach(node => {
+          const effectiveSpeed = node.speed * speedMultiplier;
+          const angle = node.phase + (isPaused ? 0 : time * 0.4 * effectiveSpeed) + dragAngle;
+          const rX = Math.min(w, h) * 0.42 * (node.orbitRadius / 58);
+          const rY = rX * (viewMode === 'topdown' ? 0.95 : 0.45);
+
+          const px = cx + Math.cos(angle) * rX;
+          const py = cy + Math.sin(angle) * rY;
+
+          const isSelected = selectedPlanet?.id === node.id;
+          const isHovered = hoveredPlanet?.id === node.id;
+          const baseSize = node.size * 3.5 * dpr;
+          const pRadius = isSelected ? baseSize * 1.45 : isHovered ? baseSize * 1.25 : baseSize;
+
+          // Planetary Glow
+          const pGlow = ctx.createRadialGradient(px, py, pRadius * 0.3, px, py, pRadius * 2.4);
+          pGlow.addColorStop(0, node.color);
+          pGlow.addColorStop(1, 'transparent');
+          ctx.fillStyle = pGlow;
+          ctx.beginPath();
+          ctx.arc(px, py, pRadius * 2.4, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Core Sphere
+          ctx.fillStyle = node.color;
+          ctx.beginPath();
+          ctx.arc(px, py, pRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Selection Ring
+          if (isSelected) {
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 2 * dpr;
+            ctx.beginPath();
+            ctx.arc(px, py, pRadius + (5 * dpr), 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          // Label
+          if (isSelected || isHovered) {
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = `bold ${Math.round(11 * dpr)}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText(node.name, px, py - pRadius - (8 * dpr));
+          }
+        });
+      };
+
+      render2D(performance.now());
+
+      return () => {
+        cancelAnimationFrame(animId);
+        window.removeEventListener('resize', handleResize2D);
+        canvas.removeEventListener('mousedown', onPointerDown);
+        canvas.removeEventListener('mousemove', onPointerMove);
+        window.removeEventListener('mouseup', onPointerUp);
+        canvas.removeEventListener('click', onCanvasClick);
+      };
+    };
+
+    if (webglFailed || !checkWebGLSupport()) {
+      return run2DFallback();
+    }
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance'
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+    } catch (err) {
+      console.warn('WebGLRenderer context creation failed, falling back to 2D orbital canvas:', err);
+      return run2DFallback();
+    }
+
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x020308, 0.012);
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.5, 300);
     camera.position.set(0, 32, 68);
-
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
 
     // 2. 4D Spacetime Hyperspace Shader Plane (Custom GLSL)
     const vertexShader4D = `
@@ -721,7 +954,7 @@ export const Baa4DEcosystemHero: React.FC<Baa4DEcosystemHeroProps> = ({
 
       renderer.dispose();
     };
-  }, [speedMultiplier, isPaused, viewMode, showRings, selectedPlanet]);
+  }, [speedMultiplier, isPaused, viewMode, showRings, selectedPlanet, webglFailed]);
 
   return (
     <div className="relative w-full rounded-3xl bg-black border border-zinc-800/80 overflow-hidden shadow-2xl font-sans select-none">
@@ -757,7 +990,7 @@ export const Baa4DEcosystemHero: React.FC<Baa4DEcosystemHeroProps> = ({
 
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-950/60 border border-[#00D4FF]/40 text-[#00D4FF]">
             <Activity className="w-3 h-3 animate-spin-slow" />
-            <span>4D Shader Live</span>
+            <span>{webglFailed ? '2D Orbital Engine' : '4D Shader Live'}</span>
           </div>
         </div>
       </div>
@@ -767,7 +1000,7 @@ export const Baa4DEcosystemHero: React.FC<Baa4DEcosystemHeroProps> = ({
         ref={mountRef}
         className="relative w-full h-[420px] sm:h-[540px] lg:h-[620px] bg-gradient-to-b from-[#02040a] via-[#010206] to-black cursor-grab active:cursor-grabbing overflow-hidden"
       >
-        <canvas ref={canvasRef} className="w-full h-full block" />
+        <canvas key={webglFailed ? 'canvas-2d' : 'canvas-3d'} ref={canvasRef} className="w-full h-full block" />
 
         {/* Central Sun Brand Label Overlay */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center">

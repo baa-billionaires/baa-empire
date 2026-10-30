@@ -140,6 +140,14 @@ interface EcosystemContextType {
 
   // Manuscript Reading Proof & BaaCoin Rewards
   claimReadingReward: (bookId: string, bookTitle: string, baacoinReward?: number) => { success: boolean; rewardAmount: number; alreadyClaimed?: boolean; message: string };
+
+  // Email Suppression & Unsubscribe Registry
+  suppressionList: string[];
+  suppressionRecords: Array<{ id: string; email: string; reason: string; timestamp: string }>;
+  addToSuppressionList: (email: string, reason?: string) => void;
+  removeFromSuppressionList: (email: string) => void;
+  isSuppressed: (email: string) => boolean;
+  unsubscribeContact: (email: string, reason?: string) => void;
 }
 
 const DEFAULT_PROFILE: Profile = {
@@ -195,6 +203,47 @@ const DEFAULT_CERTIFICATES: CertificateNFT[] = [
     issue_date: 'April 4, 2026',
     transaction_hash: '0x7a30baac990812301824abced0192418a990141f',
     referral_code: 'BAA-CHIOMA-PH'
+  }
+];
+
+const DEFAULT_SUPPRESSION_LIST: string[] = [
+  'bounce@tempmail.com',
+  'spam-trap@invalid.org',
+  'refused@unverified-lead.net',
+  'optout@disposable.biz',
+  'unsubscribed-user@techcorp.io'
+];
+
+const DEFAULT_SUPPRESSION_RECORDS: Array<{ id: string; email: string; reason: string; timestamp: string }> = [
+  {
+    id: 'supp-01',
+    email: 'bounce@tempmail.com',
+    reason: 'SMTP 550 Mailbox does not exist (Hard Bounce)',
+    timestamp: '2026-10-28 14:12 UTC'
+  },
+  {
+    id: 'supp-02',
+    email: 'spam-trap@invalid.org',
+    reason: 'ISP Feedback Loop Spam Report',
+    timestamp: '2026-10-27 19:40 UTC'
+  },
+  {
+    id: 'supp-03',
+    email: 'refused@unverified-lead.net',
+    reason: 'RFC 8058 One-Click List-Unsubscribe',
+    timestamp: '2026-10-26 11:05 UTC'
+  },
+  {
+    id: 'supp-04',
+    email: 'optout@disposable.biz',
+    reason: 'Contact explicitly marked as unsubscribed in CRM',
+    timestamp: '2026-10-25 09:30 UTC'
+  },
+  {
+    id: 'supp-05',
+    email: 'unsubscribed-user@techcorp.io',
+    reason: 'User Opt-Out Preference',
+    timestamp: '2026-10-24 16:45 UTC'
   }
 ];
 
@@ -294,6 +343,14 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [studentSpotlights] = useState<StudentSpotlight[]>(INITIAL_STUDENT_SPOTLIGHTS);
   const [topStakers] = useState<TopStakerLeaderboardItem[]>(INITIAL_TOP_STAKERS);
 
+  // Email Suppression & Unsubscribe State
+  const [suppressionList, setSuppressionList] = useState<string[]>(() =>
+    loadFromStorage('suppression_list', DEFAULT_SUPPRESSION_LIST)
+  );
+  const [suppressionRecords, setSuppressionRecords] = useState<Array<{ id: string; email: string; reason: string; timestamp: string }>>(() =>
+    loadFromStorage('suppression_records', DEFAULT_SUPPRESSION_RECORDS)
+  );
+
   const setLanguage = (lang: EcosystemLanguage) => {
     setLanguageState(lang);
     localStorage.setItem('richconnect_lang', lang);
@@ -319,6 +376,8 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
   useEffect(() => { saveToStorage('staking_pools', stakingPools); }, [stakingPools]);
   useEffect(() => { saveToStorage('baacoin_price', baacoinPrice); }, [baacoinPrice]);
   useEffect(() => { saveToStorage('project_proposals', projectProposals); }, [projectProposals]);
+  useEffect(() => { saveToStorage('suppression_list', suppressionList); }, [suppressionList]);
+  useEffect(() => { saveToStorage('suppression_records', suppressionRecords); }, [suppressionRecords]);
 
 
   // Set custom logo helper
@@ -1017,6 +1076,39 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
     };
   };
 
+  // 5. EMAIL SUPPRESSION & UNSUBSCRIBE REGISTRY ENGINE
+  const isSuppressed = (email: string): boolean => {
+    if (!email) return false;
+    const normalized = email.trim().toLowerCase();
+    return suppressionList.some(item => item.trim().toLowerCase() === normalized);
+  };
+
+  const addToSuppressionList = (email: string, reason: string = 'Administrative / Compliance Suppression') => {
+    if (!email) return;
+    const normalized = email.trim().toLowerCase();
+    if (isSuppressed(normalized)) return;
+
+    setSuppressionList(prev => [normalized, ...prev]);
+    const newRecord = {
+      id: `supp-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      email: normalized,
+      reason,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC'
+    };
+    setSuppressionRecords(prev => [newRecord, ...prev]);
+  };
+
+  const removeFromSuppressionList = (email: string) => {
+    if (!email) return;
+    const normalized = email.trim().toLowerCase();
+    setSuppressionList(prev => prev.filter(e => e.trim().toLowerCase() !== normalized));
+    setSuppressionRecords(prev => prev.filter(r => r.email.trim().toLowerCase() !== normalized));
+  };
+
+  const unsubscribeContact = (email: string, reason: string = 'User Opt-Out / Unsubscribe Request') => {
+    addToSuppressionList(email, reason);
+  };
+
   return (
     <EcosystemContext.Provider
       value={{
@@ -1070,7 +1162,13 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
         topStakers,
         addReferralSignBonus,
         claimReferralBonuses,
-        claimReadingReward
+        claimReadingReward,
+        suppressionList,
+        suppressionRecords,
+        addToSuppressionList,
+        removeFromSuppressionList,
+        isSuppressed,
+        unsubscribeContact
       }}
     >
       {children}

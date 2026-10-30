@@ -549,6 +549,33 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
 
               {/* Grid of Command Centers */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+                {/* 0. Flagship: Autonomous Growth OS + MAFIA™ */}
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-zinc-900 via-emerald-950/20 to-zinc-900 border-2 border-emerald-500/60 hover:border-emerald-400 transition flex flex-col justify-between group shadow-xl shadow-emerald-950/30">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                        <Sparkles className="w-5 h-5 text-emerald-400 animate-pulse" />
+                      </span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50">
+                        MAFIA™ FLAGSHIP OS
+                      </span>
+                    </div>
+                    <h3 className="text-base font-heading font-black text-white group-hover:text-emerald-400 transition">
+                      Autonomous Growth OS + MAFIA™
+                    </h3>
+                    <p className="text-xs text-zinc-300">
+                      13-Agent Advertising Colony, GeoTerritory discovery, 10-stage CRM, digital product factory, and verified Paystack webhook revenue loops.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onNavigate && onNavigate('growth-mafia')}
+                    className="mt-4 w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-heading font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950"
+                  >
+                    <span>Launch MAFIA™ Command Center</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
                 {/* 1. Marketing Command */}
                 <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-[#FFD700] transition flex flex-col justify-between group">
                   <div className="space-y-2">

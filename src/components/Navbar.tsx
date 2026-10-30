@@ -28,10 +28,16 @@ import {
   Flame,
   ShoppingCart,
   Palette,
-  Tv
+  Tv,
+  Zap,
+  ChevronLeft,
+  ChevronRight,
+  Grid,
+  LayoutDashboard
 } from 'lucide-react';
 import { useAmbience } from '../context/AmbienceContext';
 import { ViewModeSwitcherBar } from './viewmodes/ViewModeSwitcherBar';
+import { useNavigation } from '../context/NavigationContext';
 
 interface NavbarProps {
   currentPage: string;
@@ -46,6 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const { profile, isAdmin, scoutStats, customLogoUrl, language, setLanguage, baacoinPrice, baacoinPriceChange } = useEcosystem();
   const { openThemeModal, openLiveClass, primaryAccent } = useAmbience();
+  const { goBack, goForward, canGoBack, canGoForward, previousPage, nextPage, openAllPagesModal, allPages } = useNavigation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
 
@@ -54,6 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks = [
     { id: 'home', label: 'Home', icon: Compass },
     { id: 'cyber-eco', label: 'Autonomous Hub', icon: Layers, badge: '5-PILLARS' },
+    { id: 'growth-mafia', label: 'Growth OS & MAFIA™', icon: Zap, badge: '13-AGENTS' },
     { id: 'general-marketplace', label: '🛒 General Market', icon: ShoppingCart, badge: 'CARS/TECH' },
     { id: 'referrals', label: '🎁 Referral Hub', icon: Gift, badge: 'EARN BAA' },
     { id: 'projects', label: '🚀 Projects & Grants', icon: Flame, badge: 'FUNDING' },
@@ -170,13 +178,43 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-        {/* Brand Logo */}
-        <button
-          onClick={() => handleNav('home')}
-          className="focus:outline-none transition hover:opacity-90 shrink-0"
-        >
-          <Logo size="md" variant="full" showText={true} customLogoUrl={customLogoUrl} />
-        </button>
+        {/* Brand Logo & Back/Forward Quick Steppers */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <button
+            onClick={() => handleNav('home')}
+            className="focus:outline-none transition hover:opacity-90 shrink-0"
+          >
+            <Logo size="md" variant="full" showText={true} customLogoUrl={customLogoUrl} />
+          </button>
+
+          {/* Quick Back & Forward Stepper in Navbar */}
+          <div className="flex items-center gap-1 pl-1.5 sm:pl-2 border-l border-zinc-800">
+            <button
+              onClick={goBack}
+              disabled={!canGoBack}
+              title={previousPage ? `Back to: ${previousPage.shortTitle}` : 'Go Back'}
+              className={`p-1.5 rounded-lg border transition ${
+                canGoBack
+                  ? 'bg-zinc-900 hover:bg-zinc-800 text-zinc-100 hover:text-white border-zinc-700 hover:border-[#FFD700] cursor-pointer'
+                  : 'bg-zinc-950/40 text-zinc-600 border-zinc-900 cursor-not-allowed opacity-40'
+              }`}
+            >
+              <ChevronLeft className="w-4 h-4 text-[#FFD700]" />
+            </button>
+            <button
+              onClick={goForward}
+              disabled={!canGoForward}
+              title={nextPage ? `Forward to: ${nextPage.shortTitle}` : 'Go Forward'}
+              className={`p-1.5 rounded-lg border transition ${
+                canGoForward
+                  ? 'bg-zinc-900 hover:bg-zinc-800 text-zinc-100 hover:text-white border-zinc-700 hover:border-[#00D4FF] cursor-pointer'
+                  : 'bg-zinc-950/40 text-zinc-600 border-zinc-900 cursor-not-allowed opacity-40'
+              }`}
+            >
+              <ChevronRight className="w-4 h-4 text-[#00D4FF]" />
+            </button>
+          </div>
+        </div>
 
         {/* Desktop Nav Links */}
         <nav className="hidden xl:flex items-center gap-1">
@@ -230,6 +268,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
             <Tv className="w-3.5 h-3.5 text-red-400" />
             <span className="hidden xl:inline">Live Class</span>
+          </button>
+
+          {/* All Pages Directory Trigger */}
+          <button
+            onClick={openAllPagesModal}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition bg-zinc-900 border border-zinc-700 hover:border-[#FFD700] text-zinc-200 hover:text-white"
+            title="Open Directory of All Pages & Modules"
+          >
+            <Grid className="w-3.5 h-3.5 text-[#FFD700]" />
+            <span className="hidden xl:inline">All Pages</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-zinc-800 text-[#FFD700] border border-zinc-700 font-bold hidden sm:inline">
+              {allPages.length}
+            </span>
           </button>
 
           {/* Student Dashboard Button */}
@@ -349,6 +400,60 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
         <div className="xl:hidden bg-zinc-950 border-b border-zinc-800 px-4 pt-2 pb-6 space-y-1">
+          {/* Quick Back / Forward / Dashboard / All Pages Mobile Navigation Bar */}
+          <div className="grid grid-cols-4 gap-1.5 py-2 mb-2 border-b border-zinc-800">
+            <button
+              onClick={() => {
+                goBack();
+                setMobileMenuOpen(false);
+              }}
+              disabled={!canGoBack}
+              className={`py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 border transition ${
+                canGoBack
+                  ? 'bg-zinc-900 text-zinc-100 border-zinc-700'
+                  : 'bg-zinc-950/40 text-zinc-600 border-zinc-900 opacity-40'
+              }`}
+            >
+              <ChevronLeft className="w-3.5 h-3.5 text-[#FFD700]" />
+              <span>Back</span>
+            </button>
+            <button
+              onClick={() => {
+                goForward();
+                setMobileMenuOpen(false);
+              }}
+              disabled={!canGoForward}
+              className={`py-2 px-1 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 border transition ${
+                canGoForward
+                  ? 'bg-zinc-900 text-zinc-100 border-zinc-700'
+                  : 'bg-zinc-950/40 text-zinc-600 border-zinc-900 opacity-40'
+              }`}
+            >
+              <span>Next</span>
+              <ChevronRight className="w-3.5 h-3.5 text-[#00D4FF]" />
+            </button>
+            <button
+              onClick={() => {
+                handleNav('dashboard');
+                setMobileMenuOpen(false);
+              }}
+              className="py-2 px-1 rounded-lg text-xs font-bold flex items-center justify-center gap-1 bg-[#FFD700]/15 text-[#FFD700] border border-[#FFD700]/30"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span>Dash</span>
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openAllPagesModal();
+              }}
+              className="py-2 px-1 rounded-lg text-xs font-bold flex items-center justify-center gap-1 bg-zinc-900 text-white border border-zinc-700"
+            >
+              <Grid className="w-3.5 h-3.5 text-[#FFD700]" />
+              <span>Pages</span>
+            </button>
+          </div>
+
           {/* Device Simulator Switcher in Mobile Drawer */}
           <div className="py-2 mb-2 border-b border-zinc-800">
             <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-1.5 font-bold">

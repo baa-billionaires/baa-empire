@@ -47,6 +47,7 @@ import { ReferralHubPage } from './pages/ReferralHubPage';
 import { ProjectsFundingPage } from './pages/ProjectsFundingPage';
 import { GeneralMarketplacePage } from './pages/GeneralMarketplacePage';
 import { AutonomousCyberEcoDashboard } from './components/AutonomousCyberEcoDashboard';
+import { AutonomousGrowthMafiaPage } from './pages/AutonomousGrowthMafiaPage';
 import { SpotlightNewsDrawer } from './components/SpotlightNewsDrawer';
 import { AmbienceProvider } from './context/AmbienceContext';
 import { AmbienceBackground } from './components/AmbienceBackground';
@@ -60,10 +61,15 @@ import { DeviceViewportFrame } from './components/viewmodes/DeviceViewportFrame'
 import { ComputerSmartReadingAssistant } from './components/viewmodes/ComputerSmartReadingAssistant';
 import { ViewModeSwitcherBar } from './components/viewmodes/ViewModeSwitcherBar';
 
+import { NavigationProvider, useNavigation } from './context/NavigationContext';
+import { UniversalPageNavigator } from './components/navigation/UniversalPageNavigator';
+import { FloatingNavDock } from './components/navigation/FloatingNavDock';
+import { AllPagesDirectoryModal } from './components/navigation/AllPagesDirectoryModal';
+
 function AppContent() {
   const { isAdmin } = useEcosystem();
+  const { currentPage, navigateTo } = useNavigation();
 
-  const [currentPage, setCurrentPage] = useState<string>('home');
   const [selectedCourseId, setSelectedCourseId] = useState<string>('course-1');
   const [selectedTutorId, setSelectedTutorId] = useState<string>('tutor-1');
   const [selectedShowId, setSelectedShowId] = useState<string>('show-1');
@@ -75,39 +81,44 @@ function AppContent() {
     const handleHashChange = () => {
       // Check pathname first
       if (window.location.pathname === '/investor-one-pager' || window.location.pathname === '/investor-one-pager/') {
-        setCurrentPage('investor-one-pager');
+        navigateTo('investor-one-pager');
         return;
       }
       if (window.location.pathname === '/wallet' || window.location.pathname === '/wallet/') {
-        setCurrentPage('wallet');
+        navigateTo('wallet');
         return;
       }
       if (window.location.pathname === '/ai-workforce' || window.location.pathname === '/ai-workforce/') {
-        setCurrentPage('ai-workforce');
+        navigateTo('ai-workforce');
         return;
       }
       if (window.location.pathname === '/omni-ad-swarm' || window.location.pathname === '/omni-ad-swarm/') {
-        setCurrentPage('omni-ad-swarm');
+        navigateTo('omni-ad-swarm');
         return;
       }
       if (window.location.pathname === '/exchange' || window.location.pathname === '/exchange/') {
-        setCurrentPage('exchange');
+        navigateTo('exchange');
         return;
       }
       if (window.location.pathname === '/cyber-eco' || window.location.pathname === '/cyber-eco/') {
-        setCurrentPage('cyber-eco');
+        navigateTo('cyber-eco');
         return;
       }
       if (window.location.pathname === '/referrals' || window.location.pathname === '/referral-hub') {
-        setCurrentPage('referrals');
+        navigateTo('referrals');
         return;
       }
       if (window.location.pathname === '/projects' || window.location.pathname === '/funding') {
-        setCurrentPage('projects');
+        navigateTo('projects');
         return;
       }
       if (window.location.pathname === '/general-marketplace' || window.location.pathname === '/general-market') {
-        setCurrentPage('general-marketplace');
+        navigateTo('general-marketplace');
+        return;
+      }
+
+      if (window.location.pathname === '/growth-mafia' || window.location.pathname === '/mafia' || window.location.pathname === '/growth') {
+        navigateTo('growth-mafia');
         return;
       }
 
@@ -115,34 +126,36 @@ function AppContent() {
       if (hash) {
         if (hash.startsWith('learn/')) {
           setSelectedCourseId(hash.replace('learn/', ''));
-          setCurrentPage('learn');
+          navigateTo('learn');
         } else if (hash.startsWith('tutor/')) {
           setSelectedTutorId(hash.replace('tutor/', ''));
-          setCurrentPage('tutor-detail');
+          navigateTo('tutor-detail');
         } else if (hash.startsWith('embed/tutor/')) {
           setSelectedTutorId(hash.replace('embed/tutor/', ''));
-          setCurrentPage('embed-tutor');
+          navigateTo('embed-tutor');
         } else if (hash.startsWith('show/')) {
           setSelectedShowId(hash.replace('show/', ''));
-          setCurrentPage('tv-watch');
+          navigateTo('tv-watch');
         } else if (hash === 'admin') {
-          setCurrentPage('admin');
+          navigateTo('admin');
+        } else if (hash === 'growth-mafia' || hash === 'mafia' || hash === 'growth') {
+          navigateTo('growth-mafia');
         } else if (hash === 'referral-hub' || hash === 'referrals') {
-          setCurrentPage('referrals');
+          navigateTo('referrals');
         } else if (hash === 'funding' || hash === 'projects') {
-          setCurrentPage('projects');
+          navigateTo('projects');
         } else if (hash === 'general-marketplace' || hash === 'general-market') {
-          setCurrentPage('general-marketplace');
+          navigateTo('general-marketplace');
         } else if (hash === 'library') {
-          setCurrentPage('ebooks');
+          navigateTo('ebooks');
         } else if ([
           'home', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
-          'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace'
+          'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace', 'growth-mafia', 'mafia'
         ].includes(hash)) {
-          setCurrentPage(hash === 'library' ? 'ebooks' : hash);
+          navigateTo(hash === 'library' ? 'ebooks' : (hash === 'mafia' ? 'growth-mafia' : hash));
         }
       }
 
@@ -151,45 +164,45 @@ function AppContent() {
     window.addEventListener('hashchange', handleHashChange);
     handleHashChange();
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [navigateTo]);
 
   const handleNav = (page: string) => {
-    setCurrentPage(page);
+    navigateTo(page);
     window.location.hash = page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSelectCourse = (courseId: string) => {
     setSelectedCourseId(courseId);
-    setCurrentPage('course-detail');
+    navigateTo('course-detail');
     window.location.hash = `course/${courseId}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStartLearning = (courseId: string) => {
     setSelectedCourseId(courseId);
-    setCurrentPage('learn');
+    navigateTo('learn');
     window.location.hash = `learn/${courseId}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSelectTutor = (tutorId: string) => {
     setSelectedTutorId(tutorId);
-    setCurrentPage('tutor-detail');
+    navigateTo('tutor-detail');
     window.location.hash = `tutor/${tutorId}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleWatchShow = (showId: string) => {
     setSelectedShowId(showId);
-    setCurrentPage('tv-watch');
+    navigateTo('tv-watch');
     window.location.hash = `show/${showId}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSelectCertificate = (cert: CertificateNFT) => {
     setSelectedCertificate(cert);
-    setCurrentPage('certificate-view');
+    navigateTo('certificate-view');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -212,6 +225,9 @@ function AppContent() {
         setCurrentPage={handleNav}
         openAdminModal={() => setIsAdminModalOpen(true)}
       />
+
+      {/* Universal Sub-Header Navigation Bar: Back, Forward, Dashboard & All Pages Directory */}
+      <UniversalPageNavigator />
 
       <main className="flex-1">
         {currentPage === 'home' && (
@@ -275,6 +291,10 @@ function AppContent() {
 
         {currentPage === 'omni-ad-swarm' && (
           <OmniAdGrowthPage />
+        )}
+
+        {currentPage === 'growth-mafia' && (
+          <AutonomousGrowthMafiaPage onNavigate={handleNav} />
         )}
 
         {currentPage === 'exchange' && (
@@ -545,6 +565,12 @@ function AppContent() {
       {/* Floating Device View Mode Switcher (Mobile Phone, IPAD, Computer Smart Reading Assistant) */}
       <ViewModeSwitcherBar />
 
+      {/* Floating Universal Quick Navigation Dock (Back, Forward, Dashboard, All Pages) */}
+      <FloatingNavDock />
+
+      {/* Searchable All Pages Directory Modal */}
+      <AllPagesDirectoryModal />
+
       {/* Computer Smart Reading Assistant Companion Console */}
       <ComputerSmartReadingAssistant />
     </div>
@@ -557,7 +583,9 @@ export default function App() {
     <EcosystemProvider>
       <AmbienceProvider>
         <ViewModeProvider>
-          <AppContent />
+          <NavigationProvider>
+            <AppContent />
+          </NavigationProvider>
         </ViewModeProvider>
       </AmbienceProvider>
     </EcosystemProvider>

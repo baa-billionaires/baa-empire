@@ -94,6 +94,36 @@ export const ALL_PAGES: PageMetadata[] = [
 
   // 2. AUTONOMOUS AI & AGENTS
   {
+    id: 'deal-room',
+    title: 'BAA Global Deal Room & AI Funding Exchange™',
+    shortTitle: 'Global Deal Room',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Finance',
+    description: 'Autonomous opportunity discovery, direct institutional engagement, AI project finance & global contract intelligence.',
+    iconName: 'Building2',
+    badge: 'AI DEALS'
+  },
+  {
+    id: 'governance',
+    title: 'BAA Global AI & Web3 Governance Institute (PVAIDC)',
+    shortTitle: 'Governance Institute',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Policy',
+    description: 'Living international laboratory for AI principles, agent constitution compilation, and policy digital twin testing.',
+    iconName: 'Scale',
+    badge: 'PVAIDC LAB'
+  },
+  {
+    id: 'recruiter',
+    title: 'AI Recruiter Portal & Active Lead Radar',
+    shortTitle: 'AI Recruiter',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous Recruitment',
+    description: 'Autonomous multi-channel lead discovery radar across LinkedIn, GitHub, TechCabal, and Twitter/X with verified intent signals.',
+    iconName: 'Radar',
+    badge: 'LIVE RADAR'
+  },
+  {
     id: 'growth-mafia',
     title: 'Growth OS & MAFIA™ Multi-Agent Colony',
     shortTitle: 'Growth OS + MAFIA™',

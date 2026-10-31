@@ -22,7 +22,9 @@ import {
   Layers,
   Sparkles,
   Download,
-  Coins
+  Coins,
+  Building2,
+  Scale
 } from 'lucide-react';
 import { AdminCentralEarningsDashboard } from '../components/AdminCentralEarningsDashboard';
 
@@ -572,6 +574,60 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
                     className="mt-4 w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-heading font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950"
                   >
                     <span>Launch MAFIA™ Command Center</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* 0B. Flagship: BAA Global Deal Room & AI Funding Exchange™ */}
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-zinc-900 via-amber-950/25 to-zinc-900 border-2 border-[#FFD700]/70 hover:border-[#FFD700] transition flex flex-col justify-between group shadow-xl shadow-[#FFD700]/10">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="p-2 rounded-xl bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/40">
+                        <Building2 className="w-5 h-5 text-[#FFD700]" />
+                      </span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/50">
+                        6 ENGINES • 12 AGENTS
+                      </span>
+                    </div>
+                    <h3 className="text-base font-heading font-black text-white group-hover:text-[#FFD700] transition">
+                      BAA Deal Room &amp; Funding Exchange™
+                    </h3>
+                    <p className="text-xs text-zinc-300">
+                      Contracts, Grants, Debt, VC Equity &amp; Compute Credits. Institutional 3-panel command, RFP bidder, readiness auditor &amp; 14-stage CRM.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onNavigate && onNavigate('deal-room')}
+                    className="mt-4 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#FFD700] to-amber-500 hover:brightness-110 text-black font-heading font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-[#FFD700]/20"
+                  >
+                    <span>Open Deal Room &amp; Exchange</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* 0C. Flagship: BAA Global AI & Web3 Governance Institute (PVAIDC) */}
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-zinc-900 via-purple-950/25 to-zinc-900 border-2 border-purple-500/60 hover:border-purple-400 transition flex flex-col justify-between group shadow-xl shadow-purple-950/30">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="p-2 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/40">
+                        <Scale className="w-5 h-5 text-purple-400" />
+                      </span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/50">
+                        PVAIDC • 12 PRINCIPLES
+                      </span>
+                    </div>
+                    <h3 className="text-base font-heading font-black text-white group-hover:text-purple-400 transition">
+                      AI &amp; Web3 Governance Institute
+                    </h3>
+                    <p className="text-xs text-zinc-300">
+                      Living international laboratory: PrincipleForge, Agent Constitution Compiler, Policy Digital Twin Conformance Lab &amp; W3C VC 2.0 Trust Passports.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onNavigate && onNavigate('governance')}
+                    className="mt-4 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:brightness-110 text-white font-heading font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-purple-950"
+                  >
+                    <span>Launch Governance Lab</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </button>
                 </div>

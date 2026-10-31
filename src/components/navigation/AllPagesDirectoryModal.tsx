@@ -37,6 +37,9 @@ import {
   Sparkles,
   Info,
   Handshake,
+  Building2,
+  Scale,
+  Radar,
   ArrowRight,
   ExternalLink,
   ChevronRight
@@ -46,6 +49,9 @@ import { useEcosystem } from '../../context/EcosystemContext';
 
 // Map icon names to Lucide icons
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
+  Building2,
+  Scale,
+  Radar,
   Compass,
   LayoutDashboard,
   GraduationCap,

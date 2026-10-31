@@ -11,7 +11,10 @@ import {
   Coins,
   Shield,
   Layers,
-  Compass
+  Compass,
+  Building2,
+  Scale,
+  Radar
 } from 'lucide-react';
 import { useNavigation } from '../../context/NavigationContext';
 import { useEcosystem } from '../../context/EcosystemContext';
@@ -124,6 +127,45 @@ export const UniversalPageNavigator: React.FC = () => {
 
         {/* RIGHT: ALL PAGES EXPLORER & QUICK HUBS */}
         <div className="flex items-center gap-1.5 shrink-0">
+          {/* Quick Hub Jump: Global Deal Room */}
+          <button
+            onClick={() => navigateTo('deal-room')}
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition border ${
+              currentPage === 'deal-room'
+                ? 'bg-[#FFD700] text-black border-[#FFD700] shadow-sm'
+                : 'bg-zinc-900/80 hover:bg-zinc-800 text-[#FFD700] hover:text-white border-[#FFD700]/30 hover:border-[#FFD700]'
+            }`}
+          >
+            <Building2 className="w-3.5 h-3.5" />
+            <span className="text-[11px]">Deal Room</span>
+          </button>
+
+          {/* Quick Hub Jump: Governance Institute */}
+          <button
+            onClick={() => navigateTo('governance')}
+            className={`hidden md:flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition border ${
+              currentPage === 'governance'
+                ? 'bg-purple-900 text-purple-200 border-purple-500 shadow-sm'
+                : 'bg-zinc-900/80 hover:bg-zinc-800 text-purple-300 hover:text-white border-purple-500/30 hover:border-purple-500'
+            }`}
+          >
+            <Scale className="w-3.5 h-3.5 text-purple-400" />
+            <span className="text-[11px]">Governance</span>
+          </button>
+
+          {/* Quick Hub Jump: AI Recruiter Radar */}
+          <button
+            onClick={() => navigateTo('recruiter')}
+            className={`hidden lg:flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition border ${
+              currentPage === 'recruiter'
+                ? 'bg-cyan-900 text-cyan-200 border-cyan-500 shadow-sm'
+                : 'bg-zinc-900/80 hover:bg-zinc-800 text-cyan-300 hover:text-white border-cyan-500/30 hover:border-cyan-500'
+            }`}
+          >
+            <Radar className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-[11px]">Recruiter</span>
+          </button>
+
           {/* Quick Hub Jump: Growth OS / MAFIA */}
           <button
             onClick={() => navigateTo('growth-mafia')}

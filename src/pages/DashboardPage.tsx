@@ -5,6 +5,8 @@ import { NFTCertificatePreviewModal } from '../components/NFTCertificatePreviewM
 import { CertificateNFT } from '../types';
 import { InternalAdRenderer } from '../components/InternalAdRenderer';
 import { DailyMiningTargetWidget } from '../components/DailyMiningTargetWidget';
+import { LearnToMineWidget } from '../components/LearnToMineWidget';
+import { AIRecruiterPortal } from '../components/AIRecruiterPortal';
 import {
   getStoredSubscriptions,
   getStoredTransactions,
@@ -35,7 +37,8 @@ import {
   CreditCard,
   Repeat,
   Calendar,
-  Clock
+  Clock,
+  Radar
 } from 'lucide-react';
 
 interface DashboardPageProps {
@@ -57,10 +60,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     marketplacePrompts,
     certificates,
     referrals,
+    scoutLeads,
     latestMiningBlock
   } = useEcosystem();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'learning' | 'prompts' | 'certificates' | 'referrals' | 'tutor' | 'subscriptions'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'learning' | 'prompts' | 'certificates' | 'referrals' | 'tutor' | 'subscriptions' | 'recruiter'>('overview');
   const [previewCert, setPreviewCert] = useState<CertificateNFT | null>(null);
   const [subscriptionsList, setSubscriptionsList] = useState<PaystackSubscription[]>(() => getStoredSubscriptions());
 
@@ -160,6 +164,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="flex p-1.5 bg-zinc-950 border border-zinc-800 rounded-2xl overflow-x-auto no-scrollbar text-xs">
           {[
             { id: 'overview', label: 'Overview & Networth' },
+            { id: 'recruiter', label: `🎯 AI Recruiter (${scoutLeads.length} Leads)` },
             { id: 'learning', label: `My Courses (${enrollments.length})` },
             { id: 'prompts', label: '60/40 Prompts' },
             { id: 'certificates', label: `NFTs (${certificates.length})` },
@@ -170,7 +175,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-3.5 py-2 rounded-xl font-bold whitespace-nowrap transition ${
+              className={`px-3.5 py-2 rounded-xl font-bold whitespace-nowrap transition cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-[#FFD700] text-black shadow-md'
                   : 'text-zinc-400 hover:text-white'
@@ -186,6 +191,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         {/* TAB 1: OVERVIEW & 10X NETWORTH SYSTEM */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
+            {/* LEARN-TO-MINE BAACOIN REAL-TIME ACCUMULATOR WIDGET */}
+            <LearnToMineWidget
+              onNavigateToAcademy={onNavigateToAcademy}
+              onNavigateToWallet={() => {
+                window.location.hash = 'wallet';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+
             {/* DAILY MINING TARGET WIDGET */}
             <DailyMiningTargetWidget
               onOpenReader={() => {
@@ -806,6 +820,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               )}
             </div>
           </div>
+        )}
+
+        {/* TAB 8: AI RECRUITER PORTAL */}
+        {activeTab === 'recruiter' && (
+          <AIRecruiterPortal
+            onNavigateToAcademy={onNavigateToAcademy}
+            onNavigateToDealRoom={() => {
+              window.location.hash = 'deal-room';
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         )}
       </div>
 

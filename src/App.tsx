@@ -48,6 +48,9 @@ import { ProjectsFundingPage } from './pages/ProjectsFundingPage';
 import { GeneralMarketplacePage } from './pages/GeneralMarketplacePage';
 import { AutonomousCyberEcoDashboard } from './components/AutonomousCyberEcoDashboard';
 import { AutonomousGrowthMafiaPage } from './pages/AutonomousGrowthMafiaPage';
+import { GlobalDealRoomPage } from './pages/GlobalDealRoomPage';
+import { GlobalGovernanceInstitutePage } from './pages/GlobalGovernanceInstitutePage';
+import { AIRecruiterPortal } from './components/AIRecruiterPortal';
 import { SpotlightNewsDrawer } from './components/SpotlightNewsDrawer';
 import { AmbienceProvider } from './context/AmbienceContext';
 import { AmbienceBackground } from './components/AmbienceBackground';
@@ -117,6 +120,21 @@ function AppContent() {
         return;
       }
 
+      if (window.location.pathname === '/deal-room' || window.location.pathname === '/funding-exchange' || window.location.pathname === '/deals') {
+        navigateTo('deal-room');
+        return;
+      }
+
+      if (window.location.pathname === '/governance' || window.location.pathname === '/policy-institute' || window.location.pathname === '/principles') {
+        navigateTo('governance');
+        return;
+      }
+
+      if (window.location.pathname === '/recruiter' || window.location.pathname === '/ai-recruiter' || window.location.pathname === '/scout') {
+        navigateTo('recruiter');
+        return;
+      }
+
       if (window.location.pathname === '/growth-mafia' || window.location.pathname === '/mafia' || window.location.pathname === '/growth') {
         navigateTo('growth-mafia');
         return;
@@ -138,6 +156,12 @@ function AppContent() {
           navigateTo('tv-watch');
         } else if (hash === 'admin') {
           navigateTo('admin');
+        } else if (hash === 'deal-room' || hash === 'funding-exchange' || hash === 'deals') {
+          navigateTo('deal-room');
+        } else if (hash === 'governance' || hash === 'policy-institute' || hash === 'principles') {
+          navigateTo('governance');
+        } else if (hash === 'recruiter' || hash === 'ai-recruiter' || hash === 'scout') {
+          navigateTo('recruiter');
         } else if (hash === 'growth-mafia' || hash === 'mafia' || hash === 'growth') {
           navigateTo('growth-mafia');
         } else if (hash === 'referral-hub' || hash === 'referrals') {
@@ -149,7 +173,7 @@ function AppContent() {
         } else if (hash === 'library') {
           navigateTo('ebooks');
         } else if ([
-          'home', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
+          'home', 'deal-room', 'governance', 'recruiter', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
@@ -313,6 +337,23 @@ function AppContent() {
 
         {currentPage === 'projects' && (
           <ProjectsFundingPage />
+        )}
+
+        {currentPage === 'deal-room' && (
+          <GlobalDealRoomPage onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'governance' && (
+          <GlobalGovernanceInstitutePage onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'recruiter' && (
+          <div className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+            <AIRecruiterPortal
+              onNavigateToAcademy={() => handleNav('academy')}
+              onNavigateToDealRoom={() => handleNav('deal-room')}
+            />
+          </div>
         )}
 
 

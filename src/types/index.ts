@@ -147,12 +147,21 @@ export interface AITutor {
 
 export interface ScoutLead {
   id: string;
-  type: 'student' | 'investor' | 'institution';
+  type: 'student' | 'investor' | 'institution' | 'talent' | 'client';
   name: string;
+  title?: string;
+  organization?: string;
+  domain?: string;
+  location?: string;
   email: string;
   phone_or_wa?: string;
-  source_platform: 'LinkedIn' | 'Twitter / X' | 'Facebook Groups' | 'TechCabal' | 'Direct Scraping';
-  status: 'discovered' | 'contacted' | 'converted';
+  linkedin_url?: string;
+  source_platform: 'LinkedIn' | 'Twitter / X' | 'Facebook Groups' | 'TechCabal' | 'Direct Scraping' | 'GitHub' | 'AngelList' | 'ProductHunt';
+  status: 'discovered' | 'contacted' | 'qualified' | 'converted';
+  lead_score?: number; // 0 - 100
+  estimated_value?: number; // USD
+  intent_signal?: string;
+  skills_or_focus?: string[];
   ai_message: string;
   converted: boolean;
   created_at: string;

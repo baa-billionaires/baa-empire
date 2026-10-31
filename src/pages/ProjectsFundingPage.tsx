@@ -29,8 +29,10 @@ import {
   Eye
 } from 'lucide-react';
 import { MicroStartupSwarm } from '../types';
+import { useNavigation } from '../context/NavigationContext';
 
 export const ProjectsFundingPage: React.FC = () => {
+  const { navigateTo } = useNavigation();
   const {
     projectProposals,
     backProjectWithBaaCoin,
@@ -325,7 +327,14 @@ export const ProjectsFundingPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <button
+              onClick={() => navigateTo('deal-room')}
+              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-[#FFD700] via-amber-400 to-[#00D4FF] text-black font-heading font-black text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-lg shadow-[#FFD700]/20 flex items-center gap-2"
+            >
+              <Building2 className="w-4 h-4" />
+              <span>BAA Global Deal Room &amp; AI Funding Exchange™</span>
+            </button>
             <button
               onClick={() => setIsSubmitModalOpen(true)}
               className="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-black font-heading font-black text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-lg shadow-emerald-500/20 flex items-center gap-2"
@@ -333,6 +342,34 @@ export const ProjectsFundingPage: React.FC = () => {
               <Plus className="w-4 h-4" />
               <span>Submit Project Proposal</span>
             </button>
+          </div>
+        </div>
+
+        {/* Global Deal Room & Funding Exchange Announcement Banner */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-zinc-950 via-zinc-900 to-black border border-[#FFD700]/30 p-6 md:p-8 shadow-2xl">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#FFD700]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFD700]/10 border border-[#FFD700]/30 text-[#FFD700] text-xs font-mono font-bold">
+                <Landmark className="w-3.5 h-3.5" />
+                <span>NEW SOVEREIGN MODULE • BAA GLOBAL DEAL ROOM &amp; AI FUNDING EXCHANGE™</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-heading font-black text-white">
+                Discover Opportunities. Build Relationships. <span className="text-[#FFD700]">Secure Real Deals.</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                Connect your AI venture to 6 unified opportunity engines: Global AI &amp; Software Contracts, Grants &amp; Innovation Programmes, Equipment &amp; Project Loans, Angel &amp; VC Equity, Cloud &amp; Compute Credits, and Corporate Partnerships. Backed by a 12-agent Autonomous Discovery Swarm.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <button
+                onClick={() => navigateTo('deal-room')}
+                className="px-6 py-3.5 rounded-2xl bg-[#FFD700] hover:bg-amber-400 text-black font-heading font-black text-xs uppercase tracking-wider transition shadow-lg shadow-[#FFD700]/25 flex items-center justify-center gap-2 group"
+              >
+                <span>Enter Deal Room</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
           </div>
         </div>
 

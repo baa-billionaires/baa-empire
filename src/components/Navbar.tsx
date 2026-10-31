@@ -33,7 +33,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Grid,
-  LayoutDashboard
+  LayoutDashboard,
+  Building2,
+  Scale
 } from 'lucide-react';
 import { useAmbience } from '../context/AmbienceContext';
 import { ViewModeSwitcherBar } from './viewmodes/ViewModeSwitcherBar';
@@ -64,6 +66,9 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'growth-mafia', label: 'Growth OS & MAFIA™', icon: Zap, badge: '13-AGENTS' },
     { id: 'general-marketplace', label: '🛒 General Market', icon: ShoppingCart, badge: 'CARS/TECH' },
     { id: 'referrals', label: '🎁 Referral Hub', icon: Gift, badge: 'EARN BAA' },
+    { id: 'recruiter', label: '🎯 AI Recruiter', icon: Radar, badge: 'RADAR' },
+    { id: 'deal-room', label: '🏛️ Deal Room & Capital', icon: Building2, badge: 'EXCHANGE' },
+    { id: 'governance', label: '⚖️ Governance Lab', icon: Scale, badge: 'PVAIDC' },
     { id: 'projects', label: '🚀 Projects & Grants', icon: Flame, badge: 'FUNDING' },
     { id: 'ai-workforce', label: '🤖 AI Workforce', icon: Bot, badge: '24/7 AGENTS' },
     { id: 'omni-ad-swarm', label: '📡 Omni-Ad Swarm', icon: Radio, badge: 'GROWTH' },

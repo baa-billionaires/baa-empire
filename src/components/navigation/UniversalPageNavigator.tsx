@@ -14,7 +14,8 @@ import {
   Compass,
   Building2,
   Scale,
-  Radar
+  Radar,
+  Globe
 } from 'lucide-react';
 import { useNavigation } from '../../context/NavigationContext';
 import { useEcosystem } from '../../context/EcosystemContext';
@@ -151,6 +152,19 @@ export const UniversalPageNavigator: React.FC = () => {
           >
             <Scale className="w-3.5 h-3.5 text-purple-400" />
             <span className="text-[11px]">Governance</span>
+          </button>
+
+          {/* Quick Hub Jump: Global Policy Observatory */}
+          <button
+            onClick={() => navigateTo('observatory')}
+            className={`hidden md:flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition border ${
+              currentPage === 'observatory'
+                ? 'bg-blue-600 text-white border-blue-400 shadow-sm'
+                : 'bg-zinc-900/80 hover:bg-zinc-800 text-blue-300 hover:text-white border-blue-500/30 hover:border-blue-500'
+            }`}
+          >
+            <Globe className="w-3.5 h-3.5 text-blue-400" />
+            <span className="text-[11px]">Observatory</span>
           </button>
 
           {/* Quick Hub Jump: AI Recruiter Radar */}

@@ -98,7 +98,7 @@ export const COURSE_TITLES = [
   "AI Dating App Tinder Clone",
   "AI Church Member Tracker",
   "AI Find Oil Village",
-  "AI Election Rigging Detector",
+  "Autonomous AI Grant & Global Tender Hunter",
   "AI Waste to Wealth",
   "Autonomous Data Center Self-Healing"
 ];

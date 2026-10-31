@@ -312,7 +312,37 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
   });
 
   // Entities
-  const [courses, setCourses] = useState<Course[]>(() => loadFromStorage('courses', INITIAL_COURSES));
+  const [courses, setCourses] = useState<Course[]>(() => {
+    const loaded = loadFromStorage<Course[]>('courses', INITIAL_COURSES);
+    let seenPoliticalCampaign = false;
+    const seenTitles = new Set<string>();
+
+    return loaded.map((c) => {
+      let title = c.title;
+      if (title.toLowerCase().includes('political campaign machine')) {
+        if (!seenPoliticalCampaign) {
+          seenPoliticalCampaign = true; // Maintain one
+        } else {
+          // Change the other repeated one to a brand-new course not already there
+          title = 'Autonomous AI Grant & Global Tender Hunter';
+        }
+      } else if (title.toLowerCase().includes('election rigging detector')) {
+        title = 'Autonomous AI Grant & Global Tender Hunter';
+      }
+
+      if (seenTitles.has(title)) {
+        title = 'Autonomous AI Micro-SaaS Studio (Zero-Code in 24h)';
+      }
+      seenTitles.add(title);
+
+      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      return {
+        ...c,
+        title,
+        slug
+      };
+    });
+  });
   const [ebooks, setEbooks] = useState<Ebook[]>(() => loadFromStorage('ebooks', INITIAL_EBOOKS));
   const [aiTools, setAiTools] = useState<AITool[]>(() => loadFromStorage('tools', INITIAL_AI_TOOLS));
   const [aiTutors, setAiTutors] = useState<AITutor[]>(() => loadFromStorage('tutors', INITIAL_AI_TUTORS));

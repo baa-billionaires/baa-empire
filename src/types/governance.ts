@@ -13,13 +13,20 @@ export type GovernanceJurisdiction =
   | 'Global / Multilateral'
   | 'United Kingdom'
   | 'Asia-Pacific'
-  | 'Nigeria & ECOWAS';
+  | 'Nigeria & ECOWAS'
+  | 'Nigeria'
+  | 'Singapore'
+  | 'United Arab Emirates';
 
 export interface PolicyRecord {
   id: string;
   title: string;
   issuingBody: string;
   jurisdiction: GovernanceJurisdiction;
+  country?: string;
+  countryCode?: string;
+  flag?: string;
+  category?: 'AI' | 'Blockchain' | 'Web3' | 'Autonomous Agents' | 'Cross-Disciplinary';
   legalStatus: PolicyLegalStatus;
   publicationDate: string;
   effectiveDate?: string;
@@ -31,6 +38,7 @@ export interface PolicyRecord {
   relatedStandards: string[];
   timelineMilestones: Array<{ date: string; description: string; isPast: boolean }>;
   complianceReadinessNotes: string;
+  penaltyRisk?: string;
   isStale?: boolean;
 }
 

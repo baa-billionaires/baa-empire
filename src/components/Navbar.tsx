@@ -35,7 +35,8 @@ import {
   Grid,
   LayoutDashboard,
   Building2,
-  Scale
+  Scale,
+  Globe
 } from 'lucide-react';
 import { useAmbience } from '../context/AmbienceContext';
 import { ViewModeSwitcherBar } from './viewmodes/ViewModeSwitcherBar';
@@ -68,6 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'referrals', label: '🎁 Referral Hub', icon: Gift, badge: 'EARN BAA' },
     { id: 'recruiter', label: '🎯 AI Recruiter', icon: Radar, badge: 'RADAR' },
     { id: 'deal-room', label: '🏛️ Deal Room & Capital', icon: Building2, badge: 'EXCHANGE' },
+    { id: 'observatory', label: '🌐 Policy Observatory', icon: Globe, badge: 'LEGAL AI' },
     { id: 'governance', label: '⚖️ Governance Lab', icon: Scale, badge: 'PVAIDC' },
     { id: 'projects', label: '🚀 Projects & Grants', icon: Flame, badge: 'FUNDING' },
     { id: 'ai-workforce', label: '🤖 AI Workforce', icon: Bot, badge: '24/7 AGENTS' },

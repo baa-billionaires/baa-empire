@@ -277,15 +277,42 @@ export const GlobalGovernanceInstitutePage: React.FC<GlobalGovernanceInstitutePa
         )}
 
         {activeTab === 'observatory' && (
-          <PolicyObservatory
-            policies={policies}
-            onSelectPolicyForAudit={(p) => {
-              setActiveTab('compiler');
-            }}
-            onSelectForCourseBridge={(p) => {
-              setActiveTab('marketplace');
-            }}
-          />
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-950/70 via-zinc-900 to-zinc-950 border border-blue-600/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shrink-0">
+                  <Globe className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-heading font-black text-white">
+                    Looking for the Comprehensive Tabular Policy Dashboard?
+                  </h4>
+                  <p className="text-xs text-zinc-300">
+                    Access high-density international regulation tables, country flags, effective date horizons, and export tools.
+                  </p>
+                </div>
+              </div>
+              {onNavigate && (
+                <button
+                  onClick={() => onNavigate('observatory')}
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold font-mono flex items-center gap-2 shrink-0 transition shadow-md cursor-pointer"
+                >
+                  <span>Launch Dedicated Observatory</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            <PolicyObservatory
+              policies={policies}
+              onSelectPolicyForAudit={(p) => {
+                setActiveTab('compiler');
+              }}
+              onSelectForCourseBridge={(p) => {
+                setActiveTab('marketplace');
+              }}
+            />
+          </div>
         )}
 
         {activeTab === 'passport' && (

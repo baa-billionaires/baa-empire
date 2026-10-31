@@ -50,6 +50,7 @@ import { AutonomousCyberEcoDashboard } from './components/AutonomousCyberEcoDash
 import { AutonomousGrowthMafiaPage } from './pages/AutonomousGrowthMafiaPage';
 import { GlobalDealRoomPage } from './pages/GlobalDealRoomPage';
 import { GlobalGovernanceInstitutePage } from './pages/GlobalGovernanceInstitutePage';
+import { GlobalPolicyObservatoryPage } from './pages/GlobalPolicyObservatoryPage';
 import { AIRecruiterPortal } from './components/AIRecruiterPortal';
 import { SpotlightNewsDrawer } from './components/SpotlightNewsDrawer';
 import { AmbienceProvider } from './context/AmbienceContext';
@@ -130,6 +131,11 @@ function AppContent() {
         return;
       }
 
+      if (window.location.pathname === '/observatory' || window.location.pathname === '/policy-observatory' || window.location.pathname === '/policy') {
+        navigateTo('observatory');
+        return;
+      }
+
       if (window.location.pathname === '/recruiter' || window.location.pathname === '/ai-recruiter' || window.location.pathname === '/scout') {
         navigateTo('recruiter');
         return;
@@ -158,6 +164,8 @@ function AppContent() {
           navigateTo('admin');
         } else if (hash === 'deal-room' || hash === 'funding-exchange' || hash === 'deals') {
           navigateTo('deal-room');
+        } else if (hash === 'observatory' || hash === 'policy-observatory' || hash === 'policy') {
+          navigateTo('observatory');
         } else if (hash === 'governance' || hash === 'policy-institute' || hash === 'principles') {
           navigateTo('governance');
         } else if (hash === 'recruiter' || hash === 'ai-recruiter' || hash === 'scout') {
@@ -173,7 +181,7 @@ function AppContent() {
         } else if (hash === 'library') {
           navigateTo('ebooks');
         } else if ([
-          'home', 'deal-room', 'governance', 'recruiter', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
+          'home', 'deal-room', 'observatory', 'governance', 'recruiter', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
@@ -345,6 +353,10 @@ function AppContent() {
 
         {currentPage === 'governance' && (
           <GlobalGovernanceInstitutePage onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'observatory' && (
+          <GlobalPolicyObservatoryPage onNavigate={handleNav} />
         )}
 
         {currentPage === 'recruiter' && (

@@ -104,6 +104,16 @@ export const ALL_PAGES: PageMetadata[] = [
     badge: 'AI DEALS'
   },
   {
+    id: 'observatory',
+    title: 'BAA Global Policy Intelligence Observatory™',
+    shortTitle: 'Policy Observatory',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Policy',
+    description: 'International AI, blockchain, and Web3 legislation tracker, country categorizations, effective dates, and agent constitution compiler.',
+    iconName: 'Globe',
+    badge: 'LEGAL AI'
+  },
+  {
     id: 'governance',
     title: 'BAA Global AI & Web3 Governance Institute (PVAIDC)',
     shortTitle: 'Governance Institute',

@@ -13,8 +13,10 @@ import {
   ShieldCheck,
   Zap,
   Clock,
-  Layers
+  Layers,
+  Camera
 } from 'lucide-react';
+import { CourseBannerEditModal } from '../components/CourseBannerEditModal';
 
 interface CourseDetailPageProps {
   courseId: string;
@@ -27,7 +29,8 @@ export const CourseDetailPage: React.FC<CourseDetailPageProps> = ({
   onBack,
   onStartLearning
 }) => {
-  const { courses, enrollments, enrollInCourse, profile } = useEcosystem();
+  const { courses, enrollments, enrollInCourse, profile, updateCourseBanner } = useEcosystem();
+  const [isEditingBanner, setIsEditingBanner] = React.useState(false);
   const course = courses.find((c) => c.id === courseId) || courses[0];
   const isEnrolled = enrollments.some((e) => e.course_id === course.id);
 
@@ -51,14 +54,28 @@ export const CourseDetailPage: React.FC<CourseDetailPageProps> = ({
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Course Media & Syllabus (8 Cols) */}
         <div className="lg:col-span-8 space-y-8">
-          <div className="relative aspect-video rounded-3xl overflow-hidden bg-zinc-900 border border-zinc-800 shadow-2xl">
+          <div className="relative aspect-video rounded-3xl overflow-hidden bg-zinc-900 border border-zinc-800 shadow-2xl group">
             <img
               src={course.thumbnail_url}
               alt={course.title}
-              className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-6 sm:p-8 flex flex-col justify-end">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00D4FF]/20 text-[#00D4FF] border border-[#00D4FF]/40 text-xs font-mono mb-3 w-fit">
+            {/* Animated Holographic sweep */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-black via-black/40 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
+
+            {/* Change Banner Button */}
+            <button
+              onClick={() => setIsEditingBanner(true)}
+              className="absolute top-4 right-4 px-3 py-1.5 rounded-xl bg-black/80 hover:bg-[#FFD700] text-zinc-300 hover:text-black border border-zinc-700 hover:border-[#FFD700] text-xs font-mono font-bold transition flex items-center gap-1.5 backdrop-blur-md shadow-xl"
+              title="Change course banner photo"
+            >
+              <Camera className="w-3.5 h-3.5" />
+              <span>Change Photo</span>
+            </button>
+
+            <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end pointer-events-none">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00D4FF]/20 text-[#00D4FF] border border-[#00D4FF]/40 text-xs font-mono mb-3 w-fit backdrop-blur-md">
                 <span>{course.category}</span>
                 <span>•</span>
                 <span>{course.level}</span>
@@ -223,6 +240,14 @@ export const CourseDetailPage: React.FC<CourseDetailPageProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Edit Banner Modal */}
+      <CourseBannerEditModal
+        course={course}
+        isOpen={isEditingBanner}
+        onClose={() => setIsEditingBanner(false)}
+        onSaveBanner={updateCourseBanner}
+      />
     </div>
   );
 };

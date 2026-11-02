@@ -11,15 +11,19 @@ import {
   Zap,
   Users,
   CheckCircle,
-  Clock
+  Clock,
+  Camera,
+  Image as ImageIcon
 } from 'lucide-react';
+import { CourseBannerEditModal } from '../components/CourseBannerEditModal';
 
 interface AcademyPageProps {
   onSelectCourse: (courseId: string) => void;
 }
 
 export const AcademyPage: React.FC<AcademyPageProps> = ({ onSelectCourse }) => {
-  const { courses, enrollInCourse, enrollments } = useEcosystem();
+  const { courses, enrollInCourse, enrollments, updateCourseBanner } = useEcosystem();
+  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -163,19 +167,47 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onSelectCourse }) => {
                 key={c.id}
                 className="group relative bg-zinc-950 rounded-2xl border border-zinc-800/80 hover:border-[#FFD700]/50 overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-xl"
               >
-                {/* Thumbnail */}
-                <div className="relative aspect-video w-full overflow-hidden bg-zinc-900">
+                {/* Animated Thumbnail Container */}
+                <div className="relative aspect-video w-full overflow-hidden bg-zinc-900 border-b border-zinc-800/80">
                   <img
                     src={c.thumbnail_url}
                     alt={c.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   />
-                  <div className="absolute top-3 left-3 bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-zinc-700 text-[10px] font-mono text-zinc-300">
+
+                  {/* Animated Holographic Light Sweep Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-amber-400/10 opacity-60 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
+
+                  {/* Level Pill */}
+                  <div className="absolute top-3 left-3 bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-zinc-700 text-[10px] font-mono text-zinc-300 shadow-md">
                     {c.level}
                   </div>
-                  <div className="absolute top-3 right-3 bg-[#FFD700] text-black px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-md">
+
+                  {/* Price Tag */}
+                  <div className="absolute top-3 right-3 bg-gradient-to-r from-[#FFD700] to-amber-400 text-black px-2.5 py-1 rounded-full font-mono font-black text-xs shadow-md">
                     ${c.price} USD
                   </div>
+
+                  {/* Live Animated Learn-to-Mine Indicator */}
+                  <div className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-black/85 backdrop-blur-md border border-[#FFD700]/40 text-[9px] font-mono text-[#FFD700] flex items-center gap-1 shadow-md">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span>MINE-READY</span>
+                  </div>
+
+                  {/* Change Photo / Banner Action Button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingCourse(c);
+                    }}
+                    className="absolute bottom-2.5 right-2.5 px-2 py-1 rounded-lg bg-black/85 hover:bg-[#FFD700] text-zinc-300 hover:text-black border border-zinc-700 hover:border-[#FFD700] text-[10px] font-mono font-bold transition flex items-center gap-1 shadow-lg backdrop-blur-md"
+                    title="Change or upload custom course banner"
+                  >
+                    <Camera className="w-3 h-3" />
+                    <span>Change Photo</span>
+                  </button>
                 </div>
 
                 {/* Body Details */}
@@ -234,6 +266,14 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({ onSelectCourse }) => {
           })}
         </div>
       </div>
+
+      {/* Course Banner Edit Modal */}
+      <CourseBannerEditModal
+        course={editingCourse}
+        isOpen={!!editingCourse}
+        onClose={() => setEditingCourse(null)}
+        onSaveBanner={updateCourseBanner}
+      />
     </div>
   );
 };

@@ -90,6 +90,10 @@ interface EcosystemContextType {
   customLogoUrl: string | null;
   setCustomLogoUrl: (url: string | null) => void;
 
+  // Courses management
+  updateCourseBanner: (courseId: string, newThumbnailUrl: string) => void;
+  updateCourse: (courseId: string, updates: Partial<Course>) => void;
+
   // Actions
   enrollInCourse: (courseId: string) => { success: boolean; networthEarned: number; error?: string };
   recordInteraction: (params: {
@@ -315,6 +319,7 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [courses, setCourses] = useState<Course[]>(() => {
     const loaded = loadFromStorage<Course[]>('courses', INITIAL_COURSES);
     let seenPoliticalCampaign = false;
+    let seenMedicalClinics = false;
     const seenTitles = new Set<string>();
 
     return loaded.map((c) => {
@@ -328,6 +333,16 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
         }
       } else if (title.toLowerCase().includes('election rigging detector')) {
         title = 'Autonomous AI Grant & Global Tender Hunter';
+      }
+
+      if (title.toLowerCase().includes('medical assistant clinics') || title.toLowerCase().includes('doctor rural africa')) {
+        if (!seenMedicalClinics) {
+          seenMedicalClinics = true; // Maintain one
+          title = 'AI Medical Assistant Clinics';
+        } else {
+          // Change the other repeated one to another brand-new course not already there
+          title = 'AI Autonomous SaaS Factory (Zero-Code Micro-SaaS in 24h)';
+        }
       }
 
       if (seenTitles.has(title)) {
@@ -485,6 +500,23 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   const updateProfile = (updates: Partial<Profile>) => {
     setProfile(prev => ({ ...prev, ...updates }));
+  };
+
+  // Course Banner & Metadata Editing
+  const updateCourseBanner = (courseId: string, newThumbnailUrl: string) => {
+    setCourses((prev) => {
+      const updated = prev.map((c) => (c.id === courseId ? { ...c, thumbnail_url: newThumbnailUrl } : c));
+      saveToStorage('courses', updated);
+      return updated;
+    });
+  };
+
+  const updateCourse = (courseId: string, updates: Partial<Course>) => {
+    setCourses((prev) => {
+      const updated = prev.map((c) => (c.id === courseId ? { ...c, ...updates } : c));
+      saveToStorage('courses', updated);
+      return updated;
+    });
   };
 
   // 1. BAACOIN 10X NETWORTH SYSTEM ON ENROLLMENT
@@ -1420,6 +1452,8 @@ export const EcosystemProvider: React.FC<{ children: ReactNode }> = ({ children 
         wallet,
         customLogoUrl,
         setCustomLogoUrl,
+        updateCourseBanner,
+        updateCourse,
         enrollInCourse,
         recordInteraction,
         completeCourse,

@@ -77,7 +77,7 @@ export const COURSE_TITLES = [
   "AI Oil & Gas Pipeline",
   "AI Nollywood Script Generator",
   "AI Teacher Never Tires Sell Schools",
-  "AI Doctor Rural Africa",
+  "AI Autonomous SaaS Factory (Zero-Code Micro-SaaS in 24h)",
   "AI Lawyer Land Cases",
   "AI Pastor Sermon Generator",
   "Voice AI Yoruba Igbo Hausa",

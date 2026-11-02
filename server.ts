@@ -20,6 +20,24 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
+// XML Sitemap endpoint for Search Engines (Googlebot, Bingbot)
+app.get('/sitemap.xml', (_req: Request, res: Response) => {
+  const sitemapPath = isProd
+    ? path.join(__dirname, 'dist', 'sitemap.xml')
+    : path.join(__dirname, 'public', 'sitemap.xml');
+  res.type('application/xml');
+  res.sendFile(sitemapPath);
+});
+
+// robots.txt endpoint
+app.get('/robots.txt', (_req: Request, res: Response) => {
+  const robotsPath = isProd
+    ? path.join(__dirname, 'dist', 'robots.txt')
+    : path.join(__dirname, 'public', 'robots.txt');
+  res.type('text/plain');
+  res.sendFile(robotsPath);
+});
+
 // AI-powered course thumbnail generator endpoint using Gemini API
 app.post('/api/generate-thumbnail', async (req: Request, res: Response) => {
   try {

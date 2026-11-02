@@ -24,9 +24,11 @@ import {
   Download,
   Coins,
   Building2,
-  Scale
+  Scale,
+  BarChart3
 } from 'lucide-react';
 import { AdminCentralEarningsDashboard } from '../components/AdminCentralEarningsDashboard';
+import { AdminCourseAnalytics } from '../components/AdminCourseAnalytics';
 
 export interface AdminPageProps {
   onNavigate?: (page: string) => void;
@@ -37,6 +39,8 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     isAdmin,
     adminLogout,
     courses,
+    enrollments,
+    updateCourseBanner,
     scoutLeads,
     scoutStats,
     runScoutCycle,
@@ -47,7 +51,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     marketplacePrompts
   } = useEcosystem();
 
-  const [activeTab, setActiveTab] = useState<'scout' | 'revenue' | 'courses' | 'branding' | 'sql' | 'engines'>('engines');
+  const [activeTab, setActiveTab] = useState<'scout' | 'revenue' | 'analytics' | 'courses' | 'branding' | 'sql' | 'engines'>('engines');
   const [leadFilter, setLeadFilter] = useState<'all' | 'student' | 'investor' | 'institution'>('all');
   const [logoInputUrl, setLogoInputUrl] = useState('');
   const [copiedSql, setCopiedSql] = useState(false);
@@ -481,6 +485,18 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
             >
               <Coins className="w-3.5 h-3.5" />
               <span>Central Earnings (7 Currencies)</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`px-3.5 py-2 rounded-xl font-bold transition flex items-center gap-1.5 ${
+                activeTab === 'analytics'
+                  ? 'bg-gradient-to-r from-[#FFD700] to-emerald-400 text-black shadow-md font-black'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Course Analytics (Recharts)</span>
             </button>
 
             <button
@@ -1137,6 +1153,15 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
               </div>
             </div>
           </div>
+        )}
+
+        {/* TAB: COURSE ANALYTICS (RECHARTS) */}
+        {activeTab === 'analytics' && (
+          <AdminCourseAnalytics
+            courses={courses}
+            enrollments={enrollments}
+            onUpdateBanner={updateCourseBanner}
+          />
         )}
 
         {/* TAB 3: COURSES (100) */}

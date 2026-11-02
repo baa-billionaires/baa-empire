@@ -25,7 +25,7 @@ export interface NewsItem {
   sourceName: string;
   sourceRole: string;
   sourceOrg: string;
-  category: 'Tech Giants' | 'Robotics & AI' | 'Government Policy' | 'Student Stars' | 'AI TV Live';
+  category: 'Tech Giants' | 'Robotics & AI' | 'Government Policy' | 'Student Stars' | 'AI TV Live' | 'Featured Courses';
   headline: string;
   fullQuote: string;
   analysis: string;
@@ -39,6 +39,86 @@ export interface NewsItem {
 }
 
 export const BREAKING_NEWS_ITEMS: NewsItem[] = [
+  {
+    id: 'course-saas-factory-2026',
+    sourceName: 'BAA Autonomous Studio',
+    sourceRole: 'Curriculum Director',
+    sourceOrg: 'Billionaires AI Academy',
+    category: 'Featured Courses',
+    headline: 'NEW COURSE: AI Autonomous SaaS Factory (Zero-Code Micro-SaaS in 24h) — Architect and deploy cash-flowing micro-SaaS with zero manual code.',
+    fullQuote: '“You no longer need 6 months and venture capital to build scalable software. With autonomous prompt swarms and self-healing cloud microservices, students can deploy functional, monetized SaaS platforms in under 24 hours and mine BaaCoin continuously.”',
+    analysis: 'This flagship masterclass breaks down rapid full-stack agent orchestration, auto-provisioning databases, Stripe/Paystack payment hooks, and autonomous marketing engines.',
+    avatarUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80',
+    timestamp: 'Just now',
+    views: 41200,
+    featuredTopic: 'Autonomous Micro-SaaS Studio',
+    relatedActionText: 'Enroll in AI SaaS Factory Course',
+    relatedActionPage: 'academy'
+  },
+  {
+    id: 'course-grant-hunter-2026',
+    sourceName: 'BAA Global Deal Room',
+    sourceRole: 'Senior Proposal Auditor',
+    sourceOrg: 'International Tender Exchange',
+    category: 'Featured Courses',
+    headline: 'NEW COURSE: Autonomous AI Grant & Global Tender Hunter — Capture $100K–$5M in non-dilutive global tech tenders with autonomous proposal synthesizers.',
+    fullQuote: '“Over $120 billion in non-dilutive grant capital is allocated every year across the UN, EU, World Bank, and private foundations. Autonomous grant swarms monitor RFPs, synthesize evidence, and structure winning institutional bids.”',
+    analysis: 'Students learn to deploy multi-agent synthesizers that draft compliance-verified proposals and monitor live global procurement portals.',
+    avatarUrl: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=200&auto=format&fit=crop&q=80',
+    timestamp: '4m ago',
+    views: 39500,
+    featuredTopic: 'Non-Dilutive Tender Automation',
+    relatedActionText: 'Enroll in Grant Hunter Course',
+    relatedActionPage: 'academy'
+  },
+  {
+    id: 'course-medical-clinics-2026',
+    sourceName: 'Dr. Chukwuma Sterling',
+    sourceRole: 'AI Capital & Health Fellow',
+    sourceOrg: 'Sovereign Clinical Labs',
+    category: 'Featured Courses',
+    headline: 'NEW COURSE: AI Medical Assistant Clinics — Deploy compliant clinical triage, EHR synthesis, and diagnostic intake across private medical practices.',
+    fullQuote: '“By pairing specialized local LLMs with doctor oversight, private clinics can reduce intake time by 75% and eliminate clinician burnout while expanding triage access to thousands of underserved patients.”',
+    analysis: 'A comprehensive curriculum on HIPAA/data protection, local offline edge inference for health clinics, and automated patient diagnosis summarization.',
+    avatarUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=200&auto=format&fit=crop&q=80',
+    timestamp: '11m ago',
+    views: 31200,
+    featuredTopic: 'Clinical AI Automation',
+    relatedActionText: 'Enroll in Medical Clinics Course',
+    relatedActionPage: 'academy'
+  },
+  {
+    id: 'course-political-campaign-2026',
+    sourceName: 'BAA Civic Intelligence Lab',
+    sourceRole: 'Electoral Strategist',
+    sourceOrg: 'Global Governance Center',
+    category: 'Featured Courses',
+    headline: 'NEW COURSE: AI Political Campaign Machine — Master real-time voter sentiment telemetry, demographic micro-targeting, and multilingual speech engines.',
+    fullQuote: '“Elections in the digital age demand instantaneous response to voter concerns. Autonomous civic intelligence models synthesize public debate, counter misinformation, and craft localized community engagement.”',
+    analysis: 'Covers ethical sentiment monitoring, predictive demographic voter models, and ground-game mobilization pipelines.',
+    avatarUrl: 'https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=200&auto=format&fit=crop&q=80',
+    timestamp: '16m ago',
+    views: 28400,
+    featuredTopic: 'Civic Sentiment Intelligence',
+    relatedActionText: 'Enroll in Political AI Course',
+    relatedActionPage: 'academy'
+  },
+  {
+    id: 'course-chatgpt-atm-2026',
+    sourceName: 'BAA Wealth Accelerator',
+    sourceRole: 'Prompt Monetization Lead',
+    sourceOrg: 'BaaCoin Treasury',
+    category: 'Featured Courses',
+    headline: 'COURSE SPOTLIGHT: ChatGPT ATM ($100 Daily Copy-Paste Workflows) — Execute verified prompt workflows with instant 10x locked networth.',
+    fullQuote: '“Turn conversational AI into daily cash flow. Over 4,200 students are already utilizing these exact prompt templates to fulfill freelance contracts and digital asset orders on autopilot.”',
+    analysis: 'Hands-on practical walkthrough of highest-demand freelance micro-deliverables with live prompt labs and Learn-to-Mine token rewards.',
+    avatarUrl: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=200&auto=format&fit=crop&q=80',
+    timestamp: '22m ago',
+    views: 54100,
+    featuredTopic: 'Daily Prompt Cash Flow',
+    relatedActionText: 'Enroll in ChatGPT ATM',
+    relatedActionPage: 'academy'
+  },
   {
     id: 'elon-optimus-2026',
     sourceName: 'Elon Musk',
@@ -247,7 +327,7 @@ export const BaaLiveNewsHeader: React.FC<BaaLiveNewsHeaderProps> = ({ onNavigate
     return () => window.removeEventListener('baa_book_autonomously_generated', handleAutoBook);
   }, []);
 
-  const categories = ['All', 'Tech Giants', 'Robotics & AI', 'Government Policy', 'Student Stars', 'AI TV Live'];
+  const categories = ['All', 'Featured Courses', 'Tech Giants', 'Robotics & AI', 'Government Policy', 'Student Stars', 'AI TV Live'];
 
   const filteredNews = activeCategory === 'All'
     ? newsList
@@ -382,8 +462,12 @@ export const BaaLiveNewsHeader: React.FC<BaaLiveNewsHeaderProps> = ({ onNavigate
                 alt={item.sourceName}
                 className="w-11 h-11 rounded-xl object-cover border border-zinc-700 group-hover:border-[#FFD700] transition"
               />
-              <span className="absolute -bottom-1 -right-1 px-1 py-0.2 rounded bg-black/90 text-[8px] font-mono font-bold text-[#00D4FF] border border-zinc-700">
-                LIVE
+              <span className={`absolute -bottom-1 -right-1 px-1 py-0.2 rounded text-[8px] font-mono font-bold border ${
+                item.category === 'Featured Courses'
+                  ? 'bg-black text-[#FFD700] border-[#FFD700]/70 animate-pulse'
+                  : 'bg-black/90 text-[#00D4FF] border-zinc-700'
+              }`}>
+                {item.category === 'Featured Courses' ? 'COURSE' : 'LIVE'}
               </span>
             </div>
 

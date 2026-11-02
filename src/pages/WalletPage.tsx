@@ -28,6 +28,7 @@ import {
   Share2,
   ArrowLeft
 } from 'lucide-react';
+import { BaaStakingDashboard } from '../components/BaaStakingDashboard';
 
 interface WalletPageProps {
   onNavigate?: (page: string) => void;
@@ -35,6 +36,9 @@ interface WalletPageProps {
 
 export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
   const { profile, updateProfile } = useEcosystem();
+
+  // Wallet Navigation Tabs
+  const [walletTab, setWalletTab] = useState<'all' | 'staking' | 'streams' | 'ledger'>('all');
 
   // Active FAQ Accordion state
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
@@ -76,6 +80,24 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
       }, 3000);
     }, 1500);
   };
+
+  // User stakes total for portfolio calculation
+  const totalStakedAmount = React.useMemo(() => {
+    try {
+      const saved = localStorage.getItem('richconnect_user_stakes');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed.reduce((sum: number, item: any) => sum + (Number(item.amountStaked) || 0), 0);
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return 250;
+  }, []);
+
+  const totalPortfolioValue = profile.baacoin_networth + profile.baacoin_balance + totalStakedAmount;
 
   const earningStreams = [
     {
@@ -162,8 +184,8 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
     {
       id: 'staking',
       title: '11. 💎 Staking Rewards',
-      balance: '0.00 BAA',
-      description: 'Stake BAA in other student businesses, earn 15% monthly',
+      balance: `${(totalStakedAmount * 0.15).toFixed(2)} BAA (Accruing)`,
+      description: 'Stake BAA in UADC GPU clusters & node mesh, earn up to 42.8% APY',
       icon: Coins,
       color: '#00FF88'
     }
@@ -306,8 +328,8 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
                 TOTAL PORTFOLIO NETWORTH
               </span>
               <div className="text-3xl sm:text-5xl font-black text-white font-mono flex items-baseline gap-3">
-                <span className="text-[#00FF88]">${(profile.baacoin_networth + profile.baacoin_balance).toFixed(2)} USD</span>
-                <span className="text-base sm:text-xl text-zinc-400 font-normal">/ {(profile.baacoin_networth + profile.baacoin_balance).toFixed(2)} BAA</span>
+                <span className="text-[#00FF88]">${totalPortfolioValue.toFixed(2)} USD</span>
+                <span className="text-base sm:text-xl text-zinc-400 font-normal">/ {totalPortfolioValue.toFixed(2)} BAA</span>
               </div>
               <span className="text-xs font-mono text-emerald-400 font-semibold block">
                 ● 1 BAA = $1.00 USD (₦1,500 Bank Cashout Equivalent)
@@ -363,17 +385,17 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* STAKED IN BUSINESSES */}
+            {/* STAKED IN BUSINESSES / VAULTS */}
             <div className="p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 space-y-1 text-left">
               <div className="flex items-center justify-between text-zinc-400 text-xs">
-                <span>Staked in Businesses:</span>
+                <span>Staked in Yield Vaults:</span>
                 <Coins className="w-4 h-4 text-[#00D4FF]" />
               </div>
               <div className="text-2xl font-black text-white">
-                0.00 BAA
+                {totalStakedAmount.toFixed(2)} BAA
               </div>
               <div className="text-[11px] text-zinc-400">
-                ($0.00) • Earning 15% monthly APY
+                (${totalStakedAmount.toFixed(2)}) • Earning up to 42.8% APY
               </div>
             </div>
           </div>
@@ -389,11 +411,15 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
             </button>
 
             <button
-              onClick={() => onNavigate && onNavigate('uadc-lab')}
-              className="px-5 py-3.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-[#FFD700] text-white font-mono text-xs uppercase tracking-wider hover:bg-zinc-800 transition flex items-center gap-2 cursor-pointer"
+              onClick={() => {
+                setWalletTab('staking');
+                const el = document.getElementById('staking-dashboard-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-5 py-3.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-[#FFD700]/60 hover:border-[#FFD700] text-[#FFD700] hover:text-white font-mono text-xs uppercase tracking-wider hover:bg-zinc-800 transition flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10"
             >
               <Coins className="w-4 h-4 text-[#FFD700]" />
-              <span>Stake BAA in Business (15% Monthly)</span>
+              <span>Lock &amp; Stake BAA (Up to 42.8% APY)</span>
             </button>
 
             <button
@@ -406,7 +432,73 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
           </div>
         </div>
 
+        {/* WALLET SECTIONS TAB NAVIGATION */}
+        <div className="flex flex-wrap items-center gap-2 border-b border-zinc-800/80 pb-4">
+          <button
+            onClick={() => setWalletTab('all')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              walletTab === 'all'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>All Wallet Modules</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setWalletTab('staking');
+              const el = document.getElementById('staking-dashboard-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              walletTab === 'staking'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 hover:border-[#FFD700]/50'
+            }`}
+          >
+            <Coins className="w-3.5 h-3.5 text-amber-400" />
+            <span>💎 Staking &amp; Yield Vaults</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono border border-amber-500/30">
+              HIGH YIELD
+            </span>
+          </button>
+
+          <button
+            onClick={() => setWalletTab('streams')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              walletTab === 'streams'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+            }`}
+          >
+            <Briefcase className="w-3.5 h-3.5" />
+            <span>💼 11 Earnings Streams</span>
+          </button>
+
+          <button
+            onClick={() => setWalletTab('ledger')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              walletTab === 'ledger'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+            }`}
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>📜 Transaction Ledger</span>
+          </button>
+        </div>
+
+        {/* STAKING DASHBOARD COMPONENT */}
+        {(walletTab === 'all' || walletTab === 'staking') && (
+          <div id="staking-dashboard-section" className="scroll-mt-6">
+            <BaaStakingDashboard />
+          </div>
+        )}
+
         {/* ALL 11 EARNINGS STREAMS CAROUSEL / GRID */}
+        {(walletTab === 'all' || walletTab === 'streams') && (
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -462,8 +554,10 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
             })}
           </div>
         </div>
+        )}
 
         {/* TRANSACTION HISTORY TABLE */}
+        {(walletTab === 'all' || walletTab === 'ledger') && (
         <div className="bg-zinc-950 border border-zinc-800/90 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
             <h3 className="text-base font-bold text-white font-heading">
@@ -521,6 +615,8 @@ export const WalletPage: React.FC<WalletPageProps> = ({ onNavigate }) => {
             </table>
           </div>
         </div>
+        )}
+
 
         {/* BLOCKCHAIN EXPLAINER FAQ BOX (Accordion style) */}
         <div className="bg-zinc-950 border border-zinc-800/90 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl">

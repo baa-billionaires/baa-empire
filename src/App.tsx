@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { Certificate } from './components/Certificate';
 import { BaaLiveNewsHeader } from './components/BaaLiveNewsHeader';
+import { BaaMiningLiveTicker } from './components/BaaMiningLiveTicker';
 import { AdminGate } from './components/AdminGate';
 
 // Pages
@@ -260,6 +261,9 @@ function AppContent() {
 
       {/* Universal Sub-Header Navigation Bar: Back, Forward, Dashboard & All Pages Directory */}
       <UniversalPageNavigator />
+
+      {/* Real-Time BaaCoin Mining Telemetry & Live Indicator Scrolling Marquee Ticker */}
+      <BaaMiningLiveTicker onNavigate={handleNav} />
 
       <main className="flex-1">
         {currentPage === 'home' && (

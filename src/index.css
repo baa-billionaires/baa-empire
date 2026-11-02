@@ -63,3 +63,36 @@
 .animate-pulse-glow {
   animation: pulseGlow 4s ease-in-out infinite;
 }
+
+/* Continuous Marquee Ticker */
+@keyframes tickerScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-ticker-continuous {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 42s linear infinite;
+  will-change: transform;
+}
+
+.animate-ticker-continuous:hover {
+  animation-play-state: paused;
+}
+
+.animate-ticker-continuous-fast {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 24s linear infinite;
+  will-change: transform;
+}
+
+.animate-ticker-continuous-fast:hover {
+  animation-play-state: paused;
+}
+

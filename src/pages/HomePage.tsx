@@ -30,6 +30,7 @@ import {
 import { InternalAdRenderer } from '../components/InternalAdRenderer';
 import { AutonomousCyberEcoDashboard } from '../components/AutonomousCyberEcoDashboard';
 import { CourseBannerEditModal } from '../components/CourseBannerEditModal';
+import { BaaFaqAccordion } from '../components/BaaFaqAccordion';
 import { Course } from '../types';
 
 interface HomePageProps {
@@ -696,6 +697,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage, onSelectCour
           </div>
         </div>
       </section>
+
+      {/* 5B. FREQUENTLY ASKED QUESTIONS (FAQ) ACCORDION (SEO & USER RETENTION) */}
+      <BaaFaqAccordion onNavigate={setCurrentPage} />
 
       {/* 6. CALL TO ACTION FOOTER BANNER */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-black via-zinc-950 to-black relative">

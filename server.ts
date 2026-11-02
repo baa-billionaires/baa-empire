@@ -38,6 +38,276 @@ app.get('/robots.txt', (_req: Request, res: Response) => {
   res.sendFile(robotsPath);
 });
 
+// In-memory or stateful log of staking operations for telemetry
+const STAKING_RECORDS: Array<{
+  id: string;
+  poolId: string;
+  poolName: string;
+  amount: number;
+  lockupDays: number;
+  apyPercent: number;
+  userEmail: string;
+  txHash: string;
+  timestamp: string;
+}> = [];
+
+// Staking lock endpoint
+app.post('/api/staking/lock', (req: Request, res: Response) => {
+  const { poolId, poolName, amount, lockupDays, apyPercent, userEmail } = req.body;
+  if (!poolId || !amount || amount <= 0) {
+    return res.status(400).json({ error: 'Valid poolId and positive amount required' });
+  }
+
+  const txHash = `0x${Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('')}`;
+  const record = {
+    id: `stake-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    poolId,
+    poolName: poolName || 'BaaCoin Sovereign Vault',
+    amount: Number(amount),
+    lockupDays: Number(lockupDays || 90),
+    apyPercent: Number(apyPercent || 42.8),
+    userEmail: userEmail || 'student@billionairesai.academy',
+    txHash,
+    timestamp: new Date().toISOString()
+  };
+
+  STAKING_RECORDS.unshift(record);
+  res.status(200).json({
+    success: true,
+    message: `Successfully locked ${amount} BaaCoin for ${lockupDays || 90} days at ${apyPercent || 42.8}% APY`,
+    record,
+    txHash
+  });
+});
+
+// In-memory real-time mining events stream
+export interface MiningTelemetryEvent {
+  id: string;
+  minerName: string;
+  nodeType: 'phone' | 'gpu' | 'laptop' | 'validator';
+  deviceModel: string;
+  country: string;
+  countryCode: string;
+  flag: string;
+  city: string;
+  amount: number;
+  rewardUsd: number;
+  workload: string;
+  hashrate: string;
+  blockNumber: number;
+  txHash: string;
+  timestamp: string;
+  status: 'confirmed';
+}
+
+const INITIAL_MINING_EVENTS: MiningTelemetryEvent[] = [
+  {
+    id: 'mine-001',
+    minerName: 'Student Phone Node #8491',
+    nodeType: 'phone',
+    deviceModel: 'Tecno Camon 20 Pro · Helio G99',
+    country: 'Nigeria',
+    countryCode: 'NG',
+    flag: '🇳🇬',
+    city: 'Lagos',
+    amount: 0.48,
+    rewardUsd: 0.48,
+    workload: 'Overnight Idle Battery Compute',
+    hashrate: '840 kH/s',
+    blockNumber: 8941204,
+    txHash: '0x8a91c491e0a298f219dbca9188e04bba89190124',
+    timestamp: new Date(Date.now() - 12000).toISOString(),
+    status: 'confirmed'
+  },
+  {
+    id: 'mine-002',
+    minerName: 'Nairobi GPU Mesh Shard-7',
+    nodeType: 'gpu',
+    deviceModel: 'NVIDIA RTX 4090 · 24GB VRAM',
+    country: 'Kenya',
+    countryCode: 'KE',
+    flag: '🇰🇪',
+    city: 'Nairobi',
+    amount: 2.15,
+    rewardUsd: 2.15,
+    workload: 'Civic LLM Fine-Tuning Batch',
+    hashrate: '14.2 MH/s',
+    blockNumber: 8941205,
+    txHash: '0x5b32e01a884ef0291ca824190baac71e40019283',
+    timestamp: new Date(Date.now() - 28000).toISOString(),
+    status: 'confirmed'
+  },
+  {
+    id: 'mine-003',
+    minerName: 'ABAU Laptop Worker #109',
+    nodeType: 'laptop',
+    deviceModel: 'MacBook Air M2 · Neural Engine',
+    country: 'Ghana',
+    countryCode: 'GH',
+    flag: '🇬🇭',
+    city: 'Accra',
+    amount: 0.85,
+    rewardUsd: 0.85,
+    workload: 'WhatsApp Closer AI Autonomous Inferences',
+    hashrate: '2.4 MH/s',
+    blockNumber: 8941206,
+    txHash: '0x2e99f018ca0199da2880c108baac9108a1005521',
+    timestamp: new Date(Date.now() - 47000).toISOString(),
+    status: 'confirmed'
+  },
+  {
+    id: 'mine-004',
+    minerName: 'Johannesburg Edge Validator #312',
+    nodeType: 'validator',
+    deviceModel: 'Ubuntu Sovereign Edge Cluster',
+    country: 'South Africa',
+    countryCode: 'ZA',
+    flag: '🇿🇦',
+    city: 'Johannesburg',
+    amount: 1.20,
+    rewardUsd: 1.20,
+    workload: 'Base L2 Epoch Block Verification',
+    hashrate: '5.1 MH/s',
+    blockNumber: 8941207,
+    txHash: '0x77c419fae881023bc800192fa901baac31d90048',
+    timestamp: new Date(Date.now() - 65000).toISOString(),
+    status: 'confirmed'
+  },
+  {
+    id: 'mine-005',
+    minerName: 'Kigali Campus Cluster Alpha',
+    nodeType: 'gpu',
+    deviceModel: 'Dual Tesla A100 Data Pod',
+    country: 'Rwanda',
+    countryCode: 'RW',
+    flag: '🇷🇼',
+    city: 'Kigali',
+    amount: 3.40,
+    rewardUsd: 3.40,
+    workload: 'UADC 4D Spatial Neural Synthesis',
+    hashrate: '28.6 MH/s',
+    blockNumber: 8941208,
+    txHash: '0x19f201089bc2980fa0192cba8901baac80bb1290',
+    timestamp: new Date(Date.now() - 95000).toISOString(),
+    status: 'confirmed'
+  },
+  {
+    id: 'mine-006',
+    minerName: 'Cairo Mobile Node #72',
+    nodeType: 'phone',
+    deviceModel: 'Samsung Galaxy A54 · Exynos 1380',
+    country: 'Egypt',
+    countryCode: 'EG',
+    flag: '🇪🇬',
+    city: 'Cairo',
+    amount: 0.55,
+    rewardUsd: 0.55,
+    workload: 'Overnight Idle Battery Compute',
+    hashrate: '910 kH/s',
+    blockNumber: 8941209,
+    txHash: '0x34e1980afb20199ccba018240091baac29cb7712',
+    timestamp: new Date(Date.now() - 130000).toISOString(),
+    status: 'confirmed'
+  },
+  {
+    id: 'mine-007',
+    minerName: 'Abidjan Student Node #208',
+    nodeType: 'phone',
+    deviceModel: 'Infinix Note 30 · Helio G99',
+    country: 'Ivory Coast',
+    countryCode: 'CI',
+    flag: '🇨🇮',
+    city: 'Abidjan',
+    amount: 0.72,
+    rewardUsd: 0.72,
+    workload: 'French/Swahili Translation Shard',
+    hashrate: '870 kH/s',
+    blockNumber: 8941210,
+    txHash: '0x61a3c0018fa0190288eb00192baac338f099182a',
+    timestamp: new Date(Date.now() - 175000).toISOString(),
+    status: 'confirmed'
+  },
+  {
+    id: 'mine-008',
+    minerName: 'Kampala Phone Mesh #33',
+    nodeType: 'phone',
+    deviceModel: 'Xiaomi Redmi Note 12 · Snapdragon',
+    country: 'Uganda',
+    countryCode: 'UG',
+    flag: '🇺🇬',
+    city: 'Kampala',
+    amount: 0.42,
+    rewardUsd: 0.42,
+    workload: 'Overnight Idle Battery Compute',
+    hashrate: '790 kH/s',
+    blockNumber: 8941211,
+    txHash: '0x99a0b120c9048a01f84901baac01844bca990141',
+    timestamp: new Date(Date.now() - 210000).toISOString(),
+    status: 'confirmed'
+  }
+];
+
+let MINING_EVENTS_STORE: MiningTelemetryEvent[] = [...INITIAL_MINING_EVENTS];
+let GLOBAL_BLOCK_HEIGHT = 8941212;
+
+// Real-time Mining Events Stream Endpoint
+app.get('/api/mining/events', (_req: Request, res: Response) => {
+  const totalMined = MINING_EVENTS_STORE.reduce((acc, ev) => acc + ev.amount, 0);
+  res.status(200).json({
+    success: true,
+    blockHeight: GLOBAL_BLOCK_HEIGHT,
+    activeNodes: 4892,
+    meshHashrate: '842.6 MH/s',
+    total24hMinedBaa: (14280 + totalMined).toFixed(2),
+    eventsCount: MINING_EVENTS_STORE.length,
+    events: MINING_EVENTS_STORE.slice(0, 30)
+  });
+});
+
+// Endpoint to simulate or record a user mining event
+app.post('/api/mining/record', (req: Request, res: Response) => {
+  const { minerName, nodeType, deviceModel, country, flag, city, amount, workload, hashrate } = req.body;
+  GLOBAL_BLOCK_HEIGHT += 1;
+  const newEvent: MiningTelemetryEvent = {
+    id: `mine-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+    minerName: minerName || 'Sovereign Phone Node',
+    nodeType: nodeType || 'phone',
+    deviceModel: deviceModel || 'Mobile Mesh Device',
+    country: country || 'Pan-Africa',
+    countryCode: 'BAA',
+    flag: flag || '⚡',
+    city: city || 'Distributed Mesh',
+    amount: Number(amount) || 0.45,
+    rewardUsd: Number(amount) || 0.45,
+    workload: workload || 'Overnight Idle Battery Compute',
+    hashrate: hashrate || '850 kH/s',
+    blockNumber: GLOBAL_BLOCK_HEIGHT,
+    txHash: `0x${Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('')}`,
+    timestamp: new Date().toISOString(),
+    status: 'confirmed'
+  };
+
+  MINING_EVENTS_STORE.unshift(newEvent);
+  if (MINING_EVENTS_STORE.length > 100) {
+    MINING_EVENTS_STORE = MINING_EVENTS_STORE.slice(0, 100);
+  }
+
+  res.status(200).json({
+    success: true,
+    event: newEvent
+  });
+});
+
+// Staking telemetry endpoint
+app.get('/api/staking/records', (_req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    totalStaked: STAKING_RECORDS.reduce((acc, r) => acc + r.amount, 0),
+    recordsCount: STAKING_RECORDS.length,
+    records: STAKING_RECORDS.slice(0, 50)
+  });
+});
+
 // AI-powered course thumbnail generator endpoint using Gemini API
 app.post('/api/generate-thumbnail', async (req: Request, res: Response) => {
   try {

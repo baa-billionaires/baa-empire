@@ -154,14 +154,74 @@ export const ALL_PAGES: PageMetadata[] = [
     badge: '24/7'
   },
   {
-    id: 'uadc-lab',
-    title: 'UADC Lab & Phone Entanglement',
-    shortTitle: 'UADC Lab',
+    id: 'uaaig',
+    title: 'BAA Universal Autonomous AI Infrastructure Grid (UAAIG) & Compute Passport',
+    shortTitle: 'UAAIG Master Grid',
     category: 'ai_autonomous',
-    categoryLabel: 'Autonomous AI',
-    description: 'Mobile node telemetry, sleeping hours validator, and distributed checkpoint consensus.',
+    categoryLabel: 'Autonomous AI & Hardware Compute',
+    description: 'One Intelligence. Every Approved Compute Resource. Universal Autonomous Computing Planet, Universal Compute Passport, BYODC Connector & 10 Compute Markets.',
+    iconName: 'Globe',
+    badge: '128 PFLOPS'
+  },
+  {
+    id: 'ce-colony',
+    title: 'BAA CE Colony V12 — Autonomous Computer Engineering Data-to-Wealth Ecosystem',
+    shortTitle: 'CE Colony V12',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Hardware Compute',
+    description: 'From Computer Repairer to Autonomous Data Infrastructure Entrepreneur. 12 Wealth Colonies, Orchestrator, Node Installer & 70/30 Paystack Ledger.',
+    iconName: 'Wrench',
+    badge: 'V12 WEALTH'
+  },
+  {
+    id: 'code-vein',
+    title: 'BAA CODE VEIN V13 — Autonomous Source-to-Wealth Colony (UA-AIDC Module 2)',
+    shortTitle: 'CODE VEIN V13',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Software Asset Economy',
+    description: 'Global Software Asset Refinery & Marketplace. 15 Colonies, 18 Autonomous Agents, Code Landlord Wealth OS & 70/30 Paystack Ledger.',
+    iconName: 'Code2',
+    badge: 'V13 WEALTH'
+  },
+  {
+    id: 'aurum-colony',
+    title: 'BAA AURUM COLONY V13 — Autonomous Digital Asset Recovery & Commercialization Network (UA-AIDC Module 3)',
+    shortTitle: 'AURUM COLONY V13',
+    category: 'web3_finance',
+    categoryLabel: 'Autonomous AI & Digital Asset Economy',
+    description: 'The Digital Asset Refinery. 8 Wealth Colonies, 24 Autonomous Agents, Wallet Dust Sweeper, Slither AST Audit, ERC-4907 NFT Rentals & Paystack Direct Bank Payouts.',
+    iconName: 'Coins',
+    badge: 'MODULE 3'
+  },
+  {
+    id: 'genesis',
+    title: 'BAA MIND HIVE V17 GENESIS — Autonomous Venture Creation, Evolution & Colony Fusion Engine (UA-AIDC Module 4)',
+    shortTitle: 'MIND HIVE GENESIS',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Venture Studio',
+    description: 'The Autonomous Venture Studio. 8 Intelligence Modules, 10-Stage Living Venture Genome, Opportunity Gravity Map, Invention Tournaments, Colony Fusion Reactor & Paystack Ledger.',
+    iconName: 'Sparkles',
+    badge: 'MODULE 4'
+  },
+  {
+    id: 'uadc-lab',
+    title: 'BAA Universal Autonomous Data Center LAB — Universal Device Wealth Network (UDWN)',
+    shortTitle: 'UDWN Data Center LAB',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Hardware Compute',
+    description: 'Turn Connected Devices into Verified Computing Infrastructure and Shared Digital Wealth. Multi-device fleet, 13-agent colony & paid workloads.',
     iconName: 'Cpu',
-    badge: 'NODES'
+    badge: 'UDWN LAB'
+  },
+  {
+    id: 'udwn',
+    title: 'Universal Device Wealth Network (UDWN Command Center)',
+    shortTitle: 'UDWN Command Center',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Hardware Compute',
+    description: 'Register and benchmark smartphones, laptops, workstations, smart TVs and edge clusters for verified commercial revenue.',
+    iconName: 'Globe',
+    badge: 'NEW FLEET'
   },
   {
     id: 'datacenter',
@@ -455,19 +515,22 @@ export const NavigationProvider: React.FC<{
 
   // Navigate to target page and append to history
   const navigateTo = useCallback((page: string) => {
-    if (page === currentPage) return;
+    let targetPage = page;
+    if (page === 'aurum') targetPage = 'aurum-colony';
+    if (page === 'mind-hive' || page === 'genesis-engine' || page === 'colony-v17') targetPage = 'genesis';
+    if (targetPage === currentPage) return;
 
-    setCurrentPage(page);
+    setCurrentPage(targetPage);
     setHistory(prev => {
       const truncated = prev.slice(0, historyIndex + 1);
-      return [...truncated, page];
+      return [...truncated, targetPage];
     });
     setHistoryIndex(prev => prev + 1);
 
     if (onPageChange) {
-      onPageChange(page);
+      onPageChange(targetPage);
     } else {
-      window.location.hash = page;
+      window.location.hash = targetPage;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [currentPage, historyIndex, onPageChange]);

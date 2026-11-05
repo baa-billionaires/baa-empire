@@ -39,15 +39,26 @@ import {
   Compass,
   ArrowRight,
   Check,
-  Server
+  Server,
+  Wrench,
+  Code2
 } from 'lucide-react';
 import { UADCLeaderboard } from '../components/UADCLeaderboard';
 import { FounderEcosystemShowcase } from '../components/FounderEcosystemShowcase';
 import { PhoneEntangleHowItWorks } from '../components/PhoneEntangleHowItWorks';
 import { LiveNodeHealthDashboard } from '../components/LiveNodeHealthDashboard';
+import { UdwnDashboard } from '../components/udwn/UdwnDashboard';
+import { UaaigCommandGrid } from '../components/uaaig/UaaigCommandGrid';
+import { CeColonyPage } from './CeColonyPage';
 
-export const UADCLab: React.FC = () => {
+interface UADCLabProps {
+  onNavigate?: (page: string) => void;
+  initialTab?: 'ce-colony' | 'uaaig' | 'udwn' | 'all' | 'engines' | 'hardware' | 'leaderboard';
+}
+
+export const UADCLab: React.FC<UADCLabProps> = ({ onNavigate, initialTab = 'udwn' }) => {
   const { profile, updateProfile } = useEcosystem();
+  const [labTab, setLabTab] = useState<'ce-colony' | 'uaaig' | 'udwn' | 'all' | 'engines' | 'hardware' | 'leaderboard'>(initialTab);
 
   // Top Live Counters
   const [computeMined, setComputeMined] = useState(12450.84);
@@ -332,12 +343,154 @@ export const UADCLab: React.FC = () => {
           </div>
         </div>
 
+        {/* TOP LEVEL LAB NAVIGATION TABS */}
+        <div className="flex flex-wrap items-center gap-2 border-b border-zinc-800 pb-3">
+          <button
+            onClick={() => setLabTab('ce-colony')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              labTab === 'ce-colony'
+                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-black shadow-lg shadow-orange-500/25'
+                : 'bg-zinc-900 text-orange-400 hover:text-white border border-orange-500/40 hover:border-orange-400'
+            }`}
+          >
+            <Wrench className="w-3.5 h-3.5 text-current" />
+            <span>🛠️ CE Colony V12 (Computer Engineering)</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/30 font-mono font-black">70/30</span>
+          </button>
+
+          <button
+            onClick={() => onNavigate ? onNavigate('code-vein') : (window.location.hash = 'code-vein')}
+            className="px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer bg-zinc-900 text-purple-400 hover:text-white border border-purple-500/40 hover:border-purple-400"
+          >
+            <Code2 className="w-3.5 h-3.5 text-current" />
+            <span>⚡ Code Vein V13 (Software Asset Economy)</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/30 font-mono font-black text-[#00FF88]">70/30</span>
+          </button>
+
+          <button
+            onClick={() => onNavigate ? onNavigate('aurum-colony') : (window.location.hash = 'aurum-colony')}
+            className="px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer bg-zinc-900 text-amber-400 hover:text-white border border-amber-500/40 hover:border-amber-400"
+          >
+            <Coins className="w-3.5 h-3.5 text-current" />
+            <span>🪙 Aurum Colony V13 (Digital Asset Refinery)</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/30 font-mono font-black text-amber-300">MODULE 3</span>
+          </button>
+
+          <button
+            onClick={() => onNavigate ? onNavigate('genesis') : (window.location.hash = 'genesis')}
+            className="px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer bg-zinc-900 text-cyan-400 hover:text-white border border-cyan-500/40 hover:border-cyan-400"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-current" />
+            <span>🌌 Mind Hive Genesis V17 (Venture Studio)</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/30 font-mono font-black text-cyan-300">MODULE 4</span>
+          </button>
+
+          <button
+            onClick={() => setLabTab('uaaig')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              labTab === 'uaaig'
+                ? 'bg-[#FFD700] text-black shadow-lg shadow-[#FFD700]/25'
+                : 'bg-zinc-900 text-amber-300 hover:text-white border border-amber-500/40 hover:border-[#FFD700]'
+            }`}
+          >
+            <Globe2 className="w-3.5 h-3.5 text-current" />
+            <span>🌌 UAAIG Master Infrastructure Grid</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/30 font-mono font-black">128 PFLOPS</span>
+          </button>
+
+          <button
+            onClick={() => setLabTab('udwn')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              labTab === 'udwn'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 hover:border-[#00FF88]/40'
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5 text-current" />
+            <span>🌐 Universal Device Wealth Network (UDWN)</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/30 font-mono">NEW</span>
+          </button>
+
+          <button
+            onClick={() => setLabTab('all')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              labTab === 'all'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>All Lab Infrastructure</span>
+          </button>
+
+          <button
+            onClick={() => setLabTab('engines')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              labTab === 'engines'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>⚡ 15 Monetization Engines (M1–M4)</span>
+          </button>
+
+          <button
+            onClick={() => setLabTab('hardware')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              labTab === 'hardware'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+            }`}
+          >
+            <BatteryCharging className="w-3.5 h-3.5" />
+            <span>🔋 Phone Entangle &amp; Health Gauges</span>
+          </button>
+
+          <button
+            onClick={() => setLabTab('leaderboard')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
+              labTab === 'leaderboard'
+                ? 'bg-[#00FF88] text-black shadow-lg shadow-[#00FF88]/20'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+            }`}
+          >
+            <Award className="w-3.5 h-3.5" />
+            <span>🏆 Leaderboard &amp; Founder Showcase</span>
+          </button>
+        </div>
+
+        {/* CE COLONY V12: COMPUTER ENGINEERING WEALTH OS */}
+        {labTab === 'ce-colony' && (
+          <section className="space-y-4">
+            <CeColonyPage onNavigate={onNavigate} />
+          </section>
+        )}
+
+        {/* UAAIG MASTER COMMAND GRID */}
+        {labTab === 'uaaig' && (
+          <section className="space-y-4">
+            <UaaigCommandGrid onNavigate={onNavigate} />
+          </section>
+        )}
+
+        {/* UDWN DASHBOARD COMPONENT */}
+        {(labTab === 'udwn' || labTab === 'all') && (
+          <section className="space-y-4">
+            <UdwnDashboard onNavigate={onNavigate} />
+          </section>
+        )}
+
         {/* LIVE NODE HEALTH DASHBOARD: D3.JS RADIAL BAR CHART & TELEMETRY */}
-        <LiveNodeHealthDashboard />
+        {(labTab === 'all' || labTab === 'hardware') && (
+          <LiveNodeHealthDashboard />
+        )}
 
         {/* =========================================================================
             MODULE 1: AUTONOMOUS (Workers, Business Cloning, Self-Healing)
            ========================================================================= */}
+        {(labTab === 'all' || labTab === 'engines') && (
+          <>
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -1096,16 +1249,22 @@ export const UADCLab: React.FC = () => {
             </div>
           </div>
         </section>
+        </>
+        )}
 
         {/* LEADERBOARD COMPONENT: TOP BILLIONAIRES UADC EARNINGS */}
-        <section className="space-y-4">
-          <UADCLeaderboard />
-        </section>
+        {(labTab === 'all' || labTab === 'leaderboard') && (
+          <>
+            <section className="space-y-4">
+              <UADCLeaderboard />
+            </section>
 
-        {/* FOUNDER & VISIONARY ARCHITECT: EMMANUEL BASSEY JOE & 11 PLATFORMS */}
-        <section className="space-y-4">
-          <FounderEcosystemShowcase />
-        </section>
+            {/* FOUNDER & VISIONARY ARCHITECT: EMMANUEL BASSEY JOE & 11 PLATFORMS */}
+            <section className="space-y-4">
+              <FounderEcosystemShowcase />
+            </section>
+          </>
+        )}
 
         {/* BOTTOM LEGAL ENTITY & AUDIT PROOF BANNER */}
         <div className="p-5 rounded-3xl bg-zinc-950/80 border border-zinc-800 text-xs text-zinc-400 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-center sm:text-left">

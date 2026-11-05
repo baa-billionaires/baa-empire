@@ -36,7 +36,9 @@ import {
   LayoutDashboard,
   Building2,
   Scale,
-  Globe
+  Globe,
+  Wrench,
+  Code2
 } from 'lucide-react';
 import { useAmbience } from '../context/AmbienceContext';
 import { ViewModeSwitcherBar } from './viewmodes/ViewModeSwitcherBar';
@@ -76,6 +78,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'omni-ad-swarm', label: '📡 Omni-Ad Swarm', icon: Radio, badge: 'GROWTH' },
     { id: 'exchange', label: '💱 Exchange & Pools', icon: TrendingUp, badge: 'DEFI' },
     { id: 'uadc-lab', label: 'UADC Lab 🧠', icon: Brain, badge: 'NODES' },
+    { id: 'ce-colony', label: 'CE Colony V12 🛠️', icon: Wrench, badge: 'V12' },
+    { id: 'code-vein', label: 'Code Vein V13 ⚡', icon: Code2, badge: 'V13' },
+    { id: 'aurum-colony', label: 'Aurum Colony V13 🪙', icon: Coins, badge: 'V13' },
+    { id: 'genesis', label: 'Mind Hive Genesis 🌌', icon: Sparkles, badge: 'V17' },
     { id: 'wallet', label: 'Wallet 🪙', icon: Coins, badge: 'BASE' },
     { id: 'academy', label: 'Academy', icon: BookOpen },
     { id: 'ebooks', label: 'BAA Library', icon: BookOpen, badge: '4D EMPIRE' },

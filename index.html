@@ -3,6 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Ignore Vite HMR WebSocket connection errors in iFrame preview environment
+      (function() {
+        function shouldIgnore(err, filename) {
+          var str = '';
+          if (typeof err === 'string') str = err;
+          else if (err && typeof err === 'object') str = (err.message || '') + ' ' + (err.stack || '') + ' ' + (err.name || '');
+          if (filename) str += ' ' + filename;
+          return str.indexOf('WebSocket') !== -1 ||
+                 str.indexOf('@vite/client') !== -1 ||
+                 str.indexOf('createWebSocketModuleRunnerTransport') !== -1;
+        }
+        window.addEventListener('error', function(e) {
+          if (shouldIgnore(e.error || e.message, e.filename)) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            return true;
+          }
+        }, true);
+        window.addEventListener('unhandledrejection', function(e) {
+          if (shouldIgnore(e.reason)) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
     <title>Billionaires AI Academy &amp; Africa Blockchain University</title>
     <!-- Google Search Console Ownership Verification -->
     <meta name="google-site-verification" content="A-CrG2416Yf_a_gHt1mbADH_eWATZzPqrR339jqK900" />

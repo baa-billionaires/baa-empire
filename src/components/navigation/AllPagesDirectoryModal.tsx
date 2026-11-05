@@ -42,7 +42,8 @@ import {
   Radar,
   ArrowRight,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Code2
 } from 'lucide-react';
 import { useNavigation, PageMetadata } from '../../context/NavigationContext';
 import { useEcosystem } from '../../context/EcosystemContext';
@@ -86,7 +87,8 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   PlaySquare,
   Sparkles,
   Info,
-  Handshake
+  Handshake,
+  Code2
 };
 
 export const AllPagesDirectoryModal: React.FC = () => {

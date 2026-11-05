@@ -37,6 +37,10 @@ import { AdminTranslationsPage } from './pages/AdminTranslationsPage';
 import { CourseStudioPage } from './pages/CourseStudioPage';
 import { BulkGenerateVideosPage } from './pages/BulkGenerateVideosPage';
 import { UADCLab } from './pages/UADCLab';
+import { CeColonyPage } from './pages/CeColonyPage';
+import { CodeVeinPage } from './pages/CodeVeinPage';
+import { AurumColonyPage } from './pages/AurumColonyPage';
+import { GenesisCommandPage } from './pages/GenesisCommandPage';
 import { AboutPage } from './pages/AboutPage';
 import { PartnersPage } from './pages/PartnersPage';
 import { InvestorOnePagerPage } from './pages/InvestorOnePagerPage';
@@ -147,6 +151,31 @@ function AppContent() {
         return;
       }
 
+      if (window.location.pathname === '/uaaig' || window.location.pathname === '/compute-passport' || window.location.pathname === '/passport') {
+        navigateTo('uaaig');
+        return;
+      }
+
+      if (window.location.pathname === '/ce-colony' || window.location.pathname === '/colony-v12' || window.location.pathname === '/computer-engineering') {
+        navigateTo('ce-colony');
+        return;
+      }
+
+      if (window.location.pathname === '/code-vein' || window.location.pathname === '/vein' || window.location.pathname === '/colony-v13' || window.location.pathname === '/software-economy') {
+        navigateTo('code-vein');
+        return;
+      }
+
+      if (window.location.pathname === '/aurum' || window.location.pathname === '/aurum-colony' || window.location.pathname === '/colony-v13-aurum' || window.location.pathname === '/digital-assets') {
+        navigateTo('aurum-colony');
+        return;
+      }
+
+      if (window.location.pathname === '/genesis' || window.location.pathname === '/mind-hive' || window.location.pathname === '/genesis-engine' || window.location.pathname === '/colony-v17') {
+        navigateTo('genesis');
+        return;
+      }
+
       const hash = window.location.hash.replace('#', '');
       if (hash) {
         if (hash.startsWith('learn/')) {
@@ -182,13 +211,13 @@ function AppContent() {
         } else if (hash === 'library') {
           navigateTo('ebooks');
         } else if ([
-          'home', 'deal-room', 'observatory', 'governance', 'recruiter', 'wallet', 'uadc-lab', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
+          'home', 'deal-room', 'observatory', 'governance', 'recruiter', 'wallet', 'uadc-lab', 'ce-colony', 'code-vein', 'aurum-colony', 'aurum', 'genesis', 'mind-hive', 'uaaig', 'investor-one-pager', 'about', 'partners', 'academy', 'university', 'datacenter', 'tools', 'ebooks', 'library',
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
           'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace', 'growth-mafia', 'mafia'
         ].includes(hash)) {
-          navigateTo(hash === 'library' ? 'ebooks' : (hash === 'mafia' ? 'growth-mafia' : hash));
+          navigateTo(hash === 'library' ? 'ebooks' : (hash === 'mafia' ? 'growth-mafia' : (hash === 'aurum' ? 'aurum-colony' : (hash === 'mind-hive' ? 'genesis' : hash))));
         }
       }
 
@@ -305,8 +334,28 @@ function AppContent() {
           <WalletPage onNavigate={handleNav} />
         )}
 
-        {currentPage === 'uadc-lab' && (
-          <UADCLab />
+        {currentPage === 'uaaig' && (
+          <UADCLab onNavigate={handleNav} initialTab="uaaig" />
+        )}
+
+        {(currentPage === 'uadc-lab' || currentPage === 'udwn') && (
+          <UADCLab onNavigate={handleNav} initialTab="udwn" />
+        )}
+
+        {currentPage === 'ce-colony' && (
+          <CeColonyPage onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'code-vein' && (
+          <CodeVeinPage onNavigate={handleNav} />
+        )}
+
+        {(currentPage === 'aurum-colony' || currentPage === 'aurum') && (
+          <AurumColonyPage />
+        )}
+
+        {(currentPage === 'genesis' || currentPage === 'mind-hive') && (
+          <GenesisCommandPage />
         )}
 
         {currentPage === 'investor-one-pager' && (

@@ -7,6 +7,8 @@ import { registerCeColonyRoutes } from './src/server/ceColonyRoutes';
 import { registerCodeVeinRoutes } from './src/server/codeVeinRoutes';
 import { registerAurumRoutes } from './src/server/aurumRoutes';
 import { registerGenesisRoutes } from './src/server/genesisRoutes';
+import { registerMindHiveV20Routes } from './src/server/mindHiveV20Routes';
+import { registerSocialHiveRoutes } from './src/server/socialHiveRoutes';
 
 dotenv.config();
 
@@ -987,6 +989,12 @@ registerAurumRoutes(app);
 
 // BAA MIND HIVE V17 GENESIS - Autonomous Venture Creation & Colony Fusion Engine (UA-AIDC Module 4)
 registerGenesisRoutes(app);
+
+// BAA MIND HIVE V20 - Global Content Compounding, AI Knowledge Mining, Training & Wealth Civilization
+registerMindHiveV20Routes(app);
+
+// BAA MIND HIVE V21 - SOCIAL HIVE: Universal Social Media Minting, Mining & Monetization Engine
+registerSocialHiveRoutes(app);
 
 // AI-powered course thumbnail generator endpoint using Gemini API
 app.post('/api/generate-thumbnail', async (req: Request, res: Response) => {

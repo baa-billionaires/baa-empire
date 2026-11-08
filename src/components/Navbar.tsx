@@ -38,7 +38,8 @@ import {
   Scale,
   Globe,
   Wrench,
-  Code2
+  Code2,
+  Share2
 } from 'lucide-react';
 import { useAmbience } from '../context/AmbienceContext';
 import { ViewModeSwitcherBar } from './viewmodes/ViewModeSwitcherBar';
@@ -82,6 +83,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'code-vein', label: 'Code Vein V13 ⚡', icon: Code2, badge: 'V13' },
     { id: 'aurum-colony', label: 'Aurum Colony V13 🪙', icon: Coins, badge: 'V13' },
     { id: 'genesis', label: 'Mind Hive Genesis 🌌', icon: Sparkles, badge: 'V17' },
+    { id: 'mindhive-v20', label: 'Mind Hive V20 🐝', icon: Brain, badge: 'V20' },
+    { id: 'social-hive', label: 'Social Hive V21 🌐', icon: Share2, badge: 'V21' },
     { id: 'wallet', label: 'Wallet 🪙', icon: Coins, badge: 'BASE' },
     { id: 'academy', label: 'Academy', icon: BookOpen },
     { id: 'ebooks', label: 'BAA Library', icon: BookOpen, badge: '4D EMPIRE' },

@@ -90,22 +90,23 @@ export const BaaStakingDashboard: React.FC = () => {
     }
   }, [userStakes]);
 
-  // Real-time yield ticker simulator
+  // Real-time yield ticker simulator updating every 1000ms (1 second) for real-time visual growth
   useEffect(() => {
     const interval = setInterval(() => {
       setUserStakes((prev) =>
         prev.map((pos) => {
           if (pos.status !== 'locked') return pos;
-          // Calculate incremental micro yield based on APY
+          // Calculate incremental micro yield based on APY per second
           const dailyRate = pos.apyPercent / 100 / 365;
-          const microYield = (pos.amountStaked * dailyRate) / 2880; // per 30-sec tick
+          const secondRate = dailyRate / 86400;
+          const microYield = pos.amountStaked * secondRate;
           return {
             ...pos,
-            accruedYield: +(pos.accruedYield + microYield).toFixed(4)
+            accruedYield: +(pos.accruedYield + microYield)
           };
         })
       );
-    }, 5000);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -341,8 +342,8 @@ export const BaaStakingDashboard: React.FC = () => {
 
             <div className="p-4 rounded-2xl bg-zinc-900/90 border border-emerald-500/40 text-right font-mono">
               <span className="text-[10px] text-zinc-500 uppercase block">Harvestable Yield</span>
-              <span className="text-xl sm:text-2xl font-black text-[#00FF88]">
-                +{stakingStats.totalAccruedYield.toFixed(2)} BAA
+              <span className="text-xl sm:text-2xl font-black text-[#00FF88] font-mono tracking-tight">
+                +{stakingStats.totalAccruedYield.toFixed(4)} BAA
               </span>
               <button
                 onClick={handleClaimAll}

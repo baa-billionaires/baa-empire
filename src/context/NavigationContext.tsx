@@ -204,6 +204,26 @@ export const ALL_PAGES: PageMetadata[] = [
     badge: 'MODULE 4'
   },
   {
+    id: 'mindhive-v20',
+    title: 'BAA MIND HIVE V20 — Global Content Compounding, AI Knowledge Mining, Training & Wealth Civilization',
+    shortTitle: 'MIND HIVE V20',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Knowledge Economy',
+    description: 'Autonomous multi-agent knowledge civilization. 5 Connected Economies, Content Genome, Living eBook Studio, Knowledge Mining Reactor & 70/30 Paystack Ledger.',
+    iconName: 'Brain',
+    badge: 'MODULE 5'
+  },
+  {
+    id: 'social-hive',
+    title: 'BAA SOCIAL HIVE V21 — Universal Social Media Minting, Mining & Monetization Engine',
+    shortTitle: 'SOCIAL HIVE V21',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Social Intelligence',
+    description: 'Transform social media posts, videos, reels, channels & creator knowledge into minted digital assets, enterprise KBs, and 70/30 Paystack earnings.',
+    iconName: 'Share2',
+    badge: 'MODULE 6'
+  },
+  {
     id: 'uadc-lab',
     title: 'BAA Universal Autonomous Data Center LAB — Universal Device Wealth Network (UDWN)',
     shortTitle: 'UDWN Data Center LAB',
@@ -518,6 +538,8 @@ export const NavigationProvider: React.FC<{
     let targetPage = page;
     if (page === 'aurum') targetPage = 'aurum-colony';
     if (page === 'mind-hive' || page === 'genesis-engine' || page === 'colony-v17') targetPage = 'genesis';
+    if (page === 'mindhive' || page === 'v20' || page === 'mind-hive-v20' || page === 'knowledge-economy') targetPage = 'mindhive-v20';
+    if (page === 'social-hive' || page === 'socialhive' || page === 'v21' || page === 'social-mining') targetPage = 'social-hive';
     if (targetPage === currentPage) return;
 
     setCurrentPage(targetPage);

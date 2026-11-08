@@ -127,6 +127,14 @@ export const CeColonyPage: React.FC<CeColonyPageProps> = ({
             </button>
 
             <button
+              onClick={() => onNavigate?.('mindhive-v20')}
+              className="px-3 py-1.5 rounded-xl text-xs font-mono bg-zinc-900 hover:bg-zinc-800 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 transition"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>MIND HIVE V20</span>
+            </button>
+
+            <button
               onClick={fetchState}
               className="p-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition"
               title="Refresh State"

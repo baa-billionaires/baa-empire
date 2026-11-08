@@ -41,6 +41,8 @@ import { CeColonyPage } from './pages/CeColonyPage';
 import { CodeVeinPage } from './pages/CodeVeinPage';
 import { AurumColonyPage } from './pages/AurumColonyPage';
 import { GenesisCommandPage } from './pages/GenesisCommandPage';
+import { MindHiveV20Page } from './pages/MindHiveV20Page';
+import { SocialHivePage } from './pages/SocialHivePage';
 import { AboutPage } from './pages/AboutPage';
 import { PartnersPage } from './pages/PartnersPage';
 import { InvestorOnePagerPage } from './pages/InvestorOnePagerPage';
@@ -173,6 +175,16 @@ function AppContent() {
 
       if (window.location.pathname === '/genesis' || window.location.pathname === '/mind-hive' || window.location.pathname === '/genesis-engine' || window.location.pathname === '/colony-v17') {
         navigateTo('genesis');
+        return;
+      }
+
+      if (window.location.pathname === '/mindhive-v20' || window.location.pathname === '/v20' || window.location.pathname === '/knowledge-civilization' || window.location.pathname === '/mindhive') {
+        navigateTo('mindhive-v20');
+        return;
+      }
+
+      if (window.location.pathname === '/social-hive' || window.location.pathname === '/socialhive' || window.location.pathname === '/v21' || window.location.pathname === '/social-mining') {
+        navigateTo('social-hive');
         return;
       }
 
@@ -356,6 +368,14 @@ function AppContent() {
 
         {(currentPage === 'genesis' || currentPage === 'mind-hive') && (
           <GenesisCommandPage />
+        )}
+
+        {(currentPage === 'mindhive-v20' || currentPage === 'v20') && (
+          <MindHiveV20Page onNavigate={handleNav} />
+        )}
+
+        {(currentPage === 'social-hive' || currentPage === 'socialhive' || currentPage === 'v21') && (
+          <SocialHivePage onNavigate={handleNav} />
         )}
 
         {currentPage === 'investor-one-pager' && (

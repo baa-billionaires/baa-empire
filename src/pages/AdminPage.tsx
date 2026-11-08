@@ -25,10 +25,12 @@ import {
   Coins,
   Building2,
   Scale,
-  BarChart3
+  BarChart3,
+  Upload
 } from 'lucide-react';
 import { AdminCentralEarningsDashboard } from '../components/AdminCentralEarningsDashboard';
 import { AdminCourseAnalytics } from '../components/AdminCourseAnalytics';
+import { ContentRegistration } from '../components/admin/ContentRegistration';
 
 export interface AdminPageProps {
   onNavigate?: (page: string) => void;
@@ -51,7 +53,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     marketplacePrompts
   } = useEcosystem();
 
-  const [activeTab, setActiveTab] = useState<'scout' | 'revenue' | 'analytics' | 'courses' | 'branding' | 'sql' | 'engines'>('engines');
+  const [activeTab, setActiveTab] = useState<'scout' | 'revenue' | 'analytics' | 'courses' | 'branding' | 'sql' | 'engines' | 'content-registration'>('engines');
   const [leadFilter, setLeadFilter] = useState<'all' | 'student' | 'investor' | 'institution'>('all');
   const [logoInputUrl, setLogoInputUrl] = useState('');
   const [copiedSql, setCopiedSql] = useState(false);
@@ -533,6 +535,18 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
             >
               <Database className="w-3.5 h-3.5" />
               <span>Supabase SQL</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('content-registration')}
+              className={`px-3.5 py-2 rounded-xl font-bold transition flex items-center gap-1.5 ${
+                activeTab === 'content-registration'
+                  ? 'bg-amber-400 text-black shadow-md font-black'
+                  : 'text-zinc-400 hover:text-amber-400'
+              }`}
+            >
+              <Upload className="w-3.5 h-3.5 text-amber-500" />
+              <span>Content Registration (Mint)</span>
             </button>
           </div>
 
@@ -1285,6 +1299,11 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
               {supabaseSqlContent}
             </pre>
           </div>
+        )}
+
+        {/* Content Registration (knowledge_assets table Mint) */}
+        {activeTab === 'content-registration' && (
+          <ContentRegistration />
         )}
       </div>
     </div>

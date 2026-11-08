@@ -198,6 +198,14 @@ export const CodeVeinPage: React.FC<CodeVeinPageProps> = ({
               <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
               <span>GENESIS ENGINE V17</span>
             </button>
+
+            <button
+              onClick={() => onNavigate && onNavigate('mindhive-v20')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:text-white text-xs font-mono transition"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>MIND HIVE V20</span>
+            </button>
           </div>
         </div>
       </div>

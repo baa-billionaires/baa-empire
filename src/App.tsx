@@ -43,6 +43,7 @@ import { AurumColonyPage } from './pages/AurumColonyPage';
 import { GenesisCommandPage } from './pages/GenesisCommandPage';
 import { MindHiveV20Page } from './pages/MindHiveV20Page';
 import { SocialHivePage } from './pages/SocialHivePage';
+import { MindHiveV22Page } from './pages/MindHiveV22Page';
 import { AboutPage } from './pages/AboutPage';
 import { PartnersPage } from './pages/PartnersPage';
 import { InvestorOnePagerPage } from './pages/InvestorOnePagerPage';
@@ -188,6 +189,26 @@ function AppContent() {
         return;
       }
 
+      if (window.location.pathname === '/mindhive-v22' || window.location.pathname === '/v22' || window.location.pathname === '/knowledge-capital' || window.location.pathname === '/atlas') {
+        navigateTo('mindhive-v22');
+        return;
+      }
+
+      if (window.location.pathname === '/kcx') {
+        navigateTo('kcx');
+        return;
+      }
+
+      if (window.location.pathname === '/gka') {
+        navigateTo('gka');
+        return;
+      }
+
+      if (window.location.pathname === '/havc') {
+        navigateTo('havc');
+        return;
+      }
+
       const hash = window.location.hash.replace('#', '');
       if (hash) {
         if (hash.startsWith('learn/')) {
@@ -227,9 +248,10 @@ function AppContent() {
           'marketplace', 'dashboard', 'free', 'tv', 'tv-live', 'tv-studio',
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
-          'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace', 'growth-mafia', 'mafia'
+          'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace', 'growth-mafia', 'mafia',
+          'mindhive-v20', 'social-hive', 'mindhive-v22', 'v22', 'kcx', 'gka', 'havc'
         ].includes(hash)) {
-          navigateTo(hash === 'library' ? 'ebooks' : (hash === 'mafia' ? 'growth-mafia' : (hash === 'aurum' ? 'aurum-colony' : (hash === 'mind-hive' ? 'genesis' : hash))));
+          navigateTo(hash === 'library' ? 'ebooks' : (hash === 'mafia' ? 'growth-mafia' : (hash === 'aurum' ? 'aurum-colony' : (hash === 'mind-hive' ? 'genesis' : (hash === 'v22' ? 'mindhive-v22' : hash)))));
         }
       }
 
@@ -376,6 +398,22 @@ function AppContent() {
 
         {(currentPage === 'social-hive' || currentPage === 'socialhive' || currentPage === 'v21') && (
           <SocialHivePage onNavigate={handleNav} />
+        )}
+
+        {(currentPage === 'mindhive-v22' || currentPage === 'v22') && (
+          <MindHiveV22Page initialSystem="hub" onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'kcx' && (
+          <MindHiveV22Page initialSystem="kcx" onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'gka' && (
+          <MindHiveV22Page initialSystem="gka" onNavigate={handleNav} />
+        )}
+
+        {currentPage === 'havc' && (
+          <MindHiveV22Page initialSystem="havc" onNavigate={handleNav} />
         )}
 
         {currentPage === 'investor-one-pager' && (

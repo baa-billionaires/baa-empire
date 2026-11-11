@@ -93,7 +93,14 @@ export const MindHiveV20Header: React.FC<MindHiveV20HeaderProps> = ({
                   className="px-2.5 py-1 rounded-lg bg-purple-950/40 hover:bg-purple-900/50 text-purple-300 hover:text-white border border-purple-800/60 transition cursor-pointer flex items-center gap-1 font-bold"
                 >
                   <span>Social Hive V21</span>
-                  <span className="text-[9px] bg-purple-500/20 px-1 py-0.2 rounded text-purple-200">NEW</span>
+                  <span className="text-[9px] bg-purple-500/20 px-1 py-0.2 rounded text-purple-200">V21</span>
+                </button>
+                <button
+                  onClick={() => onNavigateToColony('mindhive-v22')}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 hover:text-white border border-emerald-500/40 transition cursor-pointer flex items-center gap-1 font-bold"
+                >
+                  <span>Mind Hive V22</span>
+                  <span className="text-[9px] bg-emerald-500/20 px-1 py-0.2 rounded text-emerald-200">NEW</span>
                 </button>
               </div>
             )}

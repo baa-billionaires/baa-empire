@@ -224,6 +224,46 @@ export const ALL_PAGES: PageMetadata[] = [
     badge: 'MODULE 6'
   },
   {
+    id: 'mindhive-v22',
+    title: 'BAA MIND HIVE V22 — Global Knowledge Capital, Intelligence Atlas & Human–AI Value Civilization',
+    shortTitle: 'MIND HIVE V22',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Knowledge Capital',
+    description: 'Knowledge is Capital. Intelligence is Infrastructure. Collaboration Creates Value. Featuring KCX Marketplace, GKA 20-Territory Atlas & HAVC Cooperative.',
+    iconName: 'Sparkles',
+    badge: 'MODULE 7'
+  },
+  {
+    id: 'kcx',
+    title: 'KCX — Knowledge Capital Exchange',
+    shortTitle: 'KCX Marketplace',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Knowledge Capital',
+    description: 'Global marketplace for knowledge assets, AI valuation engine, configurable licensing SLAs & buyer exchange.',
+    iconName: 'Coins',
+    badge: 'KCX'
+  },
+  {
+    id: 'gka',
+    title: 'GKA — Global Knowledge Atlas',
+    shortTitle: 'Global Atlas',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Knowledge Capital',
+    description: 'Living intelligence map across 20 knowledge territories, African language corpora & opportunity gravity.',
+    iconName: 'Globe',
+    badge: 'GKA'
+  },
+  {
+    id: 'havc',
+    title: 'HAVC — Human–AI Value Cooperative',
+    shortTitle: 'Value Cooperative',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Knowledge Capital',
+    description: 'Collaborate, track Contribution DNA, and share verified commercial value with 70% Paystack payouts.',
+    iconName: 'Users',
+    badge: 'HAVC'
+  },
+  {
     id: 'uadc-lab',
     title: 'BAA Universal Autonomous Data Center LAB — Universal Device Wealth Network (UDWN)',
     shortTitle: 'UDWN Data Center LAB',
@@ -540,6 +580,10 @@ export const NavigationProvider: React.FC<{
     if (page === 'mind-hive' || page === 'genesis-engine' || page === 'colony-v17') targetPage = 'genesis';
     if (page === 'mindhive' || page === 'v20' || page === 'mind-hive-v20' || page === 'knowledge-economy') targetPage = 'mindhive-v20';
     if (page === 'social-hive' || page === 'socialhive' || page === 'v21' || page === 'social-mining') targetPage = 'social-hive';
+    if (page === 'mindhive-v22' || page === 'v22' || page === 'knowledge-capital' || page === 'atlas') targetPage = 'mindhive-v22';
+    if (page === 'kcx') targetPage = 'kcx';
+    if (page === 'gka') targetPage = 'gka';
+    if (page === 'havc') targetPage = 'havc';
     if (targetPage === currentPage) return;
 
     setCurrentPage(targetPage);

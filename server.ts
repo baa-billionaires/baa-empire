@@ -9,6 +9,7 @@ import { registerAurumRoutes } from './src/server/aurumRoutes';
 import { registerGenesisRoutes } from './src/server/genesisRoutes';
 import { registerMindHiveV20Routes } from './src/server/mindHiveV20Routes';
 import { registerSocialHiveRoutes } from './src/server/socialHiveRoutes';
+import { registerMindHiveV22Routes } from './src/server/mindHiveV22Routes';
 
 dotenv.config();
 
@@ -995,6 +996,9 @@ registerMindHiveV20Routes(app);
 
 // BAA MIND HIVE V21 - SOCIAL HIVE: Universal Social Media Minting, Mining & Monetization Engine
 registerSocialHiveRoutes(app);
+
+// BAA MIND HIVE V22 - Global Knowledge Capital, Intelligence Atlas & Human-AI Value Cooperative
+registerMindHiveV22Routes(app);
 
 // AI-powered course thumbnail generator endpoint using Gemini API
 app.post('/api/generate-thumbnail', async (req: Request, res: Response) => {

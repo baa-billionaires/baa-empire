@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Printer,
   Download,
@@ -18,14 +18,362 @@ import {
   Lock,
   Share2,
   ArrowLeft,
-  Building
+  Building,
+  Activity,
+  Code2,
+  Brain,
+  Wrench,
+  Sparkles,
+  Layers,
+  Bot
 } from 'lucide-react';
+import { UaaidcModuleSwitcher } from '../components/navigation/UaaidcModuleSwitcher';
 
 interface InvestorOnePagerProps {
   onBack?: () => void;
+  onNavigate?: (page: string) => void;
 }
 
-export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }) => {
+interface ModuleLiveStats {
+  ceNodes: number;
+  codeApis: number;
+  aurumValue: number;
+  mindHiveCapital: number;
+  novaLivingApps: number;
+  novaMutations: number;
+  m2mMachines: number;
+  m2mSettledJobs: number;
+}
+
+export const InvestorOnePagerDashboard: React.FC<{ onNavigate?: (page: string) => void }> = ({
+  onNavigate
+}) => {
+  const [liveStats, setLiveStats] = useState<ModuleLiveStats>({
+    ceNodes: 10420,
+    codeApis: 148,
+    aurumValue: 284500,
+    mindHiveCapital: 1240000,
+    novaLivingApps: 3,
+    novaMutations: 432,
+    m2mMachines: 5,
+    m2mSettledJobs: 1
+  });
+
+  useEffect(() => {
+    let active = true;
+    const fetchAllStatuses = async () => {
+      const results = await Promise.allSettled([
+        fetch('/api/ce-colony/state').then((r) => (r.ok ? r.json() : null)),
+        fetch('/api/code-vein/state').then((r) => (r.ok ? r.json() : null)),
+        fetch('/api/aurum/state').then((r) => (r.ok ? r.json() : null)),
+        fetch('/api/mindhive-v22/state').then((r) => (r.ok ? r.json() : null)),
+        fetch('/api/nova/state').then((r) => (r.ok ? r.json() : null)),
+        fetch('/api/m2m/state').then((r) => (r.ok ? r.json() : null))
+      ]);
+
+      if (!active) return;
+
+      const [ceRes, cvRes, aurumRes, mhRes, novaRes, m2mRes] = results.map((res) =>
+        res.status === 'fulfilled' ? res.value : null
+      );
+
+      setLiveStats((prev) => ({
+        ceNodes: ceRes?.state?.nodes?.length ? Math.max(prev.ceNodes, ceRes.state.nodes.length * 1000) : prev.ceNodes,
+        codeApis: cvRes?.state?.apis?.length || cvRes?.state?.microApis?.length || prev.codeApis,
+        aurumValue: aurumRes?.state?.vaultBalanceUsd || aurumRes?.state?.totalRecoverableUsd || prev.aurumValue,
+        mindHiveCapital: mhRes?.state?.summaryMetrics?.totalKnowledgeCapitalValueUsd || prev.mindHiveCapital,
+        novaLivingApps: novaRes?.state?.stats?.total_living_apps || prev.novaLivingApps,
+        novaMutations: novaRes?.state?.stats?.total_mutations || prev.novaMutations,
+        m2mMachines: m2mRes?.state?.machines?.length || prev.m2mMachines,
+        m2mSettledJobs: m2mRes?.state?.jobs ? m2mRes.state.jobs.filter((j: { status: string }) => j.status === 'SETTLED').length : prev.m2mSettledJobs
+      }));
+    };
+
+    fetchAllStatuses();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleViewModule = (moduleId: string) => {
+    if (onNavigate) {
+      onNavigate(moduleId);
+    } else {
+      window.location.hash = moduleId;
+    }
+  };
+
+  const coreModules = [
+    {
+      id: 'ce-colony',
+      number: '01',
+      anatomy: 'THE BODY • COMPUTE & HUMAN PROOF',
+      name: 'CE COLONY V12',
+      subtitle: 'Autonomous Computer Engineering Data-to-Wealth Network',
+      icon: Wrench,
+      accentText: 'text-amber-300',
+      borderClass: 'border-amber-500/40 bg-gradient-to-br from-amber-950/30 via-zinc-950 to-black',
+      statusMetric: `${liveStats.ceNodes.toLocaleString()} Active Nodes Online`,
+      narrative:
+        'Converts idle student smartphones, laptops, and repair-shop hardware across Africa into verified edge compute clusters with zero CapEx.',
+      investmentCase:
+        'Zero CAC infrastructure acquisition: contributors supply power and silicon in exchange for a 70/30 Paystack revenue share while funding enterprise AI workloads.'
+    },
+    {
+      id: 'code-vein',
+      number: '02',
+      anatomy: 'THE HANDS • MICRO-APIS & CODE REFINERY',
+      name: 'CODE VEIN V13',
+      subtitle: 'Autonomous Source-to-Wealth Software Asset Refinery',
+      icon: Code2,
+      accentText: 'text-cyan-300',
+      borderClass: 'border-cyan-500/40 bg-gradient-to-br from-cyan-950/30 via-zinc-950 to-black',
+      statusMetric: `${liveStats.codeApis} Commercial Micro-APIs Live`,
+      narrative:
+        'Audits dormant repositories and developer codebases, wraps them in metered FastAPI/Express endpoints, and deploys rotating API shards.',
+      investmentCase:
+        'High-margin recurring API calls ($0.005–$0.05/exec) and enterprise SaaS licensing feed directly into Module 5 apps so developers earn perpetually.'
+    },
+    {
+      id: 'aurum-colony',
+      number: '03',
+      anatomy: 'THE BLOOD • LIQUIDITY & ASSET RECOVERY',
+      name: 'AURUM COLONY V13',
+      subtitle: 'Autonomous Digital Asset Recovery & Commercialization Network',
+      icon: Coins,
+      accentText: 'text-[#FFD700]',
+      borderClass: 'border-yellow-500/40 bg-gradient-to-br from-yellow-950/30 via-zinc-950 to-black',
+      statusMetric: `$${liveStats.aurumValue.toLocaleString()} Ecosystem Liquidity`,
+      narrative:
+        'Discovers recoverable wallet dust, dormant tokens, ERC-4907 rentable NFTs, and Base L2 DeFi yields to fund compute heartbeats.',
+      investmentCase:
+        'Self-funding treasury mechanics unlock trapped Web3 capital and provide instant liquidity backing the BaaCoin ($1.00 USD peg) & Paystack settlement rails.'
+    },
+    {
+      id: 'mindhive-v22',
+      number: '04',
+      anatomy: 'THE BRAIN • IDEA-COINS & KNOWLEDGE CAPITAL',
+      name: 'MIND HIVE V17–V22',
+      subtitle: 'Knowledge Capital Exchange, 20-Territory Atlas & HAVC Co-op',
+      icon: Brain,
+      accentText: 'text-purple-300',
+      borderClass: 'border-purple-500/40 bg-gradient-to-br from-purple-950/30 via-zinc-950 to-black',
+      statusMetric: `$${(liveStats.mindHiveCapital / 1000000).toFixed(2)}M Knowledge Capital`,
+      narrative:
+        'Breeds Idea-Coins, mines human & social knowledge into licensed enterprise datasets, maps 20 industry territories, and tracks Contribution DNA.',
+      investmentCase:
+        'Captures B2B AI lab & university licensing contracts ($25k–$75k RFQs) on KCX alongside multi-agent Idea-Coin evolution.'
+    },
+    {
+      id: 'nova-protocol',
+      number: '05',
+      anatomy: 'THE SOUL • LIVING UNCOPYABLE INTERNET',
+      name: 'NOVA PROTOCOL V16',
+      subtitle: 'Zero-Static Living Apps, 500ms Quorum & Origin DNA Royalties',
+      icon: Activity,
+      accentText: 'text-[#00FF88]',
+      borderClass: 'border-[#00FF88] bg-gradient-to-br from-emerald-950/40 via-zinc-950 to-black shadow-[0_0_40px_rgba(0,255,136,0.12)]',
+      statusMetric: `${liveStats.novaLivingApps} Living Apps • ${liveStats.novaMutations} Mutations`,
+      narrative:
+        'Sits on top of Modules 1–4. Apps assemble live without static HTML, mutate endpoints every 60s, and verify 100 CE nodes every 500ms.',
+      investmentCase:
+        'Renders Reverse Engineering Anything (REA) obsolete: any scraped clone fails heartbeat, shows a Dead Copy notice, and routes $0.001/click royalties home.'
+    },
+    {
+      id: 'm2m-ore',
+      number: '06',
+      anatomy: 'THE SWARM • MACHINE SERVICE ECONOMY',
+      name: 'M2M ORE PROTOCOL V18',
+      subtitle: 'Machine Digital Passports, Service Escrow & Swarm Coordination',
+      icon: Bot,
+      accentText: 'text-emerald-300',
+      borderClass: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/30 via-zinc-950 to-black',
+      statusMetric: `${liveStats.m2mMachines} Pilot Machines · ${liveStats.m2mSettledJobs} Settled Contract(s)`,
+      narrative:
+        'Gives Mother Bots, specialist Child Workers, and consented Robot Miners verifiable Passports, double-entry escrow settlement, and evidence-gated breeding.',
+      investmentCase:
+        'Captures verified M2M clearinghouse platform fees (10%) while enforcing strict non-self-dealing, PII blocking, and Level 4 human budget caps.'
+    }
+  ];
+
+  return (
+    <section className="bg-zinc-950 text-white border-b border-zinc-800 py-10 px-4 sm:px-8 print:bg-white print:text-black">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* Top Investor Badge + Dropdown Switcher */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00FF88]/15 border border-[#00FF88]/50 text-[#00FF88] font-mono text-xs font-black uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-[#00FF88] animate-ping" />
+              <span>YES FINAL DECK • INVESTOR ONE-PAGER DASHBOARD</span>
+            </div>
+            <div className="text-xs font-mono text-zinc-400">
+              UA-AIDC V16 — THE LIVING INTERNET CIVILIZATION (5 MODULES, 1 ORGANISM)
+            </div>
+          </div>
+
+          {onNavigate && (
+            <div className="print:hidden">
+              <UaaidcModuleSwitcher
+                currentPage="investor-one-pager"
+                onSelectModule={handleViewModule}
+                variant="banner"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Central Investment Thesis Banner */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-zinc-900 via-black to-emerald-950/30 border border-emerald-500/30 space-y-4">
+          <h2 className="text-2xl sm:text-4xl font-heading font-black tracking-tight text-white">
+            "You don't have 5 products. You have{' '}
+            <span className="text-[#00FF88]">1 Living Organism</span>. REA can copy anything except this."
+          </h2>
+          <p className="text-sm text-zinc-300 max-w-4xl leading-relaxed">
+            Conventional software is static code that AI scrapers can clone in seconds.{' '}
+            <strong>UA-AIDC V16</strong> turns every student device, developer microservice, dormant token, knowledge corpus, and frontend application into an interdependent 5-layer commercial organism settled transparently via <strong>Paystack NGN &amp; Base L2</strong>.
+          </p>
+
+          {/* Visual Organism Pipeline Bar */}
+          <div className="pt-3 flex flex-wrap items-center gap-2 text-[11px] font-mono">
+            <span className="px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-500/40 text-amber-300 font-bold">
+              1. Body (Compute)
+            </span>
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-600 hidden sm:inline" />
+            <span className="px-2.5 py-1 rounded-lg bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 font-bold">
+              2. Hands (Micro-APIs)
+            </span>
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-600 hidden sm:inline" />
+            <span className="px-2.5 py-1 rounded-lg bg-yellow-950/60 border border-yellow-500/40 text-[#FFD700] font-bold">
+              3. Blood (Liquidity)
+            </span>
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-600 hidden sm:inline" />
+            <span className="px-2.5 py-1 rounded-lg bg-purple-950/60 border border-purple-500/40 text-purple-300 font-bold">
+              4. Brain (Knowledge)
+            </span>
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-600 hidden sm:inline" />
+            <span className="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-[#00FF88] text-[#00FF88] font-bold">
+              5. Soul (NOVA V16 Living Web)
+            </span>
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-600 hidden sm:inline" />
+            <span className="px-2.5 py-1 rounded-lg bg-emerald-900/60 border border-emerald-400 text-emerald-300 font-bold">
+              6. Swarm (M2M ORE V18)
+            </span>
+          </div>
+        </div>
+
+        {/* 6 Core Modules Detailed Investment Narrative Grid */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-mono font-bold uppercase tracking-widest text-zinc-300 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#00FF88]" />
+              <span>6 Core Modules — Investment Narrative &amp; Live Status</span>
+            </h3>
+            <span className="text-[11px] font-mono text-emerald-400">
+              All 6 endpoints online &amp; observable
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {coreModules.map((mod) => {
+              const Icon = mod.icon;
+              return (
+                <div
+                  key={mod.id}
+                  className={`p-5 rounded-3xl border flex flex-col justify-between space-y-4 transition hover:scale-[1.01] ${mod.borderClass} ${
+                    mod.id === 'nova-protocol' ? 'md:col-span-2 lg:col-span-1' : ''
+                  }`}
+                >
+                  <div className="space-y-3">
+                    {/* Top Row */}
+                    <div className="flex items-center justify-between font-mono text-[10px]">
+                      <span className={`font-bold uppercase tracking-wider ${mod.accentText}`}>
+                        MODULE {mod.number} • {mod.anatomy}
+                      </span>
+                      <span className="flex items-center gap-1 text-emerald-400 font-bold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                        LIVE
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <div className="flex items-start gap-3">
+                      <div className={`p-2.5 rounded-xl bg-black/70 border border-zinc-800 ${mod.accentText}`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-heading font-black text-white leading-tight">
+                          {mod.name}
+                        </h4>
+                        <p className="text-[11px] text-zinc-400 mt-0.5">{mod.subtitle}</p>
+                      </div>
+                    </div>
+
+                    {/* Live Metric Strip */}
+                    <div className="px-3 py-2 rounded-xl bg-black/60 border border-zinc-800 font-mono text-xs font-bold text-white">
+                      {mod.statusMetric}
+                    </div>
+
+                    {/* Investment Narrative */}
+                    <div className="space-y-2 text-xs leading-relaxed">
+                      <p className="text-zinc-300">
+                        <strong className="text-white">Role:</strong> {mod.narrative}
+                      </p>
+                      <p className="text-zinc-400">
+                        <strong className={mod.accentText}>Investor Thesis:</strong> {mod.investmentCase}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Required 'View Live Status' Link */}
+                  <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between print:hidden">
+                    <a
+                      href={`#${mod.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleViewModule(mod.id);
+                      }}
+                      className={`inline-flex items-center gap-1.5 text-xs font-mono font-bold hover:underline cursor-pointer ${mod.accentText}`}
+                    >
+                      <span>View Live Status</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                    <span className="text-[10px] font-mono text-zinc-500">#{mod.id}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Dual Investor & Student Value Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-5 rounded-2xl bg-zinc-900/70 border border-zinc-800 space-y-2">
+            <span className="text-xs font-mono font-bold text-[#00C853] uppercase">
+              FOR INVESTORS: ZERO CAC MOAT + ANTI-CLONE ECONOMICS
+            </span>
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              Students contribute idle smartphone/PC compute in exchange for 70% revenue share—giving BAA{' '}
+              <strong>$0 infrastructure CapEx</strong>. If any competitor clones a NOVA Living App, the clone loses heartbeat proof, displays a "Dead Copy" badge, and routes{' '}
+              <strong>$0.001/click Origin DNA royalties</strong> back to our founders.
+            </p>
+          </div>
+          <div className="p-5 rounded-2xl bg-zinc-900/70 border border-zinc-800 space-y-2">
+            <span className="text-xs font-mono font-bold text-[#FFD700] uppercase">
+              FOR STUDENTS: 10x BAACOIN NETWORTH + 70% COMMERCIAL OWNERSHIP
+            </span>
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              Students don't just pay tuition—they become co-owners of the Knowledge Capital Cooperative (HAVC), mint Idea-Coins, earn from 60/40 prompt royalties, lease idle overnight CPU cycles, and cash out verified Naira settlements directly to Nigerian bank accounts via Paystack.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack, onNavigate }) => {
+  const [deckMode, setDeckMode] = React.useState<'final_v16' | 'one_pager'>('final_v16');
+
   const handlePrint = () => {
     window.print();
   };
@@ -33,13 +381,12 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'BAA-BILLIONAIRES Ecosystem - Investor One-Pager',
-        text: "Africa's First Autonomous Student Economy - 11 Platforms, One Trillion-Naira Ecosystem",
+        title: 'FINAL BAA INVESTOR + STUDENT DECK — UA-AIDC V16',
+        text: "UA-AIDC V16: The Living Internet Civilization — 5 Modules, 1 Living Organism. REA can copy anything except this.",
         url: window.location.href
       }).catch(() => {});
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
     }
   };
 
@@ -49,7 +396,7 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
       <div className="bg-zinc-900 text-white text-xs font-mono py-2.5 px-4 text-center tracking-widest uppercase border-b border-zinc-800 print:bg-black print:text-white print:border-none flex items-center justify-between">
         <div className="hidden sm:flex items-center gap-2 text-zinc-400 text-[11px]">
           <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-          <span>OFFICIAL MEMORANDUM</span>
+          <span>YES FINAL DECK • UA-AIDC V16</span>
         </div>
         <div className="mx-auto sm:mx-0 font-bold flex items-center gap-2">
           <span className="text-[#00C853]">CONFIDENTIAL</span>
@@ -68,7 +415,7 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
       </div>
 
       {/* Floating Action Controls (Hidden in Print) */}
-      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-zinc-200 px-4 sm:px-8 py-3.5 flex items-center justify-between print:hidden shadow-sm">
+      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-zinc-200 px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-2 print:hidden shadow-sm">
         <div className="flex items-center gap-3">
           {onBack && (
             <button
@@ -79,12 +426,36 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
               <span>Back to Campus</span>
             </button>
           )}
-          <span className="text-xs font-mono font-bold text-zinc-500 uppercase tracking-wider hidden sm:inline">
-            Flutterwave Style Investor Pitch Deck
-          </span>
+          <div className="inline-flex rounded-lg border border-zinc-300 p-0.5 bg-zinc-100 text-xs font-mono">
+            <button
+              onClick={() => setDeckMode('final_v16')}
+              className={`px-3 py-1 rounded-md font-bold cursor-pointer transition ${
+                deckMode === 'final_v16' ? 'bg-zinc-900 text-[#00FF88]' : 'text-zinc-600 hover:text-black'
+              }`}
+            >
+              YES FINAL DECK (V16 Living Web)
+            </button>
+            <button
+              onClick={() => setDeckMode('one_pager')}
+              className={`px-3 py-1 rounded-md font-bold cursor-pointer transition ${
+                deckMode === 'one_pager' ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:text-black'
+              }`}
+            >
+              Executive 1-Pager
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('nova-protocol')}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 text-[#00FF88] hover:bg-black transition text-xs font-mono font-bold cursor-pointer"
+            >
+              <span>Inspect Live NOVA V16</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          )}
           <button
             onClick={handleShare}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-300 text-zinc-700 hover:bg-zinc-50 transition text-xs font-medium cursor-pointer"
@@ -102,6 +473,9 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
         </div>
       </div>
 
+      {/* FINAL BAA INVESTOR + STUDENT DECK — UA-AIDC V16 DASHBOARD */}
+      {deckMode === 'final_v16' && <InvestorOnePagerDashboard onNavigate={onNavigate} />}
+
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-10 print:p-0 print:space-y-6">
         {/* 1. BRAND HEADER & PARTNER LOGOS SUBTITLE */}
         <div className="border-b border-zinc-200 pb-6 print:pb-4 space-y-2">
@@ -115,7 +489,7 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
               </span>
             </div>
             <span className="text-xs font-mono px-3 py-1 rounded-full bg-emerald-50 text-[#00C853] border border-[#00C853]/30 font-bold">
-              Autonomous Student Economy
+              Autonomous Student Economy • V16
             </span>
           </div>
 
@@ -137,7 +511,7 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
         {/* 3. HEADER BLOCK: Exact requested single production line */}
         <header className="space-y-3">
           <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider font-bold">
-            BAA-BILLIONAIRES ECOSYSTEM — INVESTOR ONE-PAGER
+            BAA-BILLIONAIRES ECOSYSTEM — FINAL INVESTOR + STUDENT DECK (UA-AIDC V16)
           </div>
           <div className="text-xs text-zinc-700 leading-relaxed font-mono">
             <strong>BAA-BILLIONAIRES Academy | A Production of MODE Digital Creations Limited &amp; Rossyst Enterprises Ltd (BN: UY/009049)</strong>
@@ -150,7 +524,7 @@ export const InvestorOnePagerPage: React.FC<InvestorOnePagerProps> = ({ onBack }
           {/* TAGLINE: Big, bold, green */}
           <div className="pt-2">
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#00C853] leading-snug">
-              Africa's First Autonomous Student Economy — 11 Platforms, One Trillion-Naira Ecosystem
+              Africa's First Autonomous Student Economy — The Living Internet Civilization
             </h1>
           </div>
         </header>

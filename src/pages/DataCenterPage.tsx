@@ -14,7 +14,13 @@ import {
   Sparkles
 } from 'lucide-react';
 
-export const DataCenterPage: React.FC = () => {
+import { UaaidcModuleSwitcher } from '../components/navigation/UaaidcModuleSwitcher';
+
+interface DataCenterPageProps {
+  onNavigate?: (page: string) => void;
+}
+
+export const DataCenterPage: React.FC<DataCenterPageProps> = ({ onNavigate }) => {
   const [activeRack, setActiveRack] = useState(1);
   const [computeReserved, setComputeReserved] = useState(false);
   const [gpuLoad, setGpuLoad] = useState(87.4);
@@ -67,11 +73,18 @@ export const DataCenterPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Executive Pitch Action */}
+        {/* Executive Pitch Action & Module Switcher */}
         <div className="flex flex-wrap items-center gap-3">
+          {onNavigate && (
+            <UaaidcModuleSwitcher
+              currentPage="datacenter"
+              onSelectModule={onNavigate}
+              variant="banner"
+            />
+          )}
           <button
             onClick={handleDownloadPitch}
-            className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#FFD700] to-[#E5A800] text-black font-heading font-black text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-lg shadow-[#FFD700]/20 flex items-center gap-2"
+            className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#FFD700] to-[#E5A800] text-black font-heading font-black text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-lg shadow-[#FFD700]/20 flex items-center gap-2 cursor-pointer"
           >
             <Download className="w-4 h-4" />
             <span>Download Investor Pitch</span>

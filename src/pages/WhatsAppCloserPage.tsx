@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useEcosystem } from '../context/EcosystemContext';
 import { generateSeedWhatsAppContacts, WhatsAppContact } from '../lib/whatsappScraper';
 import { generateAiCloserReply, CLOSER_RULES, CloserRule } from '../lib/whatsappCloser';
+import { peekLeadHandoff, clearLeadHandoff, LeadHandoffPayload } from '../lib/leadHandoff';
 import {
-  MessageSquare,
   Bot,
   Send,
-  Zap,
-  CheckCircle,
   CreditCard,
-  Flame,
   ArrowLeft,
-  DollarSign,
-  TrendingUp,
-  Settings,
-  PhoneCall,
-  Check
+  ExternalLink,
+  Radar,
+  Sparkles,
+  UserCheck
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -25,28 +20,115 @@ interface ChatMessage {
   timestamp: string;
 }
 
-export const WhatsAppCloserPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
-  const [contacts] = useState<WhatsAppContact[]>(generateSeedWhatsAppContacts());
-  const [selectedContact, setSelectedContact] = useState<WhatsAppContact>(contacts[0]);
+interface WhatsAppCloserPageProps {
+  onBack: () => void;
+  onNavigate?: (page: string) => void;
+}
+
+export const WhatsAppCloserPage: React.FC<WhatsAppCloserPageProps> = ({ onBack, onNavigate }) => {
+  const [activeHandoff, setActiveHandoff] = useState<LeadHandoffPayload | null>(() => peekLeadHandoff());
+
+  const [contacts, setContacts] = useState<WhatsAppContact[]>(() => {
+    const seeded = generateSeedWhatsAppContacts();
+    const handoff = peekLeadHandoff();
+    if (!handoff) return seeded;
+    const handoffContact: WhatsAppContact = {
+      id: handoff.leadId,
+      name: handoff.name,
+      phone: handoff.phone || '+2348025516793',
+      source: `${handoff.sourceCategory} · ${handoff.sourcePlatform}`,
+      tags: ['hot', 'handoff', handoff.sourceCategory.toLowerCase()],
+      last_message_at: 'Live Now',
+      unread_count: 1,
+      intent: 'Ready to Buy'
+    };
+    return [handoffContact, ...seeded.filter((c) => c.id !== handoff.leadId)];
+  });
+
+  const [selectedContact, setSelectedContact] = useState<WhatsAppContact>(() => {
+    const handoff = peekLeadHandoff();
+    if (handoff) {
+      return {
+        id: handoff.leadId,
+        name: handoff.name,
+        phone: handoff.phone || '+2348025516793',
+        source: `${handoff.sourceCategory} · ${handoff.sourcePlatform}`,
+        tags: ['hot', 'handoff'],
+        last_message_at: 'Live Now',
+        unread_count: 1,
+        intent: 'Ready to Buy'
+      };
+    }
+    return generateSeedWhatsAppContacts()[0];
+  });
+
   const [autopilotOn, setAutopilotOn] = useState(true);
 
   // Chat thread per selected contact
-  const [chatHistory, setChatHistory] = useState<{ [contactId: string]: ChatMessage[] }>({
-    [contacts[0].id]: [
-      { id: '1', sender: 'contact', text: 'Hello, please how much is the ChatGPT ATM course?', timestamp: '12:15 PM' },
-      { id: '2', sender: 'ai', text: 'Hello Babajide! The course is $99 (or ₦125,000), and you get 990 BaaCoin Networth ($990 value) on day 1!', timestamp: '12:16 PM' },
-      { id: '3', sender: 'contact', text: 'Can I pay with Paystack card right now?', timestamp: '12:20 PM' }
-    ]
+  const [chatHistory, setChatHistory] = useState<{ [contactId: string]: ChatMessage[] }>(() => {
+    const seeded = generateSeedWhatsAppContacts();
+    const handoff = peekLeadHandoff();
+    const initial: { [contactId: string]: ChatMessage[] } = {
+      [seeded[0].id]: [
+        { id: '1', sender: 'contact', text: 'Hello, please how much is the ChatGPT ATM course?', timestamp: '12:15 PM' },
+        { id: '2', sender: 'ai', text: 'Hello Babajide! The course is $99 (or ₦125,000), and you get 990 BaaCoin Networth ($990 value) on day 1!', timestamp: '12:16 PM' },
+        { id: '3', sender: 'contact', text: 'Can I pay with Paystack card right now?', timestamp: '12:20 PM' }
+      ]
+    };
+    if (handoff) {
+      initial[handoff.leadId] = [
+        {
+          id: `ho-1-${handoff.leadId}`,
+          sender: 'contact',
+          text: `[${handoff.sourceCategory} → ${handoff.sourcePlatform}] ${handoff.intentSignal || `Interested in ${handoff.originModule}`}`,
+          timestamp: 'Just now'
+        },
+        {
+          id: `ho-2-${handoff.leadId}`,
+          sender: 'ai',
+          text: `Identity Verified: ${handoff.name} (${handoff.title || 'Prospect'} @ ${handoff.organization || 'Independent'}) • Est. $${handoff.estimatedValueUsd.toLocaleString()} • AI Closer ready to engage.`,
+          timestamp: 'Live'
+        }
+      ];
+    }
+    return initial;
   });
 
-  const [suggestedReply, setSuggestedReply] = useState('');
+  const [suggestedReply, setSuggestedReply] = useState(() => peekLeadHandoff()?.aiMessage || '');
   const [suggestedIntent, setSuggestedIntent] = useState('Ready to Buy');
-  const [rules, setRules] = useState<CloserRule[]>(CLOSER_RULES);
+  const [rules] = useState<CloserRule[]>(CLOSER_RULES);
   const [closedCount, setClosedCount] = useState(23);
   const [closedRevenue, setClosedRevenue] = useState(2277);
+  const [dispatchSavedNotice, setDispatchSavedNotice] = useState<string | null>(null);
+
+  // Sync if a fresh handoff exists on mount
+  useEffect(() => {
+    const handoff = peekLeadHandoff();
+    if (handoff) {
+      setActiveHandoff(handoff);
+      const handoffContact: WhatsAppContact = {
+        id: handoff.leadId,
+        name: handoff.name,
+        phone: handoff.phone || '+2348025516793',
+        source: `${handoff.sourceCategory} · ${handoff.sourcePlatform}`,
+        tags: ['hot', 'handoff'],
+        last_message_at: 'Live Now',
+        unread_count: 1,
+        intent: 'Ready to Buy'
+      };
+      setContacts((prev) => [handoffContact, ...prev.filter((c) => c.id !== handoff.leadId)]);
+      setSelectedContact(handoffContact);
+      setSuggestedReply(handoff.aiMessage);
+    }
+  }, []);
 
   // Update AI suggested reply when contact changes
   useEffect(() => {
+    if (activeHandoff && selectedContact.id === activeHandoff.leadId && activeHandoff.aiMessage) {
+      setSuggestedReply(activeHandoff.aiMessage);
+      setSuggestedIntent('One-Click Closer Handoff');
+      return;
+    }
     const thread = chatHistory[selectedContact.id] || [
       { id: '0', sender: 'contact', text: 'Is the 10x BaaCoin Networth real? How do I start?', timestamp: '12:30 PM' }
     ];
@@ -54,9 +136,9 @@ export const WhatsAppCloserPage: React.FC<{ onBack: () => void }> = ({ onBack })
     const aiResult = generateAiCloserReply(lastUserMsg, selectedContact.name);
     setSuggestedReply(aiResult.replyText);
     setSuggestedIntent(aiResult.intent);
-  }, [selectedContact, chatHistory]);
+  }, [selectedContact, chatHistory, activeHandoff]);
 
-  const handleSendReply = (customText?: string) => {
+  const handleSendReply = async (customText?: string) => {
     const textToSend = customText || suggestedReply;
     if (!textToSend.trim()) return;
 
@@ -72,6 +154,28 @@ export const WhatsAppCloserPage: React.FC<{ onBack: () => void }> = ({ onBack })
       [selectedContact.id]: [...(prev[selectedContact.id] || []), newMsg]
     }));
 
+    // Persist outreach to unified leads ledger
+    try {
+      await fetch('/api/leads/log-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          leadId: selectedContact.id,
+          leadName: selectedContact.name,
+          leadSource: selectedContact.source || 'WhatsApp Closer Bot',
+          channel: 'whatsapp',
+          recipientHandle: selectedContact.phone,
+          messageBody: textToSend,
+          sentBy: 'WhatsApp AI Closer Bot',
+          status: 'dispatched'
+        })
+      });
+      setDispatchSavedNotice(`✅ Message sent & logged to Outreach Ledger for ${selectedContact.name}`);
+      setTimeout(() => setDispatchSavedNotice(null), 4000);
+    } catch {
+      // ignore offline error
+    }
+
     // If paystack link sent, simulate closure
     if (textToSend.includes('paystack') || textToSend.includes('academy')) {
       setClosedCount(prev => prev + 1);
@@ -81,26 +185,93 @@ export const WhatsAppCloserPage: React.FC<{ onBack: () => void }> = ({ onBack })
 
   const handleSendPaystackLink = () => {
     handleSendReply(
-      `Here is your private 1-click Paystack checkout link: https://billionairesai.academy/paystack?ref=${selectedContact.phone}. Complete payment to unlock 990 BaaCoin instantly!`
+      `Here is your private 1-click Paystack checkout link: https://microwork-ai-2-app-production.up.railway.app/#academy?ref=${encodeURIComponent(selectedContact.phone)}. Complete payment with test card or bank transfer to unlock 990 BaaCoin instantly!`
     );
   };
 
   const handleSendBountyLink = () => {
     handleSendReply(
-      `Check out our active commercial developer bounties with payouts up to ₦250,000: https://billionairesai.academy/bounties`
+      `Check out our active commercial developer bounties with payouts up to ₦250,000: https://microwork-ai-2-app-production.up.railway.app/#bounties`
     );
   };
 
   return (
     <div className="min-h-screen bg-black text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-6">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-white transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Command Vault</span>
-        </button>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-white transition cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Command Vault</span>
+            </button>
+            {onNavigate && (
+              <button
+                onClick={() => onNavigate('leads-dashboard')}
+                className="flex items-center gap-1.5 text-xs font-mono text-[#00D4FF] hover:underline transition cursor-pointer"
+              >
+                <Radar className="w-3.5 h-3.5" />
+                <span>Leads Output Dashboard</span>
+              </button>
+            )}
+          </div>
+
+          {activeHandoff && (
+            <button
+              onClick={() => {
+                clearLeadHandoff();
+                setActiveHandoff(null);
+              }}
+              className="text-[11px] font-mono text-zinc-400 hover:text-white underline cursor-pointer"
+            >
+              Clear Handoff Banner
+            </button>
+          )}
+        </div>
+
+        {/* Active One-Click Handoff Banner */}
+        {activeHandoff && (
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-cyan-950/60 to-zinc-950 border-2 border-[#00FF88]/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-[#00FF88] font-bold uppercase">
+                <Sparkles className="w-4 h-4" />
+                <span>One-Click Message Handoff Active</span>
+                <span className="px-2 py-0.5 rounded bg-black/60 text-cyan-300 border border-cyan-500/40">
+                  Source: {activeHandoff.sourceCategory} ({activeHandoff.sourcePlatform})
+                </span>
+              </div>
+              <div className="text-sm font-heading font-bold text-white flex flex-wrap items-center gap-2">
+                <UserCheck className="w-4 h-4 text-emerald-400" />
+                <span>{activeHandoff.name}</span>
+                <span className="text-xs font-mono text-zinc-300 font-normal">
+                  · {activeHandoff.title} @ {activeHandoff.organization} · {activeHandoff.phone || activeHandoff.email}
+                </span>
+              </div>
+              <p className="text-xs text-zinc-300 font-mono">
+                Signal: "{activeHandoff.intentSignal}"
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <a
+                href={`https://wa.me/${(activeHandoff.phone || selectedContact.phone).replace(/[^0-9]/g, '')}?text=${encodeURIComponent(suggestedReply)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-xl bg-[#00FF88] text-black font-heading font-black text-xs uppercase tracking-wider hover:brightness-110 transition flex items-center gap-1.5"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Open Live WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        )}
+
+        {dispatchSavedNotice && (
+          <div className="p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs font-mono">
+            {dispatchSavedNotice}
+          </div>
+        )}
 
         {/* Top Header & Closer Metrics */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">

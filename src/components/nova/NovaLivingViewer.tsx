@@ -1,0 +1,222 @@
+import React, { useState } from 'react';
+import { Activity, ShieldCheck, RefreshCw, Zap } from 'lucide-react';
+import { NovaProtocolState, LivingApp } from '../../types/novaProtocol';
+
+interface Props {
+  state: NovaProtocolState;
+  selectedApp: LivingApp | null;
+  onSelectApp: (app: LivingApp) => void;
+  onTriggerMutation: (appId: string) => void;
+  onSimulateClick: (elementId: string, appId: string) => void;
+}
+
+export const NovaLivingViewer: React.FC<Props> = ({
+  state,
+  selectedApp,
+  onSelectApp,
+  onTriggerMutation,
+  onSimulateClick
+}) => {
+  const [clickAnimation, setClickAnimation] = useState<string | null>(null);
+  const [isMutatingLocal, setIsMutatingLocal] = useState(false);
+
+  const activeApp = selectedApp || (state.living_apps && state.living_apps[0]) || null;
+
+  const handleElementClick = (elementId: string) => {
+    if (!activeApp) return;
+    setClickAnimation(elementId);
+    onSimulateClick(elementId, activeApp.id);
+    setTimeout(() => setClickAnimation(null), 800);
+  };
+
+  const handleManualMutation = async () => {
+    if (!activeApp) return;
+    setIsMutatingLocal(true);
+    await onTriggerMutation(activeApp.id);
+    setTimeout(() => setIsMutatingLocal(false), 1200);
+  };
+
+  if (!activeApp) {
+    return (
+      <div className="p-8 rounded-2xl bg-zinc-950 border border-zinc-800 text-center text-zinc-400 font-mono">
+        No active Living Apps available. Breed one from the Left Command Console.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      {/* Organism Status Header Banner */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-zinc-950 to-cyan-950/40 border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-[#00FF88]">
+              <Activity className="w-5 h-5 animate-pulse" />
+            </div>
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping" />
+          </div>
+
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+                LIVING ORGANISM: ALIVE
+              </span>
+              <span className="text-zinc-400 text-xs font-mono">Heartbeat: 500ms ago</span>
+            </div>
+            <h2 className="text-lg sm:text-xl font-heading font-black text-white mt-0.5 flex flex-wrap items-center gap-2">
+              <span>{activeApp.app_name}</span>
+              <span className="text-xs font-mono font-normal text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/60">
+                {activeApp.nova_url}
+              </span>
+            </h2>
+          </div>
+        </div>
+
+        {/* Mutation Telemetry & Trigger */}
+        <div className="flex items-center gap-3">
+          <div className="text-right font-mono hidden md:block">
+            <span className="text-[10px] text-zinc-400 block uppercase">Autonomous Mutations</span>
+            <span className="text-sm font-bold text-[#00FF88]">
+              Mutated {activeApp.mutation_count} times
+            </span>
+          </div>
+
+          <button
+            onClick={handleManualMutation}
+            disabled={isMutatingLocal}
+            className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer border ${
+              isMutatingLocal
+                ? 'bg-emerald-500/30 border-emerald-400 text-emerald-200'
+                : 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-500/40 hover:border-emerald-400'
+            }`}
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isMutatingLocal ? 'animate-spin text-white' : ''}`} />
+            <span>{isMutatingLocal ? 'Mutating Organism...' : 'Force Mutate (60s)'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Living App Runtime Surface (Zero Static HTML - Assembled Live from Ray Actors) */}
+      <div className="relative p-5 sm:p-6 rounded-3xl bg-zinc-950/90 border-2 border-emerald-500/30 shadow-[0_0_50px_rgba(0,255,136,0.08)] overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-zinc-800/80 font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Living UI — Generated by NOVA Colony
+            </span>
+            <span className="text-zinc-400 text-[11px] truncate max-w-xs">
+              Active Endpoint: <span className="text-cyan-300">{activeApp.current_endpoint}</span>
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 text-[11px] text-zinc-400">
+            <span>Origin DNA:</span>
+            <span className="font-mono text-[#FFD700] bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+              {activeApp.origin_dna.origin_dna_hash?.substring(0, 12)}...
+            </span>
+          </div>
+        </div>
+
+        {/* Dynamic Interactive Components */}
+        <div className="space-y-4">
+          <div className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-1.5">
+            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block">
+              ORGANISM MISSION PROMPT
+            </span>
+            <p className="text-sm font-sans text-zinc-200 italic leading-relaxed">
+              "{activeApp.prompt}"
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {activeApp.components.map((comp) => {
+              const isAnimating = clickAnimation === comp.element_id;
+              return (
+                <div
+                  key={comp.element_id}
+                  data-origin={comp.origin_dna_hash}
+                  className={`p-4 rounded-2xl bg-zinc-900/80 border transition-all duration-300 space-y-3 ${
+                    isAnimating
+                      ? 'border-emerald-400 ring-2 ring-emerald-500/50 scale-[1.01]'
+                      : 'border-zinc-800 hover:border-zinc-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-zinc-400 uppercase tracking-wider text-[10px]">
+                      {comp.type} • {comp.element_id}
+                    </span>
+                    <span className="text-[#FFD700] font-bold">
+                      ${(comp.royalties || 0).toFixed(4)} USD ({comp.clicks || 0} clicks)
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-bold text-white mb-1">{comp.label}</h4>
+                    <p className="text-[11px] font-mono text-zinc-400 truncate">
+                      Endpoint: <span className="text-cyan-300">{comp.current_endpoint}</span>
+                    </p>
+                    <p className="text-[10px] font-mono text-zinc-500 truncate mt-1">
+                      Spec: {comp.render_code}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between gap-3 border-t border-zinc-800/60 font-mono">
+                    <button
+                      onClick={() => handleElementClick(comp.element_id)}
+                      className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 hover:border-emerald-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+                    >
+                      <Zap className="w-3.5 h-3.5 text-[#00FF88]" />
+                      <span>Click (Pay Origin Royalty $0.001)</span>
+                    </button>
+
+                    <span className="text-[10px] text-zinc-500 font-mono hidden sm:inline">
+                      Gasless AA Relay
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Live Anti-Copy Banner within Viewer */}
+        <div className="mt-5 p-3.5 rounded-xl bg-black/60 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono text-zinc-400">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>REA Immune: If copied to static server, missing heartbeat renders "Dead Copy" badge instantly.</span>
+          </div>
+          <span className="text-emerald-400 font-bold">Copying = Free Marketing</span>
+        </div>
+      </div>
+
+      {/* Quick Organism Selector Bar */}
+      <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
+        <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest block">
+          SWITCH LIVING APP ORGANISM ({state.living_apps.length} ACTIVE)
+        </span>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {state.living_apps.map((app) => {
+            const isSelected = activeApp.id === app.id;
+            return (
+              <button
+                key={app.id}
+                onClick={() => onSelectApp(app)}
+                className={`p-3 rounded-xl border text-left transition cursor-pointer font-mono ${
+                  isSelected
+                    ? 'bg-emerald-500/15 border-emerald-400 text-white'
+                    : 'bg-zinc-900/60 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold truncate">{app.app_name}</span>
+                  <span className="text-emerald-400 font-bold">V{app.mutation_count}</span>
+                </div>
+                <span className="text-[10px] text-cyan-400 block truncate mt-0.5">{app.nova_url}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};

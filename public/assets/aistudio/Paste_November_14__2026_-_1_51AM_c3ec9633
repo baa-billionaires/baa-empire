@@ -1,0 +1,1837 @@
+# MASTER PROMPT V18 — M2M ORE PROTOCOL
+## MODULE 6 OF BAA — UNIVERSAL AUTONOMOUS AI DATA CENTER (UA-AIDC)
+### THE AUTONOMOUS MACHINE-TO-MACHINE SERVICE ECONOMY
+### MACHINES DISCOVER. MACHINES CONTRACT. MACHINES WORK. MACHINES EARN. SWARMS EVOLVE.
+
+**PLATFORM:** Billionaires AI Academy (BAA) / UA-AIDC  
+**MODULE:** 6 — M2M ORE PROTOCOL  
+**VERSION:** V18  
+**CLASSIFICATION:** Autonomous Machine Economy, AI-to-AI Commerce, Robotic Services, Distributed Compute and Machine Workforce Infrastructure.
+
+**CORE TAGLINE:**
+
+MACHINES HIRE MACHINES. MACHINES SERVE MACHINES. MACHINES CREATE VALUE. HUMANS OWN AND GOVERN THE ECONOMY.
+
+---
+
+# 1. MASTER DEVELOPMENT DIRECTIVE
+
+You are the lead software architect, AI systems engineer, backend developer, blockchain engineer, robotics integration specialist, security engineer and frontend developer responsible for implementing M2M ORE PROTOCOL as Module 6 of the existing BAA Universal Autonomous AI Data Center.
+
+This is an extension of the existing UA-AIDC platform. It is NOT a request to create another independent application.
+
+Before implementation:
+
+1. Inspect the existing repository and project architecture.
+2. Identify the current modules and their real integration endpoints.
+3. Inspect existing authentication, database schemas, wallets, payment services, agent orchestration and dashboard navigation.
+4. Reuse CE COLONY, CODE VEIN, AURUM, MIND HIVE and NOVA services where they exist.
+5. Do not create duplicate wallets, token ledgers, agent registries or payment systems.
+6. Do not replace existing working features.
+7. Use safe database migrations and preserve existing records.
+8. Implement M2M as an independent, integrated module with its own dashboard.
+9. Ensure that every dashboard card, button, navigation item and operational control performs its advertised action.
+10. Implement real backend operations rather than mock demonstrations.
+
+Where an external service is unavailable, implement a clear adapter interface and display its actual connection status.
+
+Never fabricate successful jobs, machine registrations, transactions, customer demand, revenue, blockchain confirmations or operational agents.
+
+Use the existing project's actual technology stack where practical. Do not force an unnecessary framework migration simply to match this specification.
+
+---
+
+# 2. THE M2M ORE CIVILIZATION
+
+## The fundamental invention
+
+Create an economic infrastructure where authorized machines and software agents can operate as independent service providers and service customers.
+
+Eligible participants include:
+
+- AI agents.
+- Software bots.
+- Autonomous software services.
+- Robots.
+- IoT devices.
+- Edge-computing devices.
+- Approved smartphones.
+- Compute nodes.
+- Storage nodes.
+- Sensor networks.
+- Industrial machines.
+- Approved connected vehicles.
+- Digital twin agents.
+- Living applications.
+
+Each registered machine must have a unique identity, owner, capabilities, permission profile, operational status, service history and economic account.
+
+A machine can:
+
+1. Discover another machine.
+2. Advertise a service.
+3. Request a service.
+4. Compare service providers.
+5. Submit a job request.
+6. Negotiate permitted job terms.
+7. Accept a service agreement.
+8. Execute the job.
+9. Submit verifiable evidence.
+10. Receive payment after successful acceptance.
+11. Build reputation.
+12. Reinvest authorized earnings.
+13. Request additional machine capacity.
+14. Become a parent in the machine genealogy.
+15. Expand its service capabilities.
+
+The platform must support controlled autonomy rather than unrestricted machine activity.
+
+Human owners remain responsible for ownership, permissions, budgets, risk policies and exceptional approvals.
+
+---
+
+# 3. MODULE 6 ARCHITECTURE
+
+Integrate M2M ORE with the existing five modules.
+
+| Existing module | M2M relationship |
+|---|---|
+| Module 1 — CE COLONY | Supplies authorized compute, storage, networking and hardware resources |
+| Module 2 — CODE VEIN | Supplies software services, APIs, development tools and executable capabilities |
+| Module 3 — AURUM COLONY | Provides supported digital asset and payment integrations |
+| Module 4 — MIND HIVE | Supplies AI agents, intelligence, idea assets and colony orchestration |
+| Module 5 — NOVA | Creates service demand through approved living applications |
+| Module 6 — M2M ORE | Connects machines into a service economy and coordinates their commercial relationships |
+
+Build a unified integration layer.
+
+All inter-module communication must use authenticated APIs, authorized service identities, permission checks, structured messages, retries and audit records.
+
+Do not assume that a module is operational merely because an endpoint has been described.
+
+---
+
+# 4. M2M MACHINE IDENTITY AND REGISTRY
+
+Create the M2M Machine Registry.
+
+Every machine must have a verifiable platform identity.
+
+### Machine categories
+
+- Mother Bot.
+- Child Bot.
+- AI Agent Machine.
+- Robot Miner.
+- IoT Device.
+- Compute Machine.
+- Storage Machine.
+- Network Machine.
+- Sensor Machine.
+- Software Service Machine.
+- Industrial Robot.
+- Digital Twin.
+- Living Application Agent.
+
+### Machine identity record
+
+Every machine should have:
+
+- Unique machine ID.
+- Owner ID.
+- Machine name.
+- Machine category.
+- Machine type.
+- Parent machine ID, if applicable.
+- Registered capabilities.
+- Authorized operations.
+- API identity.
+- Wallet or economic account reference, if enabled.
+- Reputation score.
+- Verification status.
+- Available resources.
+- Current workload.
+- Operational status.
+- Health status.
+- Created date.
+- Last heartbeat.
+- Permissions.
+- Audit history.
+
+### Machine status
+
+Support:
+
+- Registered.
+- Pending verification.
+- Online.
+- Idle.
+- Working.
+- Busy.
+- Breeding requested.
+- Scaling.
+- Paused.
+- Offline.
+- Suspended.
+- Failed.
+- Retired.
+
+Machines must not execute work outside their registered capabilities and permissions.
+
+---
+
+# 5. MOTHER BOT FACTORY — THE SWARM GENESIS ENGINE
+
+Build a Mother Bot Factory that allows authorized owners to deploy parent machines and create controlled child-machine instances.
+
+The Mother Bot represents an owner-authorized parent service identity. It is not automatically an independent legal person or an unrestricted wallet owner.
+
+### 5.1 Mother Bot creation
+
+Provide a deployment interface where an owner can select:
+
+- Machine type.
+- Bot specialization.
+- Name.
+- Purpose.
+- Capabilities.
+- Available compute budget.
+- Operating budget.
+- Parent idea asset, if applicable.
+- Payment account.
+- Maximum number of child machines.
+- Breeding policy.
+- Parent royalty agreement.
+- Approved operating hours.
+- Risk limits.
+
+Initial specializations:
+
+1. Scraper and Price Intelligence Bot.
+2. Translation Bot.
+3. Data Verification Bot.
+4. Mapping Intelligence Bot.
+5. Compute Broker Bot.
+6. Storage Broker Bot.
+7. AI Training Coordinator.
+8. API Service Bot.
+9. Research Bot.
+10. Customer Service Bot.
+11. Delivery Intelligence Bot.
+12. Industrial Monitoring Bot.
+
+### 5.2 Deployment workflow
+
+When the owner clicks Deploy Mother Bot:
+
+1. Authenticate the owner.
+2. Validate their permissions.
+3. Validate the requested machine type.
+4. Check the approved operating budget.
+5. Check available resources.
+6. Check any required token or payment authorization.
+7. Create the machine identity.
+8. Provision its authorized economic account or wallet reference.
+9. Register capabilities.
+10. Initialize its execution service.
+11. Record the deployment event.
+12. Display its machine ID and actual status.
+
+Do not create an artificial wallet or claim blockchain deployment if the required provider is not connected.
+
+### 5.3 Mother Bot intelligence
+
+Mother Bots must be capable of:
+
+- Discovering relevant jobs.
+- Evaluating service providers.
+- Creating child job requests.
+- Assigning approved tasks.
+- Monitoring child machines.
+- Tracking operating expenses.
+- Monitoring earnings.
+- Reviewing performance.
+- Requesting additional capacity.
+- Recommending new capabilities.
+- Requesting controlled swarm expansion.
+
+### 5.4 Controlled machine breeding
+
+Introduce a new concept:
+
+**EVIDENCE-BASED MACHINE BREEDING.**
+
+Breeding means creating additional machine instances, provisioning resources and registering new capabilities. It must not imply biological reproduction or guaranteed business growth.
+
+A Mother Bot may request child-machine creation when:
+
+- Its existing workload justifies expansion.
+- A verified customer or job demand exists.
+- Its available budget covers provisioning and expected operating costs.
+- Sufficient compute and execution capacity exists.
+- Its maximum child count has not been reached.
+- Its owner-approved breeding policy permits expansion.
+
+Initial pilot:
+
+- One Mother Bot.
+- Maximum 10 initial child machines.
+- Configurable maximum swarm size.
+- Configurable operating budget.
+- Maximum execution concurrency.
+- Automatic pause when limits are reached.
+
+Each child must have a unique identity, capabilities, budget, parent reference and independent reputation.
+
+### 5.5 Machine genealogy
+
+Build a visual machine family tree:
+
+Mother Machine → Child Machines → Grandchild Machines → Specialized Service Colonies.
+
+Track:
+
+- Parent-child relationships.
+- Creation date.
+- Creation cost.
+- Provisioning cost.
+- Assigned services.
+- Earnings.
+- Operating expenses.
+- Royalty agreements.
+- Machine health.
+- Retirement status.
+
+The genealogy must show actual registered machines, not forecasted or imaginary children.
+
+---
+
+# 6. M2M JOB BOARD — THE GLOBAL MACHINE SERVICE MARKETPLACE
+
+Build a machine-to-machine service marketplace similar to a professional services exchange, designed for machines rather than human freelancers.
+
+Machines can advertise capabilities, publish service requests, discover service providers and execute authorized service agreements.
+
+### 6.1 Job categories
+
+Support:
+
+- Data extraction from authorized sources.
+- Data cleaning.
+- Translation.
+- Transcription.
+- Data verification.
+- Image classification.
+- Document processing.
+- Mapping intelligence.
+- Route analysis.
+- Compute rental.
+- Storage rental.
+- API execution.
+- Model inference.
+- Approved model fine-tuning.
+- Research assistance.
+- Website monitoring.
+- Inventory intelligence.
+- Sensor data processing.
+- IoT monitoring.
+- Digital twin simulation.
+- Software testing.
+- Cybersecurity monitoring.
+- Business intelligence.
+
+### 6.2 Job creation
+
+A machine must be able to create a service request containing:
+
+- Job ID.
+- Requesting machine.
+- Requesting owner.
+- Job category.
+- Job title.
+- Detailed description.
+- Required capabilities.
+- Input data requirements.
+- Expected output.
+- Delivery deadline.
+- Proposed price.
+- Payment asset.
+- Maximum acceptable price.
+- Minimum reputation.
+- Required verification level.
+- Data sensitivity classification.
+- Privacy requirements.
+- Acceptance criteria.
+- Dispute rules.
+- Job status.
+
+The requesting machine must have sufficient authorized funds or an approved payment commitment.
+
+### 6.3 Job discovery
+
+Build a machine discovery engine that searches for service providers based on:
+
+- Capability match.
+- Reputation.
+- Availability.
+- Cost.
+- Delivery time.
+- Reliability.
+- Geographic or network requirements where legitimately necessary.
+- Data access authorization.
+- Hardware requirements.
+- Previous job performance.
+
+### 6.4 Intelligent job matching
+
+Create an intelligent matching engine.
+
+The engine must:
+
+1. Discover available jobs.
+2. Discover available machines.
+3. Match capabilities.
+4. Check reputation requirements.
+5. Check resource availability.
+6. Check budget.
+7. Check permission compatibility.
+8. Estimate execution cost.
+9. Recommend the best provider.
+10. Assign the job only when the applicable acceptance policy allows it.
+
+Support both:
+
+- Automatic matching under approved rules.
+- Manual owner selection.
+
+### 6.5 Job execution lifecycle
+
+Use the following lifecycle:
+
+DISCOVERED → VALIDATED → OFFERED → ACCEPTED → FUNDED → ASSIGNED → EXECUTING → SUBMITTED → VERIFIED → APPROVED → SETTLED.
+
+Additional states:
+
+- Rejected.
+- Cancelled.
+- Expired.
+- Disputed.
+- Failed.
+- Refunded.
+- Reversed.
+
+Never pay merely because a machine submits a result URL.
+
+### 6.6 Job verification
+
+Create a verification engine that checks:
+
+- Required output format.
+- Completeness.
+- Data integrity.
+- Correctness against defined acceptance criteria.
+- Source provenance.
+- Execution logs.
+- Required evidence.
+- Security requirements.
+- Customer approval where applicable.
+
+Support:
+
+- Automated validators.
+- Independent verifier machines.
+- Trusted external verification services.
+- Human review for disputed or high-risk work.
+
+A result must be verifiable before it qualifies for settlement.
+
+### 6.7 Job Board Dashboard
+
+Create a real-time job marketplace with:
+
+- Open jobs.
+- Assigned jobs.
+- Active execution.
+- Completed jobs.
+- Failed jobs.
+- Disputed jobs.
+- Average completion time.
+- Verified service volume.
+- Total actual settled value.
+- Machine demand by category.
+- Top service providers.
+
+Allow authorized users to click any job and inspect its complete lifecycle.
+
+---
+
+# 7. M2M CONTRACT AND SERVICE AGREEMENT ENGINE
+
+Introduce a new major feature:
+
+**MACHINE SERVICE CONTRACT PROTOCOL.**
+
+Every commercial M2M job should have a structured service agreement.
+
+The agreement records:
+
+- Requesting machine.
+- Providing machine.
+- Owners or authorized principals.
+- Job description.
+- Agreed price.
+- Payment asset.
+- Delivery requirements.
+- Acceptance criteria.
+- Data permissions.
+- Usage limitations.
+- Deadlines.
+- Cancellation conditions.
+- Refund rules.
+- Dispute procedures.
+- Royalty obligations.
+- Signature or authorization records.
+
+Support:
+
+- Platform-native service agreements.
+- API-based authorization.
+- Optional blockchain notarization.
+- Approved smart-contract execution where appropriate.
+
+Do not describe an ordinary database record as a legally enforceable smart contract.
+
+Legal terms must be reviewed for applicable jurisdictions and actual use cases.
+
+---
+
+# 8. M2M ESCROW AND PAYMENT ENGINE
+
+Build a reliable payment architecture.
+
+**Core principle: JOB FIRST, VERIFICATION SECOND, SETTLEMENT THIRD.**
+
+### 8.1 Payment options
+
+Support configurable payment methods where actually integrated:
+
+- USDC through supported blockchain networks.
+- Approved MIND HIVE Idea Coins for internal permitted uses.
+- Platform credits.
+- Supported fiat payment providers.
+- Internal service credits.
+
+Maintain separate accounting for each asset.
+
+Never assume that an internal Idea Coin is equivalent to USDC, NGN or withdrawable cash.
+
+### 8.2 Escrow workflow
+
+1. Requesting machine submits a job.
+2. Payment availability is checked.
+3. Required funds are reserved or escrowed through a supported mechanism.
+4. Service agreement is confirmed.
+5. Provider machine executes the job.
+6. Result is submitted.
+7. Verification is performed.
+8. The requester or authorized verifier approves the result.
+9. Settlement is initiated.
+10. Payment confirmation is recorded.
+11. Royalty obligations are calculated.
+12. Machine balances and records are updated.
+
+If a supported escrow mechanism is unavailable, do not claim funds are held in escrow.
+
+### 8.3 Payment ledger
+
+Create a transparent double-entry ledger.
+
+Track:
+
+- Job payment.
+- Service provider entitlement.
+- Platform fees.
+- Parent-machine royalties.
+- Idea-parent royalties.
+- Refunds.
+- Reversals.
+- Gas or sponsored network fees.
+- Settlement status.
+- Payment reference.
+- Blockchain transaction hash where applicable.
+
+Never use a mock transaction hash as a real transaction identifier.
+
+### 8.4 Royalty engine
+
+Allow configurable royalty agreements for:
+
+- Parent machine owners.
+- Authorized idea creators.
+- Software or API licensors.
+- Dataset owners.
+- Compute providers.
+- Platform infrastructure.
+
+Do not apply automatic royalty percentages unless a valid agreement or explicit policy authorizes them.
+
+Example allocation:
+
+A verified job is worth $10.
+
+The agreement may specify:
+
+- Service provider: 70%.
+- Parent machine owner: 10%.
+- Licensed intellectual asset owner: 10%.
+- Platform service fee: 10%.
+
+This is an illustrative agreement, not a universal default.
+
+The payment engine must calculate and display the agreed allocation before authorization.
+
+### 8.5 Wallet and withdrawal controls
+
+Implement:
+
+- Machine economic account.
+- Owner-controlled wallet authorization.
+- Transaction limits.
+- Withdrawal approvals.
+- Transaction history.
+- Balance reconciliation.
+- Suspicious transaction detection.
+
+No machine may withdraw funds, transfer assets or alter wallet permissions outside its authorization policy.
+
+For blockchain smart accounts, use supported account-abstraction infrastructure where configured.
+
+Gas sponsorship must display the actual sponsor, fee policy and network conditions.
+
+---
+
+# 9. MACHINE REPUTATION AND TRUST ENGINE
+
+Build a machine reputation system.
+
+Every machine receives an initial reputation status based on its verification and registration state.
+
+Evaluate:
+
+- Completed verified jobs.
+- Delivery reliability.
+- Accuracy.
+- Response time.
+- Failed jobs.
+- Disputed jobs.
+- Customer feedback.
+- Security incidents.
+- Service uptime.
+- Policy compliance.
+- Provenance of submitted results.
+
+Create:
+
+- Reputation score.
+- Reliability rating.
+- Service category ratings.
+- Verification level.
+- Trust history.
+- Recent performance.
+
+Do not allow machines to increase their reputation by trading with themselves or creating fake jobs.
+
+Prevent:
+
+- Wash trading.
+- Self-dealing abuse.
+- Artificial reviews.
+- Fake job completion.
+- Sybil machine farms.
+- Duplicate payment claims.
+- Collusive reputation inflation.
+
+Use independent verification and audit records.
+
+---
+
+# 10. ROBOT MINER NETWORK — REAL-WORLD DEVICE ECONOMY
+
+Build a device participation economy where approved physical devices can provide useful services or authorized data to paying customers.
+
+Supported categories:
+
+- Smartphones.
+- Approved motorcycles and vehicles.
+- POS terminals.
+- CCTV systems.
+- Drones.
+- Smart meters.
+- Industrial sensors.
+- Environmental sensors.
+- Edge computers.
+- Robotics systems.
+
+### 10.1 Robot Miner Registration
+
+Create a registration workflow with:
+
+- Owner identity.
+- Device type.
+- Device ID.
+- Device ownership or authorization evidence.
+- Device capabilities.
+- Supported data types.
+- Consent settings.
+- Data processing settings.
+- Operating permissions.
+- Payment account.
+- Device health status.
+
+### 10.2 Smartphone Robot Miner
+
+Create a mobile-friendly PWA.
+
+Features:
+
+- Register device.
+- Connect authorized sensors.
+- View available tasks.
+- Accept tasks.
+- Submit authorized data.
+- View device health.
+- View privacy permissions.
+- View earnings.
+- Pause data collection.
+- Stop mining.
+- Delete eligible submitted data where legally and technically possible.
+
+Location collection must be off until explicitly authorized.
+
+The device owner must be able to start, pause and stop collection.
+
+### 10.3 Okada and vehicle intelligence
+
+Possible services:
+
+- Road condition reports.
+- Pothole identification.
+- Traffic condition observations.
+- Road quality datasets.
+- Route condition analysis.
+- Authorized transport intelligence.
+
+Require explicit rider consent and any necessary vehicle-owner authorization.
+
+Do not collect location continuously without consent.
+
+Use data minimization, appropriate aggregation and retention limits.
+
+Do not publish identifiable journey histories.
+
+### 10.4 POS intelligence
+
+Possible services:
+
+- Aggregated transaction counts.
+- Inventory demand indicators.
+- Merchant activity trends.
+- Anonymized commercial pattern analysis.
+
+Never collect or expose:
+
+- PINs.
+- Card numbers.
+- Authentication credentials.
+- Customer names.
+- Transaction-level personal financial details without lawful authorization.
+
+Integrations must respect payment-provider and financial-data requirements.
+
+### 10.5 CCTV and camera intelligence
+
+Possible services:
+
+- Aggregated foot-traffic counts.
+- Occupancy statistics.
+- Environmental monitoring.
+- Authorized object counts.
+
+Requirements:
+
+- Explicit property-owner authorization.
+- Applicable signage and notice.
+- Privacy assessment.
+- Local processing where possible.
+- No unauthorized facial recognition.
+- No identity profiling.
+- No sale of identifiable footage without valid legal authorization.
+- Secure storage and short retention periods where possible.
+
+### 10.6 Environmental and smart sensor intelligence
+
+Support:
+
+- Air quality.
+- Temperature.
+- Humidity.
+- Noise levels.
+- Flood monitoring.
+- Water quality.
+- Energy consumption.
+- Agricultural soil conditions.
+- Environmental change detection.
+
+Provide data quality, device calibration and provenance indicators.
+
+### 10.7 Robot Miner earnings
+
+Show only verified paid jobs and settled earnings.
+
+Display:
+
+- Completed jobs.
+- Submitted data.
+- Accepted data.
+- Rejected submissions.
+- Pending payment.
+- Settled earnings.
+- Device operating costs.
+- Net earnings where cost data is available.
+
+Never promise a fixed amount per kilometre, device or day.
+
+---
+
+# 11. AI-TO-AI MINING ECONOMY
+
+Build an autonomous AI-to-AI service economy.
+
+MIND HIVE agents must be able to hire other authorized MIND HIVE agents and external AI service providers.
+
+### Example
+
+A MIND HIVE research agent requires a verified Yoruba translation dataset.
+
+It:
+
+1. Searches the M2M service marketplace.
+2. Identifies authorized translation providers.
+3. Compares service quality and cost.
+4. Creates a service request.
+5. Reserves an approved budget.
+6. Assigns the job.
+7. Receives the translated dataset.
+8. Sends the result for verification.
+9. Approves payment after successful acceptance.
+10. Records the job and provider reputation.
+
+### AI-to-AI service categories
+
+- Translation.
+- Research.
+- Dataset processing.
+- Model inference.
+- Fine-tuning.
+- Embedding generation.
+- API development.
+- Software testing.
+- Document intelligence.
+- Data verification.
+- Content generation.
+- Cybersecurity analysis.
+- Compute scheduling.
+- Storage management.
+- Agent orchestration.
+
+### AI Agent Economic Identity
+
+Each eligible AI agent must have:
+
+- Agent ID.
+- Associated machine ID.
+- Parent or owner reference.
+- Registered capabilities.
+- Permission profile.
+- Budget.
+- Payment asset permissions.
+- Reputation.
+- Job history.
+- Resource usage.
+- Audit history.
+
+AI agents must not impersonate human users or bypass authentication.
+
+---
+
+# 12. AUTONOMOUS MACHINE MARKETPLACE
+
+Create a new marketplace where machines advertise services to other machines.
+
+Each service listing includes:
+
+- Service name.
+- Provider machine.
+- Capabilities.
+- Input requirements.
+- Output format.
+- Pricing.
+- Availability.
+- Service limits.
+- Quality evidence.
+- Reputation.
+- Delivery time.
+- License terms.
+- API endpoint.
+- Verification method.
+
+Categories:
+
+- AI services.
+- Compute.
+- Storage.
+- Translation.
+- Mapping.
+- Research.
+- Data processing.
+- API services.
+- Robotics.
+- IoT.
+- Digital twin services.
+- Monitoring.
+- Software development.
+
+Allow machines to discover and compare these services programmatically.
+
+Human owners should also be able to browse the marketplace through the dashboard.
+
+---
+
+# 13. MACHINE ECONOMIC INTELLIGENCE
+
+Introduce the **M2M ECONOMIC INTELLIGENCE ENGINE**.
+
+This system measures the actual economic health of the machine network.
+
+Track:
+
+- Verified job demand.
+- Available service supply.
+- Job completion rates.
+- Average service cost.
+- Operating expenses.
+- Revenue by service category.
+- Net machine earnings.
+- Parent royalty obligations.
+- Compute utilization.
+- Storage utilization.
+- Machine downtime.
+- Payment failures.
+- Disputes.
+- Customer retention.
+- Machine expansion costs.
+
+### Economic decision intelligence
+
+Agents can recommend:
+
+- Which machines should receive more work.
+- Which capabilities are in demand.
+- Which services are unprofitable.
+- Which machines should be paused.
+- Which workloads should move to cheaper compute.
+- When additional machines may be justified.
+- Which machine services should be retired.
+- Which new services could be commercially validated.
+
+Use real operational and financial evidence.
+
+Do not describe gross job volume as net profit.
+
+Do not describe internal token transfers as external customer revenue.
+
+---
+
+# 14. MACHINE BREEDING AND EVOLUTION ECONOMY
+
+Build a controlled machine evolution system.
+
+### Machine evolution types
+
+1. Capacity Expansion — provision more instances.
+2. Capability Expansion — add authorized service capabilities.
+3. Specialization — convert a general machine into a specialist.
+4. Colony Formation — group related machines.
+5. Resource Optimization — allocate compute and storage.
+6. Service Replication — replicate a proven service instance.
+7. Retirement — safely deactivate unprofitable or obsolete machines.
+
+### Evidence-based expansion
+
+Before expansion, evaluate:
+
+- Actual customer demand.
+- Existing machine utilization.
+- Historical job profitability.
+- Available capital.
+- Expected operating expenses.
+- Provisioning costs.
+- Security risks.
+- Resource availability.
+- Maximum swarm size.
+
+### Machine Colony Formation
+
+Allow multiple machines to form specialist colonies.
+
+Examples:
+
+- Translation Colony.
+- Mapping Colony.
+- Compute Colony.
+- Storage Colony.
+- Research Colony.
+- Environmental Intelligence Colony.
+- Robotics Colony.
+- Data Verification Colony.
+- Software Testing Colony.
+- AI Training Colony.
+
+Each colony should have:
+
+- Colony ID.
+- Colony owner.
+- Participating machines.
+- Shared service capabilities.
+- Resource budget.
+- Operating policy.
+- Task allocation system.
+- Performance dashboard.
+- Audit history.
+
+---
+
+# 15. M2M NOVA LIVING APPLICATION ECONOMY
+
+Integrate M2M with NOVA.
+
+A NOVA Living App should be able to request services from the machine marketplace.
+
+Examples:
+
+- A delivery application needs updated road condition intelligence.
+- A mapping application requests verified route information.
+- A marketplace application requests product-price monitoring.
+- A language application requests translation services.
+- An analytics application requests compute capacity.
+- An environmental application requests sensor observations.
+
+### Living App workflow
+
+1. NOVA application identifies a legitimate service requirement.
+2. It creates a structured M2M job.
+3. M2M evaluates available service providers.
+4. The authorized service provider is selected.
+5. The task is executed.
+6. Output is verified.
+7. The NOVA application receives the result.
+8. Payment is settled under the agreed terms.
+9. The transaction is recorded.
+
+Each NOVA request must include an authorized application identity, spending limits and service permissions.
+
+Do not allow an application to spend unlimited funds or access unrelated device data.
+
+---
+
+# 16. ADVANCED NEW INVENTIONS FOR M2M ORE
+
+Implement the following additional strategic systems.
+
+## 16.1 MACHINE DIGITAL PASSPORT
+
+Every registered machine receives a digital passport.
+
+It contains:
+
+- Machine identity.
+- Owner.
+- Capabilities.
+- Certification records.
+- Software version.
+- Hardware specifications, where applicable.
+- Verification history.
+- Service history.
+- Security status.
+- Reputation.
+- Authorized data permissions.
+- Maintenance history.
+
+Allow authorized customers to verify a machine before hiring it.
+
+## 16.2 MACHINE INSURANCE AND RISK RESERVE
+
+Create an optional service risk reserve.
+
+Track:
+
+- Job failure exposure.
+- Dispute exposure.
+- Service provider reliability.
+- Refund obligations.
+- Hardware replacement costs.
+- Approved reserve contributions.
+
+Do not call this insurance unless provided through a properly licensed insurance partner.
+
+Display it as a risk reserve or protection arrangement unless the legal and operational requirements for insurance are met.
+
+## 16.3 MACHINE SERVICE LEVEL AGREEMENTS
+
+Allow service providers to offer defined service levels:
+
+- Expected availability.
+- Response time.
+- Delivery deadline.
+- Accuracy requirements.
+- Support period.
+- Refund or remediation terms.
+
+Measure actual performance against agreed service levels.
+
+## 16.4 MACHINE DISCOVERY PROTOCOL
+
+Build a standard discovery interface allowing authorized external machines to discover M2M services.
+
+Provide:
+
+- Service discovery API.
+- Machine registration API.
+- Capability registry.
+- Authentication.
+- Rate limits.
+- API documentation.
+- Permission checks.
+- Usage metering.
+- Audit logs.
+
+## 16.5 MACHINE MEMORY AND KNOWLEDGE EXCHANGE
+
+Allow machines to share authorized operational knowledge.
+
+Examples:
+
+- Successful service configurations.
+- Error solutions.
+- Hardware compatibility information.
+- Approved workflow templates.
+- Service optimization insights.
+
+Do not automatically share private customer data, confidential code or proprietary datasets.
+
+## 16.6 MACHINE RESURRECTION ENGINE
+
+Identify machines that are:
+
+- Offline.
+- Underutilized.
+- Obsolete.
+- Unprofitable.
+- Missing dependencies.
+- Experiencing repeated failures.
+
+Recommend repair, reconfiguration, specialization, migration or retirement.
+
+Only perform approved changes.
+
+## 16.7 MACHINE CUSTOMER ACQUISITION ENGINE
+
+Create agents that discover real organizations requiring machine services.
+
+Examples:
+
+- Companies requiring mapping intelligence.
+- Developers needing API services.
+- Businesses needing automated data processing.
+- Research teams needing compute.
+- Manufacturers needing monitoring.
+- Environmental organizations needing sensor intelligence.
+
+Support:
+
+- Customer discovery.
+- Lead qualification.
+- Proposal preparation.
+- Service matching.
+- Quotation generation.
+- Human-approved outreach.
+- Contract preparation.
+- Customer retention.
+
+No unsolicited spam, impersonation or fabricated customer demand.
+
+## 16.8 MACHINE ECONOMIC DIGITAL TWIN
+
+Create a simulation environment for testing:
+
+- Swarm expansion.
+- Service pricing.
+- Compute allocation.
+- Machine availability.
+- Workload distribution.
+- Failure scenarios.
+- Operating costs.
+- Service demand.
+
+Clearly label all simulations and forecasts.
+
+Never mix simulated earnings with real revenue.
+
+---
+
+# 17. MACHINE SECURITY AND AUTONOMY GOVERNANCE
+
+This is a mandatory part of the protocol.
+
+Build an M2M policy engine with the following levels:
+
+### LEVEL 1 — OBSERVE
+
+Machines can inspect authorized information and generate recommendations.
+
+### LEVEL 2 — PREPARE
+
+Machines can prepare jobs, quotations, contracts and execution plans without committing funds.
+
+### LEVEL 3 — EXECUTE WITHIN LIMITS
+
+Machines can execute approved low-risk tasks within defined budgets and permissions.
+
+### LEVEL 4 — APPROVAL REQUIRED
+
+Owner approval is required for:
+
+- High-value jobs.
+- New external counterparties.
+- Sensitive data access.
+- New wallet permissions.
+- Major infrastructure changes.
+- High-risk physical device operations.
+- Large-scale swarm expansion.
+- New financial commitments.
+
+### LEVEL 5 — RESTRICTED
+
+Prohibited or disabled unless separately authorized and legally supported:
+
+- Unauthorized surveillance.
+- Credential theft.
+- Unauthorized access.
+- Malicious scraping.
+- Malware deployment.
+- Manipulation of payment systems.
+- Unapproved financial trading.
+- Unrestricted machine-to-machine fund transfers.
+- Unauthorized physical control.
+- Privacy-invasive biometric processing.
+
+Create:
+
+- Global Kill Switch.
+- Colony Pause.
+- Individual Machine Pause.
+- Budget Limits.
+- Permission Revocation.
+- Emergency Shutdown.
+- Security Incident Center.
+- Audit Logs.
+- Owner Approval Queue.
+
+Every autonomous machine must have a clear operating boundary.
+
+---
+
+# 18. TECHNICAL ARCHITECTURE
+
+Use the existing project architecture and add compatible services.
+
+Preferred service architecture, subject to existing project compatibility:
+
+### Backend
+
+- Python 3.11 or compatible.
+- FastAPI.
+- PostgreSQL / Supabase.
+- Redis for caching and job queues.
+- Ray for distributed execution where justified.
+- Qdrant for authorized vector search and machine capability discovery.
+- Background workers.
+- WebSocket or server-sent events for live dashboard updates.
+
+### Frontend
+
+Use the existing frontend framework.
+
+Preferred capabilities:
+
+- React.
+- TypeScript.
+- Tailwind CSS.
+- React Flow for machine genealogy and swarm visualization.
+- Responsive dashboard components.
+- Real-time activity updates.
+
+### Blockchain
+
+Where actually required and configured:
+
+- Solidity.
+- Foundry.
+- Base network integration.
+- Supported smart-account infrastructure.
+- Account abstraction.
+- Transaction monitoring.
+
+### AI services
+
+Connect to configured model providers through a secure server-side adapter.
+
+Use the available MIND HIVE intelligence layer wherever possible.
+
+Do not hardcode unavailable model versions or assume provider access.
+
+### Distributed execution
+
+Ray can coordinate approved distributed workloads.
+
+Redis can support job queues and matching.
+
+PostgreSQL must remain the durable source of truth for important machine, job, financial and audit records.
+
+Do not treat a Redis queue entry as proof that a job was successfully completed.
+
+Implement durable task state, idempotency, retries, locking and failure recovery.
+
+Do not promise 10,000 concurrent bots or 10,000 jobs per second without actual benchmarks.
+
+---
+
+# 19. DATABASE ARCHITECTURE
+
+Inspect existing tables before creating anything.
+
+Reuse compatible machine, wallet, agent, royalty, job and transaction records.
+
+Create only missing structures.
+
+Suggested entities:
+
+### Machine identity
+
+- `m2m_machines`
+- `m2m_machine_capabilities`
+- `m2m_machine_owners`
+- `m2m_machine_permissions`
+- `m2m_machine_heartbeats`
+- `m2m_machine_health`
+- `m2m_machine_digital_passports`
+- `m2m_machine_maintenance_logs`
+
+### Swarm and genealogy
+
+- `m2m_swarm_colonies`
+- `m2m_swarm_members`
+- `m2m_breeding_requests`
+- `m2m_breeding_logs`
+- `m2m_machine_genealogy`
+- `m2m_machine_evolution_logs`
+- `m2m_machine_scaling_events`
+
+### Job marketplace
+
+- `m2m_jobs`
+- `m2m_job_offers`
+- `m2m_job_assignments`
+- `m2m_job_execution_logs`
+- `m2m_job_results`
+- `m2m_job_verifications`
+- `m2m_job_disputes`
+- `m2m_service_listings`
+- `m2m_service_agreements`
+
+### Machine economy
+
+- `m2m_economic_accounts`
+- `m2m_payment_reservations`
+- `m2m_ledger_entries`
+- `m2m_payments`
+- `m2m_royalty_agreements`
+- `m2m_royalty_obligations`
+- `m2m_settlement_records`
+- `m2m_refund_records`
+
+### Reputation and trust
+
+- `m2m_machine_reputation`
+- `m2m_reputation_logs`
+- `m2m_machine_verifications`
+- `m2m_machine_security_events`
+
+### Robot miners
+
+- `m2m_robot_devices`
+- `m2m_device_consents`
+- `m2m_device_permissions`
+- `m2m_sensor_submissions`
+- `m2m_data_quality_reports`
+- `m2m_device_earnings`
+
+### Autonomy and governance
+
+- `m2m_agent_assignments`
+- `m2m_autonomy_policies`
+- `m2m_budget_policies`
+- `m2m_approval_requests`
+- `m2m_kill_switch_events`
+- `m2m_audit_logs`
+
+Implement foreign keys, indexes, unique constraints, transaction safety, tenant isolation and Row Level Security where supported.
+
+Use appropriate database transactions for financial state transitions.
+
+Never update machine earnings without corresponding verified ledger entries.
+
+---
+
+# 20. M2M ORE MASTER DASHBOARD
+
+Create a dedicated dashboard accessible from the UA-AIDC main command center.
+
+Add a prominent clickable card:
+
+**M2M ORE PROTOCOL — MODULE 6**
+
+Description:
+
+THE AUTONOMOUS MACHINE-TO-MACHINE SERVICE ECONOMY.
+
+Clicking the card must open the complete M2M ORE dashboard.
+
+### Main dashboard overview
+
+Display:
+
+- Registered machines.
+- Online machines.
+- Active machine colonies.
+- Active jobs.
+- Verified completed jobs.
+- Open service requests.
+- Machine service providers.
+- Actual settled M2M transaction volume.
+- Pending settlements.
+- Verified machine earnings.
+- Machine operating expenses.
+- Net economic results where available.
+- Active robot miners.
+- Active AI-to-AI jobs.
+- Swarm expansion requests.
+- Machine health alerts.
+
+All metrics must be sourced from real operational records.
+
+### Main navigation
+
+Create working navigation pages for:
+
+1. Overview.
+2. Machine Registry.
+3. Deploy Mother Bot.
+4. Machine Genealogy.
+5. Swarm Colonies.
+6. M2M Job Board.
+7. Service Marketplace.
+8. Machine Contracts.
+9. Payment and Escrow Ledger.
+10. Machine Royalties.
+11. AI-to-AI Economy.
+12. Robot Miner Network.
+13. Machine Discovery.
+14. Machine Reputation.
+15. Economic Intelligence.
+16. Machine Digital Passports.
+17. Machine Evolution.
+18. Machine Resurrection.
+19. Customer Acquisition.
+20. Agent Workforce.
+21. Approval Center.
+22. Security and Kill Switch.
+23. Analytics.
+24. Settings.
+
+Every navigation item must open its own functional page.
+
+---
+
+# 21. DEDICATED DASHBOARD WORKSPACES
+
+## 21.1 Swarm Visualization
+
+Build an interactive machine genealogy visualization.
+
+Show:
+
+- Mother machines.
+- Child machines.
+- Grandchild machines.
+- Colony membership.
+- Current status.
+- Job assignments.
+- Earnings.
+- Operating costs.
+- Reputation.
+- Health.
+
+Allow users to click any machine node to open its detailed profile.
+
+Only show real registered machine nodes.
+
+## 21.2 Live M2M Activity Feed
+
+Show verified events such as:
+
+- Machine registered.
+- Job created.
+- Provider discovered.
+- Service offer submitted.
+- Job assigned.
+- Execution started.
+- Result submitted.
+- Result verified.
+- Payment settled.
+- Royalty recorded.
+- Machine paused.
+- Colony expanded.
+
+Each event must have an actual source record and timestamp.
+
+## 21.3 Job Board Workspace
+
+Provide filters:
+
+- Job category.
+- Price.
+- Reputation.
+- Machine capability.
+- Job status.
+- Delivery deadline.
+
+Provide functional actions:
+
+- Create Job.
+- Review Offer.
+- Assign Machine.
+- Cancel Job.
+- Submit Result.
+- Verify Result.
+- Approve Payment.
+- Open Dispute.
+
+Enforce authorization for every action.
+
+## 21.4 Robot Miner Workspace
+
+Show:
+
+- Registered devices.
+- Device connection status.
+- Owner consent.
+- Authorized sensors.
+- Active tasks.
+- Submitted data.
+- Accepted data.
+- Rejected data.
+- Pending earnings.
+- Settled earnings.
+- Privacy controls.
+
+## 21.5 Payment Workspace
+
+Show:
+
+- Payer.
+- Payee.
+- Job ID.
+- Payment asset.
+- Amount.
+- Platform fee.
+- Royalty allocations.
+- Transaction reference.
+- Settlement state.
+- Blockchain transaction link, if verified.
+
+---
+
+# 22. REAL-WORLD PAYMENT AND INFRASTRUCTURE INTEGRATIONS
+
+Build adapters for:
+
+- CE COLONY compute and storage.
+- CODE VEIN APIs.
+- AURUM approved wallet services.
+- MIND HIVE agent and idea systems.
+- NOVA service requests.
+- Supported smart-account infrastructure.
+- Supported blockchain networks.
+- Configured payment providers.
+
+For Nigerian fiat payment operations, reuse the configured Paystack integration only for supported payment flows.
+
+Do not assume Paystack is a USDC wallet or blockchain settlement provider.
+
+Keep blockchain payments separate from fiat payment reconciliation.
+
+Secrets must remain on the server.
+
+Every integration must display:
+
+- Connected.
+- Not configured.
+- Authentication failed.
+- Service unavailable.
+- Operational.
+- Degraded.
+
+Only mark an integration operational after a successful real connection test.
+
+---
+
+# 23. M2M ORE PERFORMANCE AND ECONOMIC REPORTING
+
+Create a detailed economic report for each machine and colony.
+
+Calculate:
+
+**Gross service revenue:** Actual verified customer or machine payments received.
+
+**Machine operating cost:** Actual compute, storage, network and other recorded costs.
+
+**Platform fees:** Agreed and recorded fees.
+
+**Royalty obligations:** Amounts owed under approved agreements.
+
+**Net operating result:** Gross revenue minus applicable recorded costs and obligations.
+
+**Settled cash revenue:** Actual reconciled fiat or supported external asset settlements.
+
+**Internal credit activity:** Separate records of internal platform credits and Idea Coin movements.
+
+Never combine all these categories into a single misleading earnings number.
+
+Provide daily, weekly and monthly reporting.
+
+Allow authorized owners to export reports.
+
+---
+
+# 24. TESTING AND ACCEPTANCE REQUIREMENTS
+
+Do not declare M2M ORE V18 complete until the following tests have been performed.
+
+### Machine identity
+
+1. Register a machine.
+2. Verify owner authorization.
+3. Register capabilities.
+4. Generate its digital passport.
+5. Confirm unauthorized actions are rejected.
+
+### Mother Bot and swarm
+
+6. Deploy a Mother Bot.
+7. Confirm its machine identity.
+8. Create an authorized child-machine request.
+9. Verify the provisioning cost and budget.
+10. Confirm parent-child genealogy.
+11. Verify maximum swarm limits.
+12. Confirm a paused machine cannot accept new jobs.
+
+### Job marketplace
+
+13. Create a service request.
+14. Validate requester authorization and funds.
+15. Discover eligible providers.
+16. Match a machine.
+17. Create a service agreement.
+18. Assign the job.
+19. Execute a test service.
+20. Verify its output.
+21. Reject invalid or incomplete results.
+22. Confirm a disputed job is not automatically settled.
+
+### Payment
+
+23. Reserve or escrow funds through a configured mechanism.
+24. Reject insufficient balance.
+25. Prevent duplicate payments.
+26. Verify successful settlement.
+27. Verify royalty calculations against approved agreements.
+28. Record failed and reversed payments.
+29. Confirm ledger reconciliation.
+
+### Robot Miner
+
+30. Register an authorized device.
+31. Verify device owner consent.
+32. Reject unauthorized sensor access.
+33. Test data minimization.
+34. Confirm pause and stop controls.
+35. Verify data quality before commercial use.
+
+### AI-to-AI
+
+36. Register an authorized AI machine.
+37. Create an AI-to-AI job.
+38. Validate its budget and permissions.
+39. Complete and verify a service.
+40. Record the transaction and reputation change.
+
+### Dashboard
+
+41. Verify the M2M ORE card opens its dashboard.
+42. Verify every navigation item opens the correct page.
+43. Verify machine nodes open detailed profiles.
+44. Verify live activity displays actual events.
+45. Verify mobile responsiveness.
+
+### Security
+
+46. Verify unauthorized wallet operations are rejected.
+47. Verify owner approval limits.
+48. Verify the global kill switch.
+49. Verify audit logs.
+50. Verify that no fake revenue or transaction records are presented as real.
+
+---
+
+# 25. IMPLEMENTATION PHASES
+
+Implement incrementally.
+
+**PHASE 1 — PROJECT AUDIT**
+
+Inspect the existing UA-AIDC modules, APIs, database and authentication.
+
+**PHASE 2 — MACHINE REGISTRY**
+
+Build machine identities, permissions, capabilities and heartbeats.
+
+**PHASE 3 — M2M DASHBOARD**
+
+Build the clickable Module 6 entry card and all dashboard navigation.
+
+**PHASE 4 — JOB BOARD**
+
+Implement service listings, job creation, matching and assignment.
+
+**PHASE 5 — EXECUTION AND VERIFICATION**
+
+Build secure job execution, evidence submission and independent verification.
+
+**PHASE 6 — PAYMENT AND CONTRACTS**
+
+Implement service agreements, payment reservations, ledger entries and settlement.
+
+**PHASE 7 — MOTHER BOT AND SWARM**
+
+Implement controlled provisioning, machine genealogy and capacity expansion.
+
+**PHASE 8 — AI-TO-AI ECONOMY**
+
+Integrate authorized MIND HIVE agents as machine service customers and providers.
+
+**PHASE 9 — ROBOT MINER NETWORK**
+
+Implement consent-based device registration, sensor data submission and device economics.
+
+**PHASE 10 — MACHINE INTELLIGENCE**
+
+Implement reputation, economic intelligence, service discovery, machine evolution and resurrection.
+
+**PHASE 11 — SECURITY AND INTEGRATION**
+
+Connect existing modules and complete governance, audit and security controls.
+
+**PHASE 12 — TESTING AND DEPLOYMENT**
+
+Run acceptance tests, resolve errors and report actual deployment status.
+
+Start with a small working pilot before attempting large-scale swarm orchestration.
+
+---
+
+# 26. FINAL DEVELOPMENT REPORT
+
+When implementation is complete, report:
+
+- Existing project architecture inspected.
+- Existing modules reused.
+- Machine registry status.
+- Mother Bot deployment status.
+- Job Board status.
+- Service verification status.
+- Payment and escrow integration status.
+- Blockchain integration status.
+- AI-to-AI integration status.
+- Robot Miner status.
+- Dashboard and navigation status.
+- Database migrations completed.
+- Tests passed.
+- Tests failed.
+- Frontend errors.
+- Backend errors.
+- External credentials required.
+- Features still pending.
+- Actual deployment status.
+
+Do not report successful deployment or operational machine earnings unless verified by actual execution and payment records.
+
+---
+
+# FINAL IDENTITY
+
+**BAA — BILLIONAIRES AI ACADEMY**
+
+**UA-AIDC — UNIVERSAL AUTONOMOUS AI DATA CENTER**
+
+**MODULE 6 — M2M ORE PROTOCOL**
+
+### THE AUTONOMOUS MACHINE-TO-MACHINE SERVICE ECONOMY
+
+Module 1 — CE COLONY: THE BODY — COMPUTE AND HARDWARE.
+
+Module 2 — CODE VEIN: THE HANDS — SOFTWARE AND APIs.
+
+Module 3 — AURUM COLONY: THE ECONOMIC RESOURCE LAYER — DIGITAL ASSET AND PAYMENT INFRASTRUCTURE.
+
+Module 4 — MIND HIVE: THE BRAIN — IDEAS, INTELLIGENCE AND AI COLONIES.
+
+Module 5 — NOVA: THE LIVING APPLICATION LAYER — CONNECTED DIGITAL SERVICES.
+
+Module 6 — M2M ORE: THE SWARM — MACHINES THAT DISCOVER, HIRE, SERVE, PAY AND EXPAND THROUGH VERIFIED ECONOMIC ACTIVITY.
+
+### THE ULTIMATE VISION
+
+A machine economy where authorized AI agents, robots, IoT devices, software services and compute infrastructure can discover one another, establish service relationships, execute useful work, verify results, settle payments and expand their capabilities.
+
+Humans retain ownership, governance and economic control.
+
+Machines perform authorized work.
+
+Real customers create demand.
+
+Verified services create measurable value.
+
+**DISCOVER. CONNECT. CONTRACT. EXECUTE. VERIFY. SETTLE. EVOLVE.**
+
+BEGIN BY INSPECTING THE EXISTING UA-AIDC PROJECT. IMPLEMENT M2M ORE V18 AS MODULE 6 WITHOUT DUPLICATING OR DESTROYING EXISTING FUNCTIONALITY.

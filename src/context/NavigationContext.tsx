@@ -264,6 +264,36 @@ export const ALL_PAGES: PageMetadata[] = [
     badge: 'HAVC'
   },
   {
+    id: 'nova-protocol',
+    title: 'NOVA PROTOCOL V16 — The Living Internet (UA-AIDC Module 5)',
+    shortTitle: 'NOVA PROTOCOL V16',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Living Web',
+    description: 'Module 5 Crown Engine: Uncopyable self-mutating living apps, 500ms quorum heartbeat & Origin DNA pixel royalties.',
+    iconName: 'Activity',
+    badge: 'V16 CROWN'
+  },
+  {
+    id: 'm2m-ore',
+    title: 'M2M ORE PROTOCOL V18 — Autonomous Machine-to-Machine Service Economy (Module 6)',
+    shortTitle: 'M2M ORE V18',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous AI & Machine Swarm',
+    description: 'Module 6 Swarm: Machine Digital Passports, Mother/Child Bots, Service Marketplace, Escrow Ledger & Consent-First Robot Miners.',
+    iconName: 'Bot',
+    badge: 'MODULE 6'
+  },
+  {
+    id: 'leads-dashboard',
+    title: 'Unified Leads Output Dashboard (Source, Identity & Outreach)',
+    shortTitle: 'Leads Output',
+    category: 'ai_autonomous',
+    categoryLabel: 'Autonomous Growth & Leads',
+    description: 'See every lead origin source, verified identity, email/WhatsApp handles & multi-channel messaging.',
+    iconName: 'Radar',
+    badge: 'LEADS'
+  },
+  {
     id: 'uadc-lab',
     title: 'BAA Universal Autonomous Data Center LAB — Universal Device Wealth Network (UDWN)',
     shortTitle: 'UDWN Data Center LAB',
@@ -584,6 +614,9 @@ export const NavigationProvider: React.FC<{
     if (page === 'kcx') targetPage = 'kcx';
     if (page === 'gka') targetPage = 'gka';
     if (page === 'havc') targetPage = 'havc';
+    if (page === 'nova' || page === 'nova-protocol' || page === 'living-internet' || page === 'v16') targetPage = 'nova-protocol';
+    if (page === 'm2m' || page === 'm2m-ore' || page === 'machine-economy') targetPage = 'm2m-ore';
+    if (page === 'leads' || page === 'leads-dashboard' || page === 'leads-output') targetPage = 'leads-dashboard';
     if (targetPage === currentPage) return;
 
     setCurrentPage(targetPage);

@@ -44,6 +44,9 @@ import { GenesisCommandPage } from './pages/GenesisCommandPage';
 import { MindHiveV20Page } from './pages/MindHiveV20Page';
 import { SocialHivePage } from './pages/SocialHivePage';
 import { MindHiveV22Page } from './pages/MindHiveV22Page';
+import { NovaProtocolPage } from './pages/NovaProtocolPage';
+import { M2MOrePage } from './pages/M2MOrePage';
+import { LeadsOutputDashboardPage } from './pages/LeadsOutputDashboardPage';
 import { AboutPage } from './pages/AboutPage';
 import { PartnersPage } from './pages/PartnersPage';
 import { InvestorOnePagerPage } from './pages/InvestorOnePagerPage';
@@ -209,6 +212,21 @@ function AppContent() {
         return;
       }
 
+      if (window.location.pathname === '/nova' || window.location.pathname === '/nova-protocol' || window.location.pathname === '/living-internet') {
+        navigateTo('nova-protocol');
+        return;
+      }
+
+      if (window.location.pathname === '/leads' || window.location.pathname === '/leads-dashboard' || window.location.pathname === '/leads-output') {
+        navigateTo('leads-dashboard');
+        return;
+      }
+
+      if (window.location.pathname === '/m2m' || window.location.pathname === '/m2m-ore' || window.location.pathname === '/machine-economy') {
+        navigateTo('m2m-ore');
+        return;
+      }
+
       const hash = window.location.hash.replace('#', '');
       if (hash) {
         if (hash.startsWith('learn/')) {
@@ -249,9 +267,10 @@ function AppContent() {
           'bounties', 'marketing', 'social', 'whatsapp-broadcast', 
           'whatsapp-closer', 'whatsapp-contacts', 'translations', 
           'course-studio', 'bulk-videos', 'ai-workforce', 'omni-ad-swarm', 'exchange', 'cyber-eco', 'referrals', 'projects', 'general-marketplace', 'growth-mafia', 'mafia',
-          'mindhive-v20', 'social-hive', 'mindhive-v22', 'v22', 'kcx', 'gka', 'havc'
+          'mindhive-v20', 'social-hive', 'mindhive-v22', 'v22', 'kcx', 'gka', 'havc',
+          'nova-protocol', 'nova', 'm2m-ore', 'm2m', 'leads-dashboard', 'leads'
         ].includes(hash)) {
-          navigateTo(hash === 'library' ? 'ebooks' : (hash === 'mafia' ? 'growth-mafia' : (hash === 'aurum' ? 'aurum-colony' : (hash === 'mind-hive' ? 'genesis' : (hash === 'v22' ? 'mindhive-v22' : hash)))));
+          navigateTo(hash === 'library' ? 'ebooks' : (hash === 'mafia' ? 'growth-mafia' : (hash === 'aurum' ? 'aurum-colony' : (hash === 'mind-hive' ? 'genesis' : (hash === 'v22' ? 'mindhive-v22' : (hash === 'nova' ? 'nova-protocol' : (hash === 'm2m' ? 'm2m-ore' : (hash === 'leads' ? 'leads-dashboard' : hash))))))));
         }
       }
 
@@ -416,8 +435,20 @@ function AppContent() {
           <MindHiveV22Page initialSystem="havc" onNavigate={handleNav} />
         )}
 
+        {(currentPage === 'nova-protocol' || currentPage === 'nova') && (
+          <NovaProtocolPage onNavigate={handleNav} />
+        )}
+
+        {(currentPage === 'm2m-ore' || currentPage === 'm2m') && (
+          <M2MOrePage onNavigate={handleNav} />
+        )}
+
+        {(currentPage === 'leads-dashboard' || currentPage === 'leads') && (
+          <LeadsOutputDashboardPage onNavigate={handleNav} />
+        )}
+
         {currentPage === 'investor-one-pager' && (
-          <InvestorOnePagerPage onBack={() => handleNav('home')} />
+          <InvestorOnePagerPage onBack={() => handleNav('home')} onNavigate={handleNav} />
         )}
 
         {currentPage === 'about' && (
@@ -475,13 +506,14 @@ function AppContent() {
             <AIRecruiterPortal
               onNavigateToAcademy={() => handleNav('academy')}
               onNavigateToDealRoom={() => handleNav('deal-room')}
+              onOpenLeadsDashboard={() => handleNav('leads-dashboard')}
             />
           </div>
         )}
 
 
         {currentPage === 'datacenter' && (
-          <DataCenterPage />
+          <DataCenterPage onNavigate={handleNav} />
         )}
 
         {currentPage === 'tools' && (
@@ -590,7 +622,7 @@ function AppContent() {
 
         {currentPage === 'whatsapp-closer' && (
           isAdmin ? (
-            <WhatsAppCloserPage onBack={() => handleNav('admin')} />
+            <WhatsAppCloserPage onBack={() => handleNav('admin')} onNavigate={handleNav} />
           ) : (
             <AdminGate
               targetFeatureName="WhatsApp 24/7 AI Closer Bot"

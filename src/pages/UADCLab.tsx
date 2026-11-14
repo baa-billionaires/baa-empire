@@ -50,6 +50,7 @@ import { LiveNodeHealthDashboard } from '../components/LiveNodeHealthDashboard';
 import { UdwnDashboard } from '../components/udwn/UdwnDashboard';
 import { UaaigCommandGrid } from '../components/uaaig/UaaigCommandGrid';
 import { CeColonyPage } from './CeColonyPage';
+import { UaaidcModuleSwitcher } from '../components/navigation/UaaidcModuleSwitcher';
 
 interface UADCLabProps {
   onNavigate?: (page: string) => void;
@@ -280,7 +281,14 @@ export const UADCLab: React.FC<UADCLabProps> = ({ onNavigate, initialTab = 'udwn
               </p>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              {onNavigate && (
+                <UaaidcModuleSwitcher
+                  currentPage="uadc-lab"
+                  onSelectModule={onNavigate}
+                  variant="banner"
+                />
+              )}
               <span className="text-xs font-mono px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-300">
                 Mode Digital &amp; Rossyst (BN: UY/009049)
               </span>

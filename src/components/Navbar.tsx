@@ -39,11 +39,13 @@ import {
   Globe,
   Wrench,
   Code2,
-  Share2
+  Share2,
+  Activity
 } from 'lucide-react';
 import { useAmbience } from '../context/AmbienceContext';
 import { ViewModeSwitcherBar } from './viewmodes/ViewModeSwitcherBar';
 import { useNavigation } from '../context/NavigationContext';
+import { UaaidcModuleSwitcher } from './navigation/UaaidcModuleSwitcher';
 
 interface NavbarProps {
   currentPage: string;
@@ -86,11 +88,24 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'mindhive-v20', label: 'Mind Hive V20 🐝', icon: Brain, badge: 'V20' },
     { id: 'social-hive', label: 'Social Hive V21 🌐', icon: Share2, badge: 'V21' },
     { id: 'mindhive-v22', label: 'Mind Hive V22 🏛️', icon: Sparkles, badge: 'V22' },
+    { id: 'nova-protocol', label: 'NOVA V16 🧬', icon: Activity, badge: 'M5 SOUL' },
+    { id: 'm2m-ore', label: 'M2M ORE V18 🤖', icon: Bot, badge: 'M6 SWARM' },
+    { id: 'leads-dashboard', label: 'Leads Output 📊', icon: Radar, badge: 'LEADS' },
     { id: 'wallet', label: 'Wallet 🪙', icon: Coins, badge: 'BASE' },
     { id: 'academy', label: 'Academy', icon: BookOpen },
     { id: 'ebooks', label: 'BAA Library', icon: BookOpen, badge: '4D EMPIRE' },
     { id: 'marketplace', label: 'Marketplace', icon: Store, badge: '60/40' },
-    { id: 'investor-one-pager', label: 'Investor Deck', icon: Sparkles, badge: 'SEED' },
+    { id: 'investor-one-pager', label: 'Final Deck V16', icon: Sparkles, badge: 'YES DECK' },
+  ];
+
+  const desktopPrimaryLinks = [
+    { id: 'home', label: 'Home' },
+    { id: 'leads-dashboard', label: 'Leads Output', badge: 'LEADS' },
+    { id: 'nova-protocol', label: 'NOVA V16', badge: 'M5' },
+    { id: 'm2m-ore', label: 'M2M ORE', badge: 'M6' },
+    { id: 'academy', label: 'Academy' },
+    { id: 'wallet', label: 'Wallet' },
+    { id: 'investor-one-pager', label: 'YES Final Deck', badge: 'V16' }
   ];
 
 
@@ -233,15 +248,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden xl:flex items-center gap-1">
-          {navLinks.map((link) => {
+        {/* Desktop Nav Links + UA-AIDC Modules Dropdown */}
+        <nav className="hidden xl:flex items-center gap-1.5">
+          {desktopPrimaryLinks.map((link) => {
             const isActive = currentPage === link.id;
             return (
               <button
                 key={link.id}
                 onClick={() => handleNav(link.id)}
-                className={`relative px-3 py-2 text-xs font-semibold tracking-wide rounded-lg transition flex items-center gap-1.5 ${
+                className={`relative px-2.5 py-2 text-xs font-semibold tracking-wide rounded-lg transition flex items-center gap-1.5 cursor-pointer ${
                   isActive
                     ? 'text-[#FFD700] bg-zinc-900 border border-[#FFD700]/30 shadow-sm'
                     : 'text-zinc-300 hover:text-white hover:bg-zinc-900/60'
@@ -256,6 +271,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             );
           })}
+
+          <UaaidcModuleSwitcher
+            currentPage={currentPage}
+            onSelectModule={handleNav}
+            variant="navbar"
+          />
         </nav>
 
         {/* Right CTA Actions */}

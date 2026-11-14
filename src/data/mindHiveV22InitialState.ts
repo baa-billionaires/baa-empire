@@ -612,7 +612,7 @@ export const INITIAL_MIND_HIVE_V22_STATE: MindHiveV22State = {
           copyrightOwner: 'Chidinma Okafor & MicroWork AI',
           jurisdiction: 'Nigeria, United Kingdom & Delaware USA',
           allowDerivatives: true,
-          licenseModelsAllowed: ['enterprise_unlimited_sla', 'api_programmatic_access', 'commercial_production']
+          licenseModelsAllowed: ['enterprise_unlimited_sla', 'api_programmatic_access', 'commissioned_production']
         },
         valuation: {
           estimatedMinUsd: 22000,

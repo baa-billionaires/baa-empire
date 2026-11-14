@@ -140,15 +140,23 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage, onSelectCour
 
                 <button
                   onClick={() => setCurrentPage('uadc-lab')}
-                  className="px-6 py-3.5 rounded-xl bg-[#00FF88]/15 border border-[#00FF88]/50 hover:bg-[#00FF88]/25 text-[#00FF88] font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2 shadow-lg shadow-[#00FF88]/10"
+                  className="px-6 py-3.5 rounded-xl bg-[#00FF88]/15 border border-[#00FF88]/50 hover:bg-[#00FF88]/25 text-[#00FF88] font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2 shadow-lg shadow-[#00FF88]/10 cursor-pointer"
                 >
                   <Cpu className="w-4 h-4 text-[#00FF88]" />
                   <span>Enter UADC Lab 🧠</span>
                 </button>
 
                 <button
+                  onClick={() => setCurrentPage('m2m-ore')}
+                  className="px-6 py-3.5 rounded-xl bg-emerald-500/15 border border-emerald-400/50 hover:bg-emerald-500/25 text-emerald-300 font-mono text-xs uppercase tracking-wider font-bold transition flex items-center gap-2 cursor-pointer"
+                >
+                  <Bot className="w-4 h-4 text-emerald-400" />
+                  <span>M2M ORE V18 (Module 6)</span>
+                </button>
+
+                <button
                   onClick={() => setCurrentPage('investor-one-pager')}
-                  className="px-5 py-3.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-[#00C853] text-white font-mono text-xs uppercase tracking-wider hover:bg-zinc-800 transition flex items-center gap-2"
+                  className="px-5 py-3.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-[#00C853] text-white font-mono text-xs uppercase tracking-wider hover:bg-zinc-800 transition flex items-center gap-2 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#00C853]" />
                   <span>Investor Deck ($500k)</span>

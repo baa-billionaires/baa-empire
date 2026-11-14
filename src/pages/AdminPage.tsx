@@ -26,7 +26,8 @@ import {
   Building2,
   Scale,
   BarChart3,
-  Upload
+  Upload,
+  Bot
 } from 'lucide-react';
 import { AdminCentralEarningsDashboard } from '../components/AdminCentralEarningsDashboard';
 import { AdminCourseAnalytics } from '../components/AdminCourseAnalytics';
@@ -581,6 +582,33 @@ create policy "Allow all uadc_twins" on uadc_twins for all using (true) with che
 
               {/* Grid of Command Centers */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+                {/* 0A. UA-AIDC MODULE 6: M2M ORE PROTOCOL */}
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-zinc-900 via-emerald-950/30 to-zinc-900 border-2 border-[#00FF88]/70 hover:border-[#00FF88] transition flex flex-col justify-between group shadow-xl shadow-emerald-950/30">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="p-2 rounded-xl bg-emerald-500/20 text-[#00FF88] border border-emerald-500/40">
+                        <Bot className="w-5 h-5 text-[#00FF88]" />
+                      </span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-[#00FF88] border border-emerald-500/50">
+                        MODULE 6 · 24 WORKSPACES
+                      </span>
+                    </div>
+                    <h3 className="text-base font-heading font-black text-white group-hover:text-[#00FF88] transition">
+                      M2M ORE PROTOCOL — MODULE 6
+                    </h3>
+                    <p className="text-xs text-zinc-300">
+                      THE AUTONOMOUS MACHINE-TO-MACHINE SERVICE ECONOMY. Machine Digital Passports, Mother/Child Bots, Service Escrow, Royalties &amp; Consent-First Robot Miners.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onNavigate && onNavigate('m2m-ore')}
+                    className="mt-4 w-full py-2.5 px-4 rounded-xl bg-[#00FF88] hover:brightness-110 text-black font-heading font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950 cursor-pointer"
+                  >
+                    <span>Open M2M ORE Command</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
                 {/* 0. Flagship: Autonomous Growth OS + MAFIA™ */}
                 <div className="p-5 rounded-2xl bg-gradient-to-br from-zinc-900 via-emerald-950/20 to-zinc-900 border-2 border-emerald-500/60 hover:border-emerald-400 transition flex flex-col justify-between group shadow-xl shadow-emerald-950/30">
                   <div className="space-y-2">

@@ -10,6 +10,9 @@ import { registerGenesisRoutes } from './src/server/genesisRoutes';
 import { registerMindHiveV20Routes } from './src/server/mindHiveV20Routes';
 import { registerSocialHiveRoutes } from './src/server/socialHiveRoutes';
 import { registerMindHiveV22Routes } from './src/server/mindHiveV22Routes';
+import { registerNovaProtocolRoutes } from './src/server/novaProtocolRoutes';
+import { registerLeadsOutputRoutes } from './src/server/leadsOutputRoutes';
+import { registerM2MOreRoutes } from './src/server/m2mOreRoutes';
 
 dotenv.config();
 
@@ -999,6 +1002,15 @@ registerSocialHiveRoutes(app);
 
 // BAA MIND HIVE V22 - Global Knowledge Capital, Intelligence Atlas & Human-AI Value Cooperative
 registerMindHiveV22Routes(app);
+
+// Register NOVA PROTOCOL V16 (Module 5 - The Living Internet) Routes
+registerNovaProtocolRoutes(app);
+
+// Register Unified Leads Output & Outreach Logging Routes
+registerLeadsOutputRoutes(app);
+
+// Register M2M ORE PROTOCOL V18 (Module 6 - Autonomous Machine-to-Machine Service Economy) Routes
+registerM2MOreRoutes(app);
 
 // AI-powered course thumbnail generator endpoint using Gemini API
 app.post('/api/generate-thumbnail', async (req: Request, res: Response) => {

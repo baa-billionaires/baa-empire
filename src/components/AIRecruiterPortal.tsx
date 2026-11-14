@@ -38,12 +38,14 @@ import { ScoutLead } from '../types';
 interface AIRecruiterPortalProps {
   onNavigateToAcademy?: () => void;
   onNavigateToDealRoom?: () => void;
+  onOpenLeadsDashboard?: () => void;
   className?: string;
 }
 
 export const AIRecruiterPortal: React.FC<AIRecruiterPortalProps> = ({
   onNavigateToAcademy,
   onNavigateToDealRoom,
+  onOpenLeadsDashboard,
   className = ''
 }) => {
   const {
@@ -309,6 +311,16 @@ export const AIRecruiterPortal: React.FC<AIRecruiterPortalProps> = ({
               <Plus className="w-3.5 h-3.5" />
               <span>Add Lead</span>
             </button>
+
+            {onOpenLeadsDashboard && (
+              <button
+                onClick={onOpenLeadsDashboard}
+                className="py-2.5 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-[#00FF88] border border-emerald-500/50 text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Full Leads Output Table</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -505,9 +517,14 @@ export const AIRecruiterPortal: React.FC<AIRecruiterPortalProps> = ({
                     {lead.title || 'Tech Professional'}
                     {lead.organization && <span className="text-zinc-400"> • {lead.organization}</span>}
                   </p>
-                  <p className="text-[11px] text-zinc-500 font-mono mt-0.5 flex items-center gap-2">
+                  <p className="text-[11px] text-zinc-500 font-mono mt-0.5 flex flex-wrap items-center gap-2">
+                    <span className="text-emerald-400">📍 Source: {lead.source_platform}</span>
                     {lead.domain && <span className="text-cyan-400">🌐 {lead.domain}</span>}
-                    {lead.location && <span>📍 {lead.location}</span>}
+                    {lead.location && <span>🗺️ {lead.location}</span>}
+                  </p>
+                  <p className="text-[11px] font-mono text-zinc-300 mt-1 flex flex-wrap items-center gap-3 bg-zinc-900/60 px-2.5 py-1.5 rounded-lg border border-zinc-800/80">
+                    <span>✉️ {lead.email}</span>
+                    {lead.phone_or_wa && <span className="text-[#00FF88]">📱 {lead.phone_or_wa}</span>}
                   </p>
                 </div>
 
